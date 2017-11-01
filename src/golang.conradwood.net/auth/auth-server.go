@@ -29,7 +29,7 @@ func main() {
 func st(server *grpc.Server) error {
 	s := new(RFCManagerServer)
 	// Register the handler object
-	pb.RegisterRFCManagerServer(server, s)
+	pb.RegisterAuthenticationServiceServer(server, s)
 	return nil
 }
 func start() error {
@@ -56,15 +56,12 @@ type RFCManagerServer struct {
 // in java/python we also put pointers to functions into structs and but call them "objects" instead
 // in Go we don't put functions pointers into structs, we "associate" a function with a struct.
 // (I think that's more or less the same as what C does, just different Syntax)
-func (s *RFCManagerServer) CreateRFC(ctx context.Context, CreateRequest *pb.CreateRequest) (*pb.CreateResponse, error) {
+func (s *RFCManagerServer) VerifyUserToken(ctx context.Context, req *pb.VerifyRequest) (*pb.VerifyResponse, error) {
 	peer, ok := peer.FromContext(ctx)
 	if !ok {
 		fmt.Println("Error getting peer ")
 	}
-	fmt.Println(peer.Addr, "called createrfc")
-	rfc := stupid.CreateNew()
-	fmt.Println("RFC: ", rfc)
-	resp := pb.CreateResponse{}
-	resp.Certificate = "I am a fake certificate"
+	fmt.Println(peer.Addr, "called verify token")
+	resp := pb.VerifyResponse{}
 	return &resp, nil
 }

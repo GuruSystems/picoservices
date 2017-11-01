@@ -11,18 +11,14 @@ import "examples/sub/message.proto";
 import "examples/sub2/message.proto";
 import "google/protobuf/timestamp.proto";
 */
-message CreateRequest {
- string Name = 1;
- string Access = 2;
+message VerifyRequest {
+ string Token = 1;
 }
 
-message CreateResponse {
- string Certificate=1;
+message VerifyResponse {
+ string UserID = 1;
 }
 
-message PingRequest {}
-message PingResponse {}
-
-service RFCManager {
- rpc CreateRFC(CreateRequest) returns (CreateResponse){ }
+service AuthenticationService {
+ rpc VerifyUserToken(VerifyRequest) returns (VerifyResponse){ }
 }
