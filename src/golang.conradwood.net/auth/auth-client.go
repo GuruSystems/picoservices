@@ -4,7 +4,7 @@ package main
 
 import (
 	"fmt"
-	"google.golang.org/grpc/metadata"
+	//	"google.golang.org/grpc/metadata"
 
 	"google.golang.org/grpc"
 	//	"github.com/golang/protobuf/proto"
@@ -20,27 +20,13 @@ import (
 // static variables for flag parser
 var (
 	serverAddr = flag.String("server_addr", "127.0.0.1:10000", "The server address in the format of host:port")
-	crt        = "/etc/cnw/certs/rfc-client/certificate.pem"
-	key        = "/etc/cnw/certs/rfc-client/privatekey.pem"
-	ca         = "/etc/cnw/certs/rfc-client/ca.pem"
+	crt        = "/etc/cnw/certs/rpc-client/certificate.pem"
+	key        = "/etc/cnw/certs/rpc-client/privatekey.pem"
+	ca         = "/etc/cnw/certs/rpc-client/ca.pem"
 )
 
 func main() {
 	flag.Parse()
-	//creds, err := credentials.NewClientTLSFromFile(crt, "")
-	/*
-		//certificate, err := tls.LoadX509KeyPair(crt, key)
-		if err != nil {
-			fmt.Println("could not load client key pair: %s", err)
-			return
-		}
-	*/
-	/*	creds := credentials.NewTLS(&tls.Config{
-			ServerName:   *serverAddr, // NOTE: this is required!
-			Certificates: []tls.Certificate{certificate},
-		})
-	*/
-
 	roots := x509.NewCertPool()
 	FrontendCert, _ := ioutil.ReadFile(crt)
 	roots.AppendCertsFromPEM(FrontendCert)
@@ -59,14 +45,13 @@ func main() {
 	}
 	defer conn.Close()
 	fmt.Println("Creating client...")
-	client := pb.NewRFCManagerClient(conn)
-	req := pb.CreateRequest{Name: "clientvpn", Access: "testaccess"}
-	md := metadata.Pairs("token", "valid-token")
-	ctx := metadata.NewOutgoingContext(context.Background(), md)
+	client := pb.NewAuthenticationServiceClient(conn)
+	req := pb.VerifyRequest{Token: "bla"}
 	fmt.Println("RPC call...")
-	resp, err := client.CreateRFC(ctx, &req)
+	ctx := context.Background()
+	resp, err := client.VerifyUserToken(ctx, &req)
 	if err != nil {
-		fmt.Printf("failed to create rfc: %v", err)
+		fmt.Printf("failed to verify user token: %v", err)
 	}
-	fmt.Printf("Response to create rfc: %v\n", resp)
+	fmt.Printf("Response to verify token: %v\n", resp)
 }
