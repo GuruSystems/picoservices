@@ -4,9 +4,18 @@ export GOBIN=`pwd`/dist
 export GOPATH=`pwd`
 echo "GOPATH=$GOPATH"
 mkdir $GOBIN
-MYSRC=src/golang.conradwood.net/auth
+
+
+BUILD() {
+    echo "Building $1"
+MYSRC=src/golang.conradwood.net/$1
 ( cd ${MYSRC} && make proto ) || exit 10
 ( cd ${MYSRC} && make client ) || exit 10
 ( cd ${MYSRC} && make server ) || exit 10
 cp -rvf ${MYSRC}/proto dist/
+}
+
+BUILD auth
+BUILD registrar
+
 exit 0
