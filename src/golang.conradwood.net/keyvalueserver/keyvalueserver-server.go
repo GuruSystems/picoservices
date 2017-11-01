@@ -5,6 +5,7 @@ import (
 	"google.golang.org/grpc"
 	//	"github.com/golang/protobuf/proto"
 	"flag"
+	"golang.conradwood.net/compound"
 	pb "golang.conradwood.net/keyvalueserver/proto"
 	"golang.org/x/net/context"
 	"google.golang.org/grpc/peer"
@@ -24,7 +25,6 @@ func st(server *grpc.Server) error {
 
 func main() {
 	flag.Parse() // parse stuff. see "var" section above
-	listenAddr := fmt.Sprintf(":%d", *port)
 	sd := compound.ServerDef{
 		Port: *port,
 	}
