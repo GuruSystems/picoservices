@@ -11,32 +11,24 @@ import "examples/sub/message.proto";
 import "examples/sub2/message.proto";
 import "google/protobuf/timestamp.proto";
 */
-message CreateRequest {
- string Name = 1;
- string Access = 2;
+
+message PutRequest {
+ string Key = 1;
+ string Value = 2;
+}
+ 
+message PutResponse {}
+
+message GetRequest {
+ string Key = 1;
+}
+message GetResponse {
+string Key = 1;
+string Value = 2;
 }
 
-message CreateResponse {
- string Certificate=1;
-}
 
-message PingRequest {}
-message PingResponse {}
-
-service VpnManager {
- rpc CreateVpn(CreateRequest) returns (CreateResponse){
-     option (google.api.http) = { get: "/vpnmgr/v1/vpn/certificate" };
- }
-
- rpc Ping(PingRequest) returns (PingResponse) {
-     option (google.api.http) = { get: "/vpnmgr/v1/ping" };
- }
-
- /*
- option(google.api.http) = {
-   post: "/v1/echo"
-   body: "*"
- };
- }
- */
+service KeyValueService {
+ rpc Put(PutRequest) returns (PutResponse);
+ rpc Get(GetRequest) returns (GetResponse) ;
 }

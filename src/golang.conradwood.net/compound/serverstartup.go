@@ -1,4 +1,4 @@
-package common
+package compound
 
 import (
 	"flag"

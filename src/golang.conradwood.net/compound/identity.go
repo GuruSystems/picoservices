@@ -1,4 +1,4 @@
-package common
+package compound
 
 // TODO: how/when do we close database connections? (pooling?)
 

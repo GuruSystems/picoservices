@@ -8,8 +8,6 @@ import (
 	pb "golang.conradwood.net/keyvalueserver/proto"
 	"golang.org/x/net/context"
 	"google.golang.org/grpc/peer"
-	"log"
-	"net"
 )
 
 // static variables for flag parser
@@ -17,28 +15,32 @@ var (
 	port = flag.Int("port", 10000, "The server port")
 )
 
+func st(server *grpc.Server) error {
+	s := new(KeyValueServer)
+	// Register the handler object
+	pb.RegisterKeyValueServiceServer(server, s)
+	return nil
+}
+
 func main() {
 	flag.Parse() // parse stuff. see "var" section above
 	listenAddr := fmt.Sprintf(":%d", *port)
-	fmt.Println("Starting VPN Manager service on ", listenAddr)
-	lis, err := net.Listen("tcp4", fmt.Sprintf(":%d", *port))
-	if err != nil {
-		log.Fatalf("failed to listen: %v", err)
+	sd := compound.ServerDef{
+		Port: *port,
 	}
-
-	var opts []grpc.ServerOption
-	grpcServer := grpc.NewServer(opts...)
-
-	s := new(VpnManagerServer)
-	pb.RegisterVpnManagerServer(grpcServer, s) // created by proto
-
-	grpcServer.Serve(lis)
+	sd.Register = st
+	err := compound.ServerStartup(sd)
+	if err != nil {
+		fmt.Printf("failed to start server: %s\n", err)
+	}
+	fmt.Printf("Done\n")
+	return
 }
 
 /**********************************
 * implementing the functions here:
 ***********************************/
-type VpnManagerServer struct {
+type KeyValueServer struct {
 	wtf int
 }
 
@@ -46,18 +48,17 @@ type VpnManagerServer struct {
 // in java/python we also put pointers to functions into structs and but call them "objects" instead
 // in Go we don't put functions pointers into structs, we "associate" a function with a struct.
 // (I think that's more or less the same as what C does, just different Syntax)
-func (s *VpnManagerServer) CreateVpn(ctx context.Context, CreateRequest *pb.CreateRequest) (*pb.CreateResponse, error) {
+func (s *KeyValueServer) Put(ctx context.Context, PutRequest *pb.PutRequest) (*pb.PutResponse, error) {
 	peer, ok := peer.FromContext(ctx)
 	if !ok {
 		fmt.Println("Error getting peer ")
 	}
-	fmt.Println(peer.Addr, "called createvpn")
-	resp := pb.CreateResponse{}
-	resp.Certificate = "I am a fake certificate"
+	fmt.Println(peer.Addr, "called put")
+	resp := pb.PutResponse{}
 	return &resp, nil
 }
 
-func (s *VpnManagerServer) Ping(ctx context.Context, pr *pb.PingRequest) (*pb.PingResponse, error) {
+func (s *KeyValueServer) Get(ctx context.Context, pr *pb.GetRequest) (*pb.GetResponse, error) {
 	fmt.Println("pong")
 	return nil, nil
 }
