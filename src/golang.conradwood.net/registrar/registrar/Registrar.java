@@ -14,52 +14,49 @@ public final class Registrar {
     registerAllExtensions(
         (com.google.protobuf.ExtensionRegistryLite) registry);
   }
-  public interface CreateRequestOrBuilder extends
-      // @@protoc_insertion_point(interface_extends:registrar.CreateRequest)
+  public interface ServiceDescriptionOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:registrar.ServiceDescription)
       com.google.protobuf.MessageOrBuilder {
 
     /**
-     * <code>optional string Name = 1;</code>
+     * <code>optional string name = 1;</code>
      */
     java.lang.String getName();
     /**
-     * <code>optional string Name = 1;</code>
+     * <code>optional string name = 1;</code>
      */
     com.google.protobuf.ByteString
         getNameBytes();
 
     /**
-     * <code>optional string Access = 2;</code>
+     * <code>optional int64 build = 2;</code>
      */
-    java.lang.String getAccess();
+    long getBuild();
+
     /**
-     * <code>optional string Access = 2;</code>
+     * <code>optional .registrar.ServiceDescription.Servicetype type = 4;</code>
      */
-    com.google.protobuf.ByteString
-        getAccessBytes();
+    int getTypeValue();
+    /**
+     * <code>optional .registrar.ServiceDescription.Servicetype type = 4;</code>
+     */
+    registrar.Registrar.ServiceDescription.Servicetype getType();
   }
   /**
-   * <pre>
-   *import "google/protobuf/empty.proto";
-   *import "google/protobuf/duration.proto";
-   *import "examples/sub/message.proto";
-   *import "examples/sub2/message.proto";
-   *import "google/protobuf/timestamp.proto";
-   * </pre>
-   *
-   * Protobuf type {@code registrar.CreateRequest}
+   * Protobuf type {@code registrar.ServiceDescription}
    */
-  public  static final class CreateRequest extends
+  public  static final class ServiceDescription extends
       com.google.protobuf.GeneratedMessageV3 implements
-      // @@protoc_insertion_point(message_implements:registrar.CreateRequest)
-      CreateRequestOrBuilder {
-    // Use CreateRequest.newBuilder() to construct.
-    private CreateRequest(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+      // @@protoc_insertion_point(message_implements:registrar.ServiceDescription)
+      ServiceDescriptionOrBuilder {
+    // Use ServiceDescription.newBuilder() to construct.
+    private ServiceDescription(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
     }
-    private CreateRequest() {
+    private ServiceDescription() {
       name_ = "";
-      access_ = "";
+      build_ = 0L;
+      type_ = 0;
     }
 
     @java.lang.Override
@@ -67,7 +64,7 @@ public final class Registrar {
     getUnknownFields() {
       return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
     }
-    private CreateRequest(
+    private ServiceDescription(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
@@ -93,10 +90,15 @@ public final class Registrar {
               name_ = s;
               break;
             }
-            case 18: {
-              java.lang.String s = input.readStringRequireUtf8();
+            case 16: {
 
-              access_ = s;
+              build_ = input.readInt64();
+              break;
+            }
+            case 32: {
+              int rawValue = input.readEnum();
+
+              type_ = rawValue;
               break;
             }
           }
@@ -112,20 +114,118 @@ public final class Registrar {
     }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return registrar.Registrar.internal_static_registrar_CreateRequest_descriptor;
+      return registrar.Registrar.internal_static_registrar_ServiceDescription_descriptor;
     }
 
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return registrar.Registrar.internal_static_registrar_CreateRequest_fieldAccessorTable
+      return registrar.Registrar.internal_static_registrar_ServiceDescription_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              registrar.Registrar.CreateRequest.class, registrar.Registrar.CreateRequest.Builder.class);
+              registrar.Registrar.ServiceDescription.class, registrar.Registrar.ServiceDescription.Builder.class);
+    }
+
+    /**
+     * Protobuf enum {@code registrar.ServiceDescription.Servicetype}
+     */
+    public enum Servicetype
+        implements com.google.protobuf.ProtocolMessageEnum {
+      /**
+       * <code>grpc = 0;</code>
+       */
+      grpc(0),
+      /**
+       * <code>json = 1;</code>
+       */
+      json(1),
+      UNRECOGNIZED(-1),
+      ;
+
+      /**
+       * <code>grpc = 0;</code>
+       */
+      public static final int grpc_VALUE = 0;
+      /**
+       * <code>json = 1;</code>
+       */
+      public static final int json_VALUE = 1;
+
+
+      public final int getNumber() {
+        if (this == UNRECOGNIZED) {
+          throw new java.lang.IllegalArgumentException(
+              "Can't get the number of an unknown enum value.");
+        }
+        return value;
+      }
+
+      /**
+       * @deprecated Use {@link #forNumber(int)} instead.
+       */
+      @java.lang.Deprecated
+      public static Servicetype valueOf(int value) {
+        return forNumber(value);
+      }
+
+      public static Servicetype forNumber(int value) {
+        switch (value) {
+          case 0: return grpc;
+          case 1: return json;
+          default: return null;
+        }
+      }
+
+      public static com.google.protobuf.Internal.EnumLiteMap<Servicetype>
+          internalGetValueMap() {
+        return internalValueMap;
+      }
+      private static final com.google.protobuf.Internal.EnumLiteMap<
+          Servicetype> internalValueMap =
+            new com.google.protobuf.Internal.EnumLiteMap<Servicetype>() {
+              public Servicetype findValueByNumber(int number) {
+                return Servicetype.forNumber(number);
+              }
+            };
+
+      public final com.google.protobuf.Descriptors.EnumValueDescriptor
+          getValueDescriptor() {
+        return getDescriptor().getValues().get(ordinal());
+      }
+      public final com.google.protobuf.Descriptors.EnumDescriptor
+          getDescriptorForType() {
+        return getDescriptor();
+      }
+      public static final com.google.protobuf.Descriptors.EnumDescriptor
+          getDescriptor() {
+        return registrar.Registrar.ServiceDescription.getDescriptor().getEnumTypes().get(0);
+      }
+
+      private static final Servicetype[] VALUES = values();
+
+      public static Servicetype valueOf(
+          com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
+        if (desc.getType() != getDescriptor()) {
+          throw new java.lang.IllegalArgumentException(
+            "EnumValueDescriptor is not for this type.");
+        }
+        if (desc.getIndex() == -1) {
+          return UNRECOGNIZED;
+        }
+        return VALUES[desc.getIndex()];
+      }
+
+      private final int value;
+
+      private Servicetype(int value) {
+        this.value = value;
+      }
+
+      // @@protoc_insertion_point(enum_scope:registrar.ServiceDescription.Servicetype)
     }
 
     public static final int NAME_FIELD_NUMBER = 1;
     private volatile java.lang.Object name_;
     /**
-     * <code>optional string Name = 1;</code>
+     * <code>optional string name = 1;</code>
      */
     public java.lang.String getName() {
       java.lang.Object ref = name_;
@@ -140,7 +240,7 @@ public final class Registrar {
       }
     }
     /**
-     * <code>optional string Name = 1;</code>
+     * <code>optional string name = 1;</code>
      */
     public com.google.protobuf.ByteString
         getNameBytes() {
@@ -156,38 +256,29 @@ public final class Registrar {
       }
     }
 
-    public static final int ACCESS_FIELD_NUMBER = 2;
-    private volatile java.lang.Object access_;
+    public static final int BUILD_FIELD_NUMBER = 2;
+    private long build_;
     /**
-     * <code>optional string Access = 2;</code>
+     * <code>optional int64 build = 2;</code>
      */
-    public java.lang.String getAccess() {
-      java.lang.Object ref = access_;
-      if (ref instanceof java.lang.String) {
-        return (java.lang.String) ref;
-      } else {
-        com.google.protobuf.ByteString bs = 
-            (com.google.protobuf.ByteString) ref;
-        java.lang.String s = bs.toStringUtf8();
-        access_ = s;
-        return s;
-      }
+    public long getBuild() {
+      return build_;
+    }
+
+    public static final int TYPE_FIELD_NUMBER = 4;
+    private int type_;
+    /**
+     * <code>optional .registrar.ServiceDescription.Servicetype type = 4;</code>
+     */
+    public int getTypeValue() {
+      return type_;
     }
     /**
-     * <code>optional string Access = 2;</code>
+     * <code>optional .registrar.ServiceDescription.Servicetype type = 4;</code>
      */
-    public com.google.protobuf.ByteString
-        getAccessBytes() {
-      java.lang.Object ref = access_;
-      if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
-        access_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
+    public registrar.Registrar.ServiceDescription.Servicetype getType() {
+      registrar.Registrar.ServiceDescription.Servicetype result = registrar.Registrar.ServiceDescription.Servicetype.valueOf(type_);
+      return result == null ? registrar.Registrar.ServiceDescription.Servicetype.UNRECOGNIZED : result;
     }
 
     private byte memoizedIsInitialized = -1;
@@ -205,8 +296,11 @@ public final class Registrar {
       if (!getNameBytes().isEmpty()) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 1, name_);
       }
-      if (!getAccessBytes().isEmpty()) {
-        com.google.protobuf.GeneratedMessageV3.writeString(output, 2, access_);
+      if (build_ != 0L) {
+        output.writeInt64(2, build_);
+      }
+      if (type_ != registrar.Registrar.ServiceDescription.Servicetype.grpc.getNumber()) {
+        output.writeEnum(4, type_);
       }
     }
 
@@ -218,8 +312,13 @@ public final class Registrar {
       if (!getNameBytes().isEmpty()) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, name_);
       }
-      if (!getAccessBytes().isEmpty()) {
-        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, access_);
+      if (build_ != 0L) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt64Size(2, build_);
+      }
+      if (type_ != registrar.Registrar.ServiceDescription.Servicetype.grpc.getNumber()) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeEnumSize(4, type_);
       }
       memoizedSize = size;
       return size;
@@ -231,16 +330,17 @@ public final class Registrar {
       if (obj == this) {
        return true;
       }
-      if (!(obj instanceof registrar.Registrar.CreateRequest)) {
+      if (!(obj instanceof registrar.Registrar.ServiceDescription)) {
         return super.equals(obj);
       }
-      registrar.Registrar.CreateRequest other = (registrar.Registrar.CreateRequest) obj;
+      registrar.Registrar.ServiceDescription other = (registrar.Registrar.ServiceDescription) obj;
 
       boolean result = true;
       result = result && getName()
           .equals(other.getName());
-      result = result && getAccess()
-          .equals(other.getAccess());
+      result = result && (getBuild()
+          == other.getBuild());
+      result = result && type_ == other.type_;
       return result;
     }
 
@@ -253,65 +353,68 @@ public final class Registrar {
       hash = (19 * hash) + getDescriptorForType().hashCode();
       hash = (37 * hash) + NAME_FIELD_NUMBER;
       hash = (53 * hash) + getName().hashCode();
-      hash = (37 * hash) + ACCESS_FIELD_NUMBER;
-      hash = (53 * hash) + getAccess().hashCode();
+      hash = (37 * hash) + BUILD_FIELD_NUMBER;
+      hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
+          getBuild());
+      hash = (37 * hash) + TYPE_FIELD_NUMBER;
+      hash = (53 * hash) + type_;
       hash = (29 * hash) + unknownFields.hashCode();
       memoizedHashCode = hash;
       return hash;
     }
 
-    public static registrar.Registrar.CreateRequest parseFrom(
+    public static registrar.Registrar.ServiceDescription parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static registrar.Registrar.CreateRequest parseFrom(
+    public static registrar.Registrar.ServiceDescription parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static registrar.Registrar.CreateRequest parseFrom(byte[] data)
+    public static registrar.Registrar.ServiceDescription parseFrom(byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static registrar.Registrar.CreateRequest parseFrom(
+    public static registrar.Registrar.ServiceDescription parseFrom(
         byte[] data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static registrar.Registrar.CreateRequest parseFrom(java.io.InputStream input)
+    public static registrar.Registrar.ServiceDescription parseFrom(java.io.InputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input);
     }
-    public static registrar.Registrar.CreateRequest parseFrom(
+    public static registrar.Registrar.ServiceDescription parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input, extensionRegistry);
     }
-    public static registrar.Registrar.CreateRequest parseDelimitedFrom(java.io.InputStream input)
+    public static registrar.Registrar.ServiceDescription parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseDelimitedWithIOException(PARSER, input);
     }
-    public static registrar.Registrar.CreateRequest parseDelimitedFrom(
+    public static registrar.Registrar.ServiceDescription parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
-    public static registrar.Registrar.CreateRequest parseFrom(
+    public static registrar.Registrar.ServiceDescription parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input);
     }
-    public static registrar.Registrar.CreateRequest parseFrom(
+    public static registrar.Registrar.ServiceDescription parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
@@ -323,7 +426,7 @@ public final class Registrar {
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
-    public static Builder newBuilder(registrar.Registrar.CreateRequest prototype) {
+    public static Builder newBuilder(registrar.Registrar.ServiceDescription prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
     public Builder toBuilder() {
@@ -338,33 +441,25 @@ public final class Registrar {
       return builder;
     }
     /**
-     * <pre>
-     *import "google/protobuf/empty.proto";
-     *import "google/protobuf/duration.proto";
-     *import "examples/sub/message.proto";
-     *import "examples/sub2/message.proto";
-     *import "google/protobuf/timestamp.proto";
-     * </pre>
-     *
-     * Protobuf type {@code registrar.CreateRequest}
+     * Protobuf type {@code registrar.ServiceDescription}
      */
     public static final class Builder extends
         com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-        // @@protoc_insertion_point(builder_implements:registrar.CreateRequest)
-        registrar.Registrar.CreateRequestOrBuilder {
+        // @@protoc_insertion_point(builder_implements:registrar.ServiceDescription)
+        registrar.Registrar.ServiceDescriptionOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
-        return registrar.Registrar.internal_static_registrar_CreateRequest_descriptor;
+        return registrar.Registrar.internal_static_registrar_ServiceDescription_descriptor;
       }
 
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
           internalGetFieldAccessorTable() {
-        return registrar.Registrar.internal_static_registrar_CreateRequest_fieldAccessorTable
+        return registrar.Registrar.internal_static_registrar_ServiceDescription_fieldAccessorTable
             .ensureFieldAccessorsInitialized(
-                registrar.Registrar.CreateRequest.class, registrar.Registrar.CreateRequest.Builder.class);
+                registrar.Registrar.ServiceDescription.class, registrar.Registrar.ServiceDescription.Builder.class);
       }
 
-      // Construct using registrar.Registrar.CreateRequest.newBuilder()
+      // Construct using registrar.Registrar.ServiceDescription.newBuilder()
       private Builder() {
         maybeForceBuilderInitialization();
       }
@@ -383,32 +478,35 @@ public final class Registrar {
         super.clear();
         name_ = "";
 
-        access_ = "";
+        build_ = 0L;
+
+        type_ = 0;
 
         return this;
       }
 
       public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
-        return registrar.Registrar.internal_static_registrar_CreateRequest_descriptor;
+        return registrar.Registrar.internal_static_registrar_ServiceDescription_descriptor;
       }
 
-      public registrar.Registrar.CreateRequest getDefaultInstanceForType() {
-        return registrar.Registrar.CreateRequest.getDefaultInstance();
+      public registrar.Registrar.ServiceDescription getDefaultInstanceForType() {
+        return registrar.Registrar.ServiceDescription.getDefaultInstance();
       }
 
-      public registrar.Registrar.CreateRequest build() {
-        registrar.Registrar.CreateRequest result = buildPartial();
+      public registrar.Registrar.ServiceDescription build() {
+        registrar.Registrar.ServiceDescription result = buildPartial();
         if (!result.isInitialized()) {
           throw newUninitializedMessageException(result);
         }
         return result;
       }
 
-      public registrar.Registrar.CreateRequest buildPartial() {
-        registrar.Registrar.CreateRequest result = new registrar.Registrar.CreateRequest(this);
+      public registrar.Registrar.ServiceDescription buildPartial() {
+        registrar.Registrar.ServiceDescription result = new registrar.Registrar.ServiceDescription(this);
         result.name_ = name_;
-        result.access_ = access_;
+        result.build_ = build_;
+        result.type_ = type_;
         onBuilt();
         return result;
       }
@@ -440,23 +538,25 @@ public final class Registrar {
         return (Builder) super.addRepeatedField(field, value);
       }
       public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof registrar.Registrar.CreateRequest) {
-          return mergeFrom((registrar.Registrar.CreateRequest)other);
+        if (other instanceof registrar.Registrar.ServiceDescription) {
+          return mergeFrom((registrar.Registrar.ServiceDescription)other);
         } else {
           super.mergeFrom(other);
           return this;
         }
       }
 
-      public Builder mergeFrom(registrar.Registrar.CreateRequest other) {
-        if (other == registrar.Registrar.CreateRequest.getDefaultInstance()) return this;
+      public Builder mergeFrom(registrar.Registrar.ServiceDescription other) {
+        if (other == registrar.Registrar.ServiceDescription.getDefaultInstance()) return this;
         if (!other.getName().isEmpty()) {
           name_ = other.name_;
           onChanged();
         }
-        if (!other.getAccess().isEmpty()) {
-          access_ = other.access_;
-          onChanged();
+        if (other.getBuild() != 0L) {
+          setBuild(other.getBuild());
+        }
+        if (other.type_ != 0) {
+          setTypeValue(other.getTypeValue());
         }
         onChanged();
         return this;
@@ -470,11 +570,11 @@ public final class Registrar {
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        registrar.Registrar.CreateRequest parsedMessage = null;
+        registrar.Registrar.ServiceDescription parsedMessage = null;
         try {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (registrar.Registrar.CreateRequest) e.getUnfinishedMessage();
+          parsedMessage = (registrar.Registrar.ServiceDescription) e.getUnfinishedMessage();
           throw e.unwrapIOException();
         } finally {
           if (parsedMessage != null) {
@@ -486,7 +586,7 @@ public final class Registrar {
 
       private java.lang.Object name_ = "";
       /**
-       * <code>optional string Name = 1;</code>
+       * <code>optional string name = 1;</code>
        */
       public java.lang.String getName() {
         java.lang.Object ref = name_;
@@ -501,7 +601,7 @@ public final class Registrar {
         }
       }
       /**
-       * <code>optional string Name = 1;</code>
+       * <code>optional string name = 1;</code>
        */
       public com.google.protobuf.ByteString
           getNameBytes() {
@@ -517,7 +617,7 @@ public final class Registrar {
         }
       }
       /**
-       * <code>optional string Name = 1;</code>
+       * <code>optional string name = 1;</code>
        */
       public Builder setName(
           java.lang.String value) {
@@ -530,7 +630,7 @@ public final class Registrar {
         return this;
       }
       /**
-       * <code>optional string Name = 1;</code>
+       * <code>optional string name = 1;</code>
        */
       public Builder clearName() {
         
@@ -539,7 +639,7 @@ public final class Registrar {
         return this;
       }
       /**
-       * <code>optional string Name = 1;</code>
+       * <code>optional string name = 1;</code>
        */
       public Builder setNameBytes(
           com.google.protobuf.ByteString value) {
@@ -553,71 +653,72 @@ public final class Registrar {
         return this;
       }
 
-      private java.lang.Object access_ = "";
+      private long build_ ;
       /**
-       * <code>optional string Access = 2;</code>
+       * <code>optional int64 build = 2;</code>
        */
-      public java.lang.String getAccess() {
-        java.lang.Object ref = access_;
-        if (!(ref instanceof java.lang.String)) {
-          com.google.protobuf.ByteString bs =
-              (com.google.protobuf.ByteString) ref;
-          java.lang.String s = bs.toStringUtf8();
-          access_ = s;
-          return s;
-        } else {
-          return (java.lang.String) ref;
-        }
+      public long getBuild() {
+        return build_;
       }
       /**
-       * <code>optional string Access = 2;</code>
+       * <code>optional int64 build = 2;</code>
        */
-      public com.google.protobuf.ByteString
-          getAccessBytes() {
-        java.lang.Object ref = access_;
-        if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
-              com.google.protobuf.ByteString.copyFromUtf8(
-                  (java.lang.String) ref);
-          access_ = b;
-          return b;
-        } else {
-          return (com.google.protobuf.ByteString) ref;
-        }
-      }
-      /**
-       * <code>optional string Access = 2;</code>
-       */
-      public Builder setAccess(
-          java.lang.String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  
-        access_ = value;
+      public Builder setBuild(long value) {
+        
+        build_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>optional string Access = 2;</code>
+       * <code>optional int64 build = 2;</code>
        */
-      public Builder clearAccess() {
+      public Builder clearBuild() {
         
-        access_ = getDefaultInstance().getAccess();
+        build_ = 0L;
+        onChanged();
+        return this;
+      }
+
+      private int type_ = 0;
+      /**
+       * <code>optional .registrar.ServiceDescription.Servicetype type = 4;</code>
+       */
+      public int getTypeValue() {
+        return type_;
+      }
+      /**
+       * <code>optional .registrar.ServiceDescription.Servicetype type = 4;</code>
+       */
+      public Builder setTypeValue(int value) {
+        type_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>optional string Access = 2;</code>
+       * <code>optional .registrar.ServiceDescription.Servicetype type = 4;</code>
        */
-      public Builder setAccessBytes(
-          com.google.protobuf.ByteString value) {
+      public registrar.Registrar.ServiceDescription.Servicetype getType() {
+        registrar.Registrar.ServiceDescription.Servicetype result = registrar.Registrar.ServiceDescription.Servicetype.valueOf(type_);
+        return result == null ? registrar.Registrar.ServiceDescription.Servicetype.UNRECOGNIZED : result;
+      }
+      /**
+       * <code>optional .registrar.ServiceDescription.Servicetype type = 4;</code>
+       */
+      public Builder setType(registrar.Registrar.ServiceDescription.Servicetype value) {
         if (value == null) {
-    throw new NullPointerException();
-  }
-  checkByteStringIsUtf8(value);
+          throw new NullPointerException();
+        }
         
-        access_ = value;
+        type_ = value.getNumber();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional .registrar.ServiceDescription.Servicetype type = 4;</code>
+       */
+      public Builder clearType() {
+        
+        type_ = 0;
         onChanged();
         return this;
       }
@@ -632,71 +733,77 @@ public final class Registrar {
       }
 
 
-      // @@protoc_insertion_point(builder_scope:registrar.CreateRequest)
+      // @@protoc_insertion_point(builder_scope:registrar.ServiceDescription)
     }
 
-    // @@protoc_insertion_point(class_scope:registrar.CreateRequest)
-    private static final registrar.Registrar.CreateRequest DEFAULT_INSTANCE;
+    // @@protoc_insertion_point(class_scope:registrar.ServiceDescription)
+    private static final registrar.Registrar.ServiceDescription DEFAULT_INSTANCE;
     static {
-      DEFAULT_INSTANCE = new registrar.Registrar.CreateRequest();
+      DEFAULT_INSTANCE = new registrar.Registrar.ServiceDescription();
     }
 
-    public static registrar.Registrar.CreateRequest getDefaultInstance() {
+    public static registrar.Registrar.ServiceDescription getDefaultInstance() {
       return DEFAULT_INSTANCE;
     }
 
-    private static final com.google.protobuf.Parser<CreateRequest>
-        PARSER = new com.google.protobuf.AbstractParser<CreateRequest>() {
-      public CreateRequest parsePartialFrom(
+    private static final com.google.protobuf.Parser<ServiceDescription>
+        PARSER = new com.google.protobuf.AbstractParser<ServiceDescription>() {
+      public ServiceDescription parsePartialFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
-          return new CreateRequest(input, extensionRegistry);
+          return new ServiceDescription(input, extensionRegistry);
       }
     };
 
-    public static com.google.protobuf.Parser<CreateRequest> parser() {
+    public static com.google.protobuf.Parser<ServiceDescription> parser() {
       return PARSER;
     }
 
     @java.lang.Override
-    public com.google.protobuf.Parser<CreateRequest> getParserForType() {
+    public com.google.protobuf.Parser<ServiceDescription> getParserForType() {
       return PARSER;
     }
 
-    public registrar.Registrar.CreateRequest getDefaultInstanceForType() {
+    public registrar.Registrar.ServiceDescription getDefaultInstanceForType() {
       return DEFAULT_INSTANCE;
     }
 
   }
 
-  public interface CreateResponseOrBuilder extends
-      // @@protoc_insertion_point(interface_extends:registrar.CreateResponse)
+  public interface ServiceAddressOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:registrar.ServiceAddress)
       com.google.protobuf.MessageOrBuilder {
 
     /**
-     * <code>optional string Certificate = 1;</code>
+     * <code>optional string Host = 1;</code>
      */
-    java.lang.String getCertificate();
+    java.lang.String getHost();
     /**
-     * <code>optional string Certificate = 1;</code>
+     * <code>optional string Host = 1;</code>
      */
     com.google.protobuf.ByteString
-        getCertificateBytes();
+        getHostBytes();
+
+    /**
+     * <code>optional int32 Port = 2;</code>
+     */
+    int getPort();
   }
   /**
-   * Protobuf type {@code registrar.CreateResponse}
+   * Protobuf type {@code registrar.ServiceAddress}
    */
-  public  static final class CreateResponse extends
+  public  static final class ServiceAddress extends
       com.google.protobuf.GeneratedMessageV3 implements
-      // @@protoc_insertion_point(message_implements:registrar.CreateResponse)
-      CreateResponseOrBuilder {
-    // Use CreateResponse.newBuilder() to construct.
-    private CreateResponse(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+      // @@protoc_insertion_point(message_implements:registrar.ServiceAddress)
+      ServiceAddressOrBuilder {
+    // Use ServiceAddress.newBuilder() to construct.
+    private ServiceAddress(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
     }
-    private CreateResponse() {
-      certificate_ = "";
+    private ServiceAddress() {
+      host_ = "";
+      port_ = 0;
     }
 
     @java.lang.Override
@@ -704,7 +811,7 @@ public final class Registrar {
     getUnknownFields() {
       return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
     }
-    private CreateResponse(
+    private ServiceAddress(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
@@ -727,7 +834,12 @@ public final class Registrar {
             case 10: {
               java.lang.String s = input.readStringRequireUtf8();
 
-              certificate_ = s;
+              host_ = s;
+              break;
+            }
+            case 16: {
+
+              port_ = input.readInt32();
               break;
             }
           }
@@ -743,50 +855,59 @@ public final class Registrar {
     }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return registrar.Registrar.internal_static_registrar_CreateResponse_descriptor;
+      return registrar.Registrar.internal_static_registrar_ServiceAddress_descriptor;
     }
 
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return registrar.Registrar.internal_static_registrar_CreateResponse_fieldAccessorTable
+      return registrar.Registrar.internal_static_registrar_ServiceAddress_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              registrar.Registrar.CreateResponse.class, registrar.Registrar.CreateResponse.Builder.class);
+              registrar.Registrar.ServiceAddress.class, registrar.Registrar.ServiceAddress.Builder.class);
     }
 
-    public static final int CERTIFICATE_FIELD_NUMBER = 1;
-    private volatile java.lang.Object certificate_;
+    public static final int HOST_FIELD_NUMBER = 1;
+    private volatile java.lang.Object host_;
     /**
-     * <code>optional string Certificate = 1;</code>
+     * <code>optional string Host = 1;</code>
      */
-    public java.lang.String getCertificate() {
-      java.lang.Object ref = certificate_;
+    public java.lang.String getHost() {
+      java.lang.Object ref = host_;
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
         com.google.protobuf.ByteString bs = 
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
-        certificate_ = s;
+        host_ = s;
         return s;
       }
     }
     /**
-     * <code>optional string Certificate = 1;</code>
+     * <code>optional string Host = 1;</code>
      */
     public com.google.protobuf.ByteString
-        getCertificateBytes() {
-      java.lang.Object ref = certificate_;
+        getHostBytes() {
+      java.lang.Object ref = host_;
       if (ref instanceof java.lang.String) {
         com.google.protobuf.ByteString b = 
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
-        certificate_ = b;
+        host_ = b;
         return b;
       } else {
         return (com.google.protobuf.ByteString) ref;
       }
     }
 
+    public static final int PORT_FIELD_NUMBER = 2;
+    private int port_;
+    /**
+     * <code>optional int32 Port = 2;</code>
+     */
+    public int getPort() {
+      return port_;
+    }
+
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
@@ -799,8 +920,11 @@ public final class Registrar {
 
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
-      if (!getCertificateBytes().isEmpty()) {
-        com.google.protobuf.GeneratedMessageV3.writeString(output, 1, certificate_);
+      if (!getHostBytes().isEmpty()) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 1, host_);
+      }
+      if (port_ != 0) {
+        output.writeInt32(2, port_);
       }
     }
 
@@ -809,8 +933,12 @@ public final class Registrar {
       if (size != -1) return size;
 
       size = 0;
-      if (!getCertificateBytes().isEmpty()) {
-        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, certificate_);
+      if (!getHostBytes().isEmpty()) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, host_);
+      }
+      if (port_ != 0) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(2, port_);
       }
       memoizedSize = size;
       return size;
@@ -822,14 +950,16 @@ public final class Registrar {
       if (obj == this) {
        return true;
       }
-      if (!(obj instanceof registrar.Registrar.CreateResponse)) {
+      if (!(obj instanceof registrar.Registrar.ServiceAddress)) {
         return super.equals(obj);
       }
-      registrar.Registrar.CreateResponse other = (registrar.Registrar.CreateResponse) obj;
+      registrar.Registrar.ServiceAddress other = (registrar.Registrar.ServiceAddress) obj;
 
       boolean result = true;
-      result = result && getCertificate()
-          .equals(other.getCertificate());
+      result = result && getHost()
+          .equals(other.getHost());
+      result = result && (getPort()
+          == other.getPort());
       return result;
     }
 
@@ -840,65 +970,67 @@ public final class Registrar {
       }
       int hash = 41;
       hash = (19 * hash) + getDescriptorForType().hashCode();
-      hash = (37 * hash) + CERTIFICATE_FIELD_NUMBER;
-      hash = (53 * hash) + getCertificate().hashCode();
+      hash = (37 * hash) + HOST_FIELD_NUMBER;
+      hash = (53 * hash) + getHost().hashCode();
+      hash = (37 * hash) + PORT_FIELD_NUMBER;
+      hash = (53 * hash) + getPort();
       hash = (29 * hash) + unknownFields.hashCode();
       memoizedHashCode = hash;
       return hash;
     }
 
-    public static registrar.Registrar.CreateResponse parseFrom(
+    public static registrar.Registrar.ServiceAddress parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static registrar.Registrar.CreateResponse parseFrom(
+    public static registrar.Registrar.ServiceAddress parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static registrar.Registrar.CreateResponse parseFrom(byte[] data)
+    public static registrar.Registrar.ServiceAddress parseFrom(byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static registrar.Registrar.CreateResponse parseFrom(
+    public static registrar.Registrar.ServiceAddress parseFrom(
         byte[] data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static registrar.Registrar.CreateResponse parseFrom(java.io.InputStream input)
+    public static registrar.Registrar.ServiceAddress parseFrom(java.io.InputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input);
     }
-    public static registrar.Registrar.CreateResponse parseFrom(
+    public static registrar.Registrar.ServiceAddress parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input, extensionRegistry);
     }
-    public static registrar.Registrar.CreateResponse parseDelimitedFrom(java.io.InputStream input)
+    public static registrar.Registrar.ServiceAddress parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseDelimitedWithIOException(PARSER, input);
     }
-    public static registrar.Registrar.CreateResponse parseDelimitedFrom(
+    public static registrar.Registrar.ServiceAddress parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
-    public static registrar.Registrar.CreateResponse parseFrom(
+    public static registrar.Registrar.ServiceAddress parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input);
     }
-    public static registrar.Registrar.CreateResponse parseFrom(
+    public static registrar.Registrar.ServiceAddress parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
@@ -910,7 +1042,7 @@ public final class Registrar {
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
-    public static Builder newBuilder(registrar.Registrar.CreateResponse prototype) {
+    public static Builder newBuilder(registrar.Registrar.ServiceAddress prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
     public Builder toBuilder() {
@@ -925,25 +1057,25 @@ public final class Registrar {
       return builder;
     }
     /**
-     * Protobuf type {@code registrar.CreateResponse}
+     * Protobuf type {@code registrar.ServiceAddress}
      */
     public static final class Builder extends
         com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-        // @@protoc_insertion_point(builder_implements:registrar.CreateResponse)
-        registrar.Registrar.CreateResponseOrBuilder {
+        // @@protoc_insertion_point(builder_implements:registrar.ServiceAddress)
+        registrar.Registrar.ServiceAddressOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
-        return registrar.Registrar.internal_static_registrar_CreateResponse_descriptor;
+        return registrar.Registrar.internal_static_registrar_ServiceAddress_descriptor;
       }
 
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
           internalGetFieldAccessorTable() {
-        return registrar.Registrar.internal_static_registrar_CreateResponse_fieldAccessorTable
+        return registrar.Registrar.internal_static_registrar_ServiceAddress_fieldAccessorTable
             .ensureFieldAccessorsInitialized(
-                registrar.Registrar.CreateResponse.class, registrar.Registrar.CreateResponse.Builder.class);
+                registrar.Registrar.ServiceAddress.class, registrar.Registrar.ServiceAddress.Builder.class);
       }
 
-      // Construct using registrar.Registrar.CreateResponse.newBuilder()
+      // Construct using registrar.Registrar.ServiceAddress.newBuilder()
       private Builder() {
         maybeForceBuilderInitialization();
       }
@@ -960,31 +1092,34 @@ public final class Registrar {
       }
       public Builder clear() {
         super.clear();
-        certificate_ = "";
+        host_ = "";
+
+        port_ = 0;
 
         return this;
       }
 
       public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
-        return registrar.Registrar.internal_static_registrar_CreateResponse_descriptor;
+        return registrar.Registrar.internal_static_registrar_ServiceAddress_descriptor;
       }
 
-      public registrar.Registrar.CreateResponse getDefaultInstanceForType() {
-        return registrar.Registrar.CreateResponse.getDefaultInstance();
+      public registrar.Registrar.ServiceAddress getDefaultInstanceForType() {
+        return registrar.Registrar.ServiceAddress.getDefaultInstance();
       }
 
-      public registrar.Registrar.CreateResponse build() {
-        registrar.Registrar.CreateResponse result = buildPartial();
+      public registrar.Registrar.ServiceAddress build() {
+        registrar.Registrar.ServiceAddress result = buildPartial();
         if (!result.isInitialized()) {
           throw newUninitializedMessageException(result);
         }
         return result;
       }
 
-      public registrar.Registrar.CreateResponse buildPartial() {
-        registrar.Registrar.CreateResponse result = new registrar.Registrar.CreateResponse(this);
-        result.certificate_ = certificate_;
+      public registrar.Registrar.ServiceAddress buildPartial() {
+        registrar.Registrar.ServiceAddress result = new registrar.Registrar.ServiceAddress(this);
+        result.host_ = host_;
+        result.port_ = port_;
         onBuilt();
         return result;
       }
@@ -1016,19 +1151,22 @@ public final class Registrar {
         return (Builder) super.addRepeatedField(field, value);
       }
       public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof registrar.Registrar.CreateResponse) {
-          return mergeFrom((registrar.Registrar.CreateResponse)other);
+        if (other instanceof registrar.Registrar.ServiceAddress) {
+          return mergeFrom((registrar.Registrar.ServiceAddress)other);
         } else {
           super.mergeFrom(other);
           return this;
         }
       }
 
-      public Builder mergeFrom(registrar.Registrar.CreateResponse other) {
-        if (other == registrar.Registrar.CreateResponse.getDefaultInstance()) return this;
-        if (!other.getCertificate().isEmpty()) {
-          certificate_ = other.certificate_;
+      public Builder mergeFrom(registrar.Registrar.ServiceAddress other) {
+        if (other == registrar.Registrar.ServiceAddress.getDefaultInstance()) return this;
+        if (!other.getHost().isEmpty()) {
+          host_ = other.host_;
           onChanged();
+        }
+        if (other.getPort() != 0) {
+          setPort(other.getPort());
         }
         onChanged();
         return this;
@@ -1042,11 +1180,11 @@ public final class Registrar {
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        registrar.Registrar.CreateResponse parsedMessage = null;
+        registrar.Registrar.ServiceAddress parsedMessage = null;
         try {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (registrar.Registrar.CreateResponse) e.getUnfinishedMessage();
+          parsedMessage = (registrar.Registrar.ServiceAddress) e.getUnfinishedMessage();
           throw e.unwrapIOException();
         } finally {
           if (parsedMessage != null) {
@@ -1056,71 +1194,97 @@ public final class Registrar {
         return this;
       }
 
-      private java.lang.Object certificate_ = "";
+      private java.lang.Object host_ = "";
       /**
-       * <code>optional string Certificate = 1;</code>
+       * <code>optional string Host = 1;</code>
        */
-      public java.lang.String getCertificate() {
-        java.lang.Object ref = certificate_;
+      public java.lang.String getHost() {
+        java.lang.Object ref = host_;
         if (!(ref instanceof java.lang.String)) {
           com.google.protobuf.ByteString bs =
               (com.google.protobuf.ByteString) ref;
           java.lang.String s = bs.toStringUtf8();
-          certificate_ = s;
+          host_ = s;
           return s;
         } else {
           return (java.lang.String) ref;
         }
       }
       /**
-       * <code>optional string Certificate = 1;</code>
+       * <code>optional string Host = 1;</code>
        */
       public com.google.protobuf.ByteString
-          getCertificateBytes() {
-        java.lang.Object ref = certificate_;
+          getHostBytes() {
+        java.lang.Object ref = host_;
         if (ref instanceof String) {
           com.google.protobuf.ByteString b = 
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
-          certificate_ = b;
+          host_ = b;
           return b;
         } else {
           return (com.google.protobuf.ByteString) ref;
         }
       }
       /**
-       * <code>optional string Certificate = 1;</code>
+       * <code>optional string Host = 1;</code>
        */
-      public Builder setCertificate(
+      public Builder setHost(
           java.lang.String value) {
         if (value == null) {
     throw new NullPointerException();
   }
   
-        certificate_ = value;
+        host_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>optional string Certificate = 1;</code>
+       * <code>optional string Host = 1;</code>
        */
-      public Builder clearCertificate() {
+      public Builder clearHost() {
         
-        certificate_ = getDefaultInstance().getCertificate();
+        host_ = getDefaultInstance().getHost();
         onChanged();
         return this;
       }
       /**
-       * <code>optional string Certificate = 1;</code>
+       * <code>optional string Host = 1;</code>
        */
-      public Builder setCertificateBytes(
+      public Builder setHostBytes(
           com.google.protobuf.ByteString value) {
         if (value == null) {
     throw new NullPointerException();
   }
   checkByteStringIsUtf8(value);
         
-        certificate_ = value;
+        host_ = value;
+        onChanged();
+        return this;
+      }
+
+      private int port_ ;
+      /**
+       * <code>optional int32 Port = 2;</code>
+       */
+      public int getPort() {
+        return port_;
+      }
+      /**
+       * <code>optional int32 Port = 2;</code>
+       */
+      public Builder setPort(int value) {
+        
+        port_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional int32 Port = 2;</code>
+       */
+      public Builder clearPort() {
+        
+        port_ = 0;
         onChanged();
         return this;
       }
@@ -1135,60 +1299,98 @@ public final class Registrar {
       }
 
 
-      // @@protoc_insertion_point(builder_scope:registrar.CreateResponse)
+      // @@protoc_insertion_point(builder_scope:registrar.ServiceAddress)
     }
 
-    // @@protoc_insertion_point(class_scope:registrar.CreateResponse)
-    private static final registrar.Registrar.CreateResponse DEFAULT_INSTANCE;
+    // @@protoc_insertion_point(class_scope:registrar.ServiceAddress)
+    private static final registrar.Registrar.ServiceAddress DEFAULT_INSTANCE;
     static {
-      DEFAULT_INSTANCE = new registrar.Registrar.CreateResponse();
+      DEFAULT_INSTANCE = new registrar.Registrar.ServiceAddress();
     }
 
-    public static registrar.Registrar.CreateResponse getDefaultInstance() {
+    public static registrar.Registrar.ServiceAddress getDefaultInstance() {
       return DEFAULT_INSTANCE;
     }
 
-    private static final com.google.protobuf.Parser<CreateResponse>
-        PARSER = new com.google.protobuf.AbstractParser<CreateResponse>() {
-      public CreateResponse parsePartialFrom(
+    private static final com.google.protobuf.Parser<ServiceAddress>
+        PARSER = new com.google.protobuf.AbstractParser<ServiceAddress>() {
+      public ServiceAddress parsePartialFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
-          return new CreateResponse(input, extensionRegistry);
+          return new ServiceAddress(input, extensionRegistry);
       }
     };
 
-    public static com.google.protobuf.Parser<CreateResponse> parser() {
+    public static com.google.protobuf.Parser<ServiceAddress> parser() {
       return PARSER;
     }
 
     @java.lang.Override
-    public com.google.protobuf.Parser<CreateResponse> getParserForType() {
+    public com.google.protobuf.Parser<ServiceAddress> getParserForType() {
       return PARSER;
     }
 
-    public registrar.Registrar.CreateResponse getDefaultInstanceForType() {
+    public registrar.Registrar.ServiceAddress getDefaultInstanceForType() {
       return DEFAULT_INSTANCE;
     }
 
   }
 
-  public interface PingRequestOrBuilder extends
-      // @@protoc_insertion_point(interface_extends:registrar.PingRequest)
+  public interface ServiceLocationOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:registrar.ServiceLocation)
       com.google.protobuf.MessageOrBuilder {
+
+    /**
+     * <code>optional .registrar.ServiceDescription Service = 1;</code>
+     */
+    boolean hasService();
+    /**
+     * <code>optional .registrar.ServiceDescription Service = 1;</code>
+     */
+    registrar.Registrar.ServiceDescription getService();
+    /**
+     * <code>optional .registrar.ServiceDescription Service = 1;</code>
+     */
+    registrar.Registrar.ServiceDescriptionOrBuilder getServiceOrBuilder();
+
+    /**
+     * <code>repeated .registrar.ServiceAddress Address = 2;</code>
+     */
+    java.util.List<registrar.Registrar.ServiceAddress> 
+        getAddressList();
+    /**
+     * <code>repeated .registrar.ServiceAddress Address = 2;</code>
+     */
+    registrar.Registrar.ServiceAddress getAddress(int index);
+    /**
+     * <code>repeated .registrar.ServiceAddress Address = 2;</code>
+     */
+    int getAddressCount();
+    /**
+     * <code>repeated .registrar.ServiceAddress Address = 2;</code>
+     */
+    java.util.List<? extends registrar.Registrar.ServiceAddressOrBuilder> 
+        getAddressOrBuilderList();
+    /**
+     * <code>repeated .registrar.ServiceAddress Address = 2;</code>
+     */
+    registrar.Registrar.ServiceAddressOrBuilder getAddressOrBuilder(
+        int index);
   }
   /**
-   * Protobuf type {@code registrar.PingRequest}
+   * Protobuf type {@code registrar.ServiceLocation}
    */
-  public  static final class PingRequest extends
+  public  static final class ServiceLocation extends
       com.google.protobuf.GeneratedMessageV3 implements
-      // @@protoc_insertion_point(message_implements:registrar.PingRequest)
-      PingRequestOrBuilder {
-    // Use PingRequest.newBuilder() to construct.
-    private PingRequest(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+      // @@protoc_insertion_point(message_implements:registrar.ServiceLocation)
+      ServiceLocationOrBuilder {
+    // Use ServiceLocation.newBuilder() to construct.
+    private ServiceLocation(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
     }
-    private PingRequest() {
+    private ServiceLocation() {
+      address_ = java.util.Collections.emptyList();
     }
 
     @java.lang.Override
@@ -1196,11 +1398,12 @@ public final class Registrar {
     getUnknownFields() {
       return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
     }
-    private PingRequest(
+    private ServiceLocation(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       this();
+      int mutable_bitField0_ = 0;
       try {
         boolean done = false;
         while (!done) {
@@ -1215,6 +1418,28 @@ public final class Registrar {
               }
               break;
             }
+            case 10: {
+              registrar.Registrar.ServiceDescription.Builder subBuilder = null;
+              if (service_ != null) {
+                subBuilder = service_.toBuilder();
+              }
+              service_ = input.readMessage(registrar.Registrar.ServiceDescription.parser(), extensionRegistry);
+              if (subBuilder != null) {
+                subBuilder.mergeFrom(service_);
+                service_ = subBuilder.buildPartial();
+              }
+
+              break;
+            }
+            case 18: {
+              if (!((mutable_bitField0_ & 0x00000002) == 0x00000002)) {
+                address_ = new java.util.ArrayList<registrar.Registrar.ServiceAddress>();
+                mutable_bitField0_ |= 0x00000002;
+              }
+              address_.add(
+                  input.readMessage(registrar.Registrar.ServiceAddress.parser(), extensionRegistry));
+              break;
+            }
           }
         }
       } catch (com.google.protobuf.InvalidProtocolBufferException e) {
@@ -1223,19 +1448,79 @@ public final class Registrar {
         throw new com.google.protobuf.InvalidProtocolBufferException(
             e).setUnfinishedMessage(this);
       } finally {
+        if (((mutable_bitField0_ & 0x00000002) == 0x00000002)) {
+          address_ = java.util.Collections.unmodifiableList(address_);
+        }
         makeExtensionsImmutable();
       }
     }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return registrar.Registrar.internal_static_registrar_PingRequest_descriptor;
+      return registrar.Registrar.internal_static_registrar_ServiceLocation_descriptor;
     }
 
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return registrar.Registrar.internal_static_registrar_PingRequest_fieldAccessorTable
+      return registrar.Registrar.internal_static_registrar_ServiceLocation_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              registrar.Registrar.PingRequest.class, registrar.Registrar.PingRequest.Builder.class);
+              registrar.Registrar.ServiceLocation.class, registrar.Registrar.ServiceLocation.Builder.class);
+    }
+
+    private int bitField0_;
+    public static final int SERVICE_FIELD_NUMBER = 1;
+    private registrar.Registrar.ServiceDescription service_;
+    /**
+     * <code>optional .registrar.ServiceDescription Service = 1;</code>
+     */
+    public boolean hasService() {
+      return service_ != null;
+    }
+    /**
+     * <code>optional .registrar.ServiceDescription Service = 1;</code>
+     */
+    public registrar.Registrar.ServiceDescription getService() {
+      return service_ == null ? registrar.Registrar.ServiceDescription.getDefaultInstance() : service_;
+    }
+    /**
+     * <code>optional .registrar.ServiceDescription Service = 1;</code>
+     */
+    public registrar.Registrar.ServiceDescriptionOrBuilder getServiceOrBuilder() {
+      return getService();
+    }
+
+    public static final int ADDRESS_FIELD_NUMBER = 2;
+    private java.util.List<registrar.Registrar.ServiceAddress> address_;
+    /**
+     * <code>repeated .registrar.ServiceAddress Address = 2;</code>
+     */
+    public java.util.List<registrar.Registrar.ServiceAddress> getAddressList() {
+      return address_;
+    }
+    /**
+     * <code>repeated .registrar.ServiceAddress Address = 2;</code>
+     */
+    public java.util.List<? extends registrar.Registrar.ServiceAddressOrBuilder> 
+        getAddressOrBuilderList() {
+      return address_;
+    }
+    /**
+     * <code>repeated .registrar.ServiceAddress Address = 2;</code>
+     */
+    public int getAddressCount() {
+      return address_.size();
+    }
+    /**
+     * <code>repeated .registrar.ServiceAddress Address = 2;</code>
+     */
+    public registrar.Registrar.ServiceAddress getAddress(int index) {
+      return address_.get(index);
+    }
+    /**
+     * <code>repeated .registrar.ServiceAddress Address = 2;</code>
+     */
+    public registrar.Registrar.ServiceAddressOrBuilder getAddressOrBuilder(
+        int index) {
+      return address_.get(index);
     }
 
     private byte memoizedIsInitialized = -1;
@@ -1250,6 +1535,12 @@ public final class Registrar {
 
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
+      if (service_ != null) {
+        output.writeMessage(1, getService());
+      }
+      for (int i = 0; i < address_.size(); i++) {
+        output.writeMessage(2, address_.get(i));
+      }
     }
 
     public int getSerializedSize() {
@@ -1257,6 +1548,14 @@ public final class Registrar {
       if (size != -1) return size;
 
       size = 0;
+      if (service_ != null) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(1, getService());
+      }
+      for (int i = 0; i < address_.size(); i++) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(2, address_.get(i));
+      }
       memoizedSize = size;
       return size;
     }
@@ -1267,12 +1566,19 @@ public final class Registrar {
       if (obj == this) {
        return true;
       }
-      if (!(obj instanceof registrar.Registrar.PingRequest)) {
+      if (!(obj instanceof registrar.Registrar.ServiceLocation)) {
         return super.equals(obj);
       }
-      registrar.Registrar.PingRequest other = (registrar.Registrar.PingRequest) obj;
+      registrar.Registrar.ServiceLocation other = (registrar.Registrar.ServiceLocation) obj;
 
       boolean result = true;
+      result = result && (hasService() == other.hasService());
+      if (hasService()) {
+        result = result && getService()
+            .equals(other.getService());
+      }
+      result = result && getAddressList()
+          .equals(other.getAddressList());
       return result;
     }
 
@@ -1283,63 +1589,71 @@ public final class Registrar {
       }
       int hash = 41;
       hash = (19 * hash) + getDescriptorForType().hashCode();
+      if (hasService()) {
+        hash = (37 * hash) + SERVICE_FIELD_NUMBER;
+        hash = (53 * hash) + getService().hashCode();
+      }
+      if (getAddressCount() > 0) {
+        hash = (37 * hash) + ADDRESS_FIELD_NUMBER;
+        hash = (53 * hash) + getAddressList().hashCode();
+      }
       hash = (29 * hash) + unknownFields.hashCode();
       memoizedHashCode = hash;
       return hash;
     }
 
-    public static registrar.Registrar.PingRequest parseFrom(
+    public static registrar.Registrar.ServiceLocation parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static registrar.Registrar.PingRequest parseFrom(
+    public static registrar.Registrar.ServiceLocation parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static registrar.Registrar.PingRequest parseFrom(byte[] data)
+    public static registrar.Registrar.ServiceLocation parseFrom(byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static registrar.Registrar.PingRequest parseFrom(
+    public static registrar.Registrar.ServiceLocation parseFrom(
         byte[] data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static registrar.Registrar.PingRequest parseFrom(java.io.InputStream input)
+    public static registrar.Registrar.ServiceLocation parseFrom(java.io.InputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input);
     }
-    public static registrar.Registrar.PingRequest parseFrom(
+    public static registrar.Registrar.ServiceLocation parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input, extensionRegistry);
     }
-    public static registrar.Registrar.PingRequest parseDelimitedFrom(java.io.InputStream input)
+    public static registrar.Registrar.ServiceLocation parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseDelimitedWithIOException(PARSER, input);
     }
-    public static registrar.Registrar.PingRequest parseDelimitedFrom(
+    public static registrar.Registrar.ServiceLocation parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
-    public static registrar.Registrar.PingRequest parseFrom(
+    public static registrar.Registrar.ServiceLocation parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input);
     }
-    public static registrar.Registrar.PingRequest parseFrom(
+    public static registrar.Registrar.ServiceLocation parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
@@ -1351,7 +1665,7 @@ public final class Registrar {
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
-    public static Builder newBuilder(registrar.Registrar.PingRequest prototype) {
+    public static Builder newBuilder(registrar.Registrar.ServiceLocation prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
     public Builder toBuilder() {
@@ -1366,25 +1680,25 @@ public final class Registrar {
       return builder;
     }
     /**
-     * Protobuf type {@code registrar.PingRequest}
+     * Protobuf type {@code registrar.ServiceLocation}
      */
     public static final class Builder extends
         com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-        // @@protoc_insertion_point(builder_implements:registrar.PingRequest)
-        registrar.Registrar.PingRequestOrBuilder {
+        // @@protoc_insertion_point(builder_implements:registrar.ServiceLocation)
+        registrar.Registrar.ServiceLocationOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
-        return registrar.Registrar.internal_static_registrar_PingRequest_descriptor;
+        return registrar.Registrar.internal_static_registrar_ServiceLocation_descriptor;
       }
 
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
           internalGetFieldAccessorTable() {
-        return registrar.Registrar.internal_static_registrar_PingRequest_fieldAccessorTable
+        return registrar.Registrar.internal_static_registrar_ServiceLocation_fieldAccessorTable
             .ensureFieldAccessorsInitialized(
-                registrar.Registrar.PingRequest.class, registrar.Registrar.PingRequest.Builder.class);
+                registrar.Registrar.ServiceLocation.class, registrar.Registrar.ServiceLocation.Builder.class);
       }
 
-      // Construct using registrar.Registrar.PingRequest.newBuilder()
+      // Construct using registrar.Registrar.ServiceLocation.newBuilder()
       private Builder() {
         maybeForceBuilderInitialization();
       }
@@ -1397,32 +1711,62 @@ public final class Registrar {
       private void maybeForceBuilderInitialization() {
         if (com.google.protobuf.GeneratedMessageV3
                 .alwaysUseFieldBuilders) {
+          getAddressFieldBuilder();
         }
       }
       public Builder clear() {
         super.clear();
+        if (serviceBuilder_ == null) {
+          service_ = null;
+        } else {
+          service_ = null;
+          serviceBuilder_ = null;
+        }
+        if (addressBuilder_ == null) {
+          address_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000002);
+        } else {
+          addressBuilder_.clear();
+        }
         return this;
       }
 
       public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
-        return registrar.Registrar.internal_static_registrar_PingRequest_descriptor;
+        return registrar.Registrar.internal_static_registrar_ServiceLocation_descriptor;
       }
 
-      public registrar.Registrar.PingRequest getDefaultInstanceForType() {
-        return registrar.Registrar.PingRequest.getDefaultInstance();
+      public registrar.Registrar.ServiceLocation getDefaultInstanceForType() {
+        return registrar.Registrar.ServiceLocation.getDefaultInstance();
       }
 
-      public registrar.Registrar.PingRequest build() {
-        registrar.Registrar.PingRequest result = buildPartial();
+      public registrar.Registrar.ServiceLocation build() {
+        registrar.Registrar.ServiceLocation result = buildPartial();
         if (!result.isInitialized()) {
           throw newUninitializedMessageException(result);
         }
         return result;
       }
 
-      public registrar.Registrar.PingRequest buildPartial() {
-        registrar.Registrar.PingRequest result = new registrar.Registrar.PingRequest(this);
+      public registrar.Registrar.ServiceLocation buildPartial() {
+        registrar.Registrar.ServiceLocation result = new registrar.Registrar.ServiceLocation(this);
+        int from_bitField0_ = bitField0_;
+        int to_bitField0_ = 0;
+        if (serviceBuilder_ == null) {
+          result.service_ = service_;
+        } else {
+          result.service_ = serviceBuilder_.build();
+        }
+        if (addressBuilder_ == null) {
+          if (((bitField0_ & 0x00000002) == 0x00000002)) {
+            address_ = java.util.Collections.unmodifiableList(address_);
+            bitField0_ = (bitField0_ & ~0x00000002);
+          }
+          result.address_ = address_;
+        } else {
+          result.address_ = addressBuilder_.build();
+        }
+        result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
       }
@@ -1454,16 +1798,45 @@ public final class Registrar {
         return (Builder) super.addRepeatedField(field, value);
       }
       public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof registrar.Registrar.PingRequest) {
-          return mergeFrom((registrar.Registrar.PingRequest)other);
+        if (other instanceof registrar.Registrar.ServiceLocation) {
+          return mergeFrom((registrar.Registrar.ServiceLocation)other);
         } else {
           super.mergeFrom(other);
           return this;
         }
       }
 
-      public Builder mergeFrom(registrar.Registrar.PingRequest other) {
-        if (other == registrar.Registrar.PingRequest.getDefaultInstance()) return this;
+      public Builder mergeFrom(registrar.Registrar.ServiceLocation other) {
+        if (other == registrar.Registrar.ServiceLocation.getDefaultInstance()) return this;
+        if (other.hasService()) {
+          mergeService(other.getService());
+        }
+        if (addressBuilder_ == null) {
+          if (!other.address_.isEmpty()) {
+            if (address_.isEmpty()) {
+              address_ = other.address_;
+              bitField0_ = (bitField0_ & ~0x00000002);
+            } else {
+              ensureAddressIsMutable();
+              address_.addAll(other.address_);
+            }
+            onChanged();
+          }
+        } else {
+          if (!other.address_.isEmpty()) {
+            if (addressBuilder_.isEmpty()) {
+              addressBuilder_.dispose();
+              addressBuilder_ = null;
+              address_ = other.address_;
+              bitField0_ = (bitField0_ & ~0x00000002);
+              addressBuilder_ = 
+                com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders ?
+                   getAddressFieldBuilder() : null;
+            } else {
+              addressBuilder_.addAllMessages(other.address_);
+            }
+          }
+        }
         onChanged();
         return this;
       }
@@ -1476,11 +1849,11 @@ public final class Registrar {
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        registrar.Registrar.PingRequest parsedMessage = null;
+        registrar.Registrar.ServiceLocation parsedMessage = null;
         try {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (registrar.Registrar.PingRequest) e.getUnfinishedMessage();
+          parsedMessage = (registrar.Registrar.ServiceLocation) e.getUnfinishedMessage();
           throw e.unwrapIOException();
         } finally {
           if (parsedMessage != null) {
@@ -1488,6 +1861,364 @@ public final class Registrar {
           }
         }
         return this;
+      }
+      private int bitField0_;
+
+      private registrar.Registrar.ServiceDescription service_ = null;
+      private com.google.protobuf.SingleFieldBuilderV3<
+          registrar.Registrar.ServiceDescription, registrar.Registrar.ServiceDescription.Builder, registrar.Registrar.ServiceDescriptionOrBuilder> serviceBuilder_;
+      /**
+       * <code>optional .registrar.ServiceDescription Service = 1;</code>
+       */
+      public boolean hasService() {
+        return serviceBuilder_ != null || service_ != null;
+      }
+      /**
+       * <code>optional .registrar.ServiceDescription Service = 1;</code>
+       */
+      public registrar.Registrar.ServiceDescription getService() {
+        if (serviceBuilder_ == null) {
+          return service_ == null ? registrar.Registrar.ServiceDescription.getDefaultInstance() : service_;
+        } else {
+          return serviceBuilder_.getMessage();
+        }
+      }
+      /**
+       * <code>optional .registrar.ServiceDescription Service = 1;</code>
+       */
+      public Builder setService(registrar.Registrar.ServiceDescription value) {
+        if (serviceBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          service_ = value;
+          onChanged();
+        } else {
+          serviceBuilder_.setMessage(value);
+        }
+
+        return this;
+      }
+      /**
+       * <code>optional .registrar.ServiceDescription Service = 1;</code>
+       */
+      public Builder setService(
+          registrar.Registrar.ServiceDescription.Builder builderForValue) {
+        if (serviceBuilder_ == null) {
+          service_ = builderForValue.build();
+          onChanged();
+        } else {
+          serviceBuilder_.setMessage(builderForValue.build());
+        }
+
+        return this;
+      }
+      /**
+       * <code>optional .registrar.ServiceDescription Service = 1;</code>
+       */
+      public Builder mergeService(registrar.Registrar.ServiceDescription value) {
+        if (serviceBuilder_ == null) {
+          if (service_ != null) {
+            service_ =
+              registrar.Registrar.ServiceDescription.newBuilder(service_).mergeFrom(value).buildPartial();
+          } else {
+            service_ = value;
+          }
+          onChanged();
+        } else {
+          serviceBuilder_.mergeFrom(value);
+        }
+
+        return this;
+      }
+      /**
+       * <code>optional .registrar.ServiceDescription Service = 1;</code>
+       */
+      public Builder clearService() {
+        if (serviceBuilder_ == null) {
+          service_ = null;
+          onChanged();
+        } else {
+          service_ = null;
+          serviceBuilder_ = null;
+        }
+
+        return this;
+      }
+      /**
+       * <code>optional .registrar.ServiceDescription Service = 1;</code>
+       */
+      public registrar.Registrar.ServiceDescription.Builder getServiceBuilder() {
+        
+        onChanged();
+        return getServiceFieldBuilder().getBuilder();
+      }
+      /**
+       * <code>optional .registrar.ServiceDescription Service = 1;</code>
+       */
+      public registrar.Registrar.ServiceDescriptionOrBuilder getServiceOrBuilder() {
+        if (serviceBuilder_ != null) {
+          return serviceBuilder_.getMessageOrBuilder();
+        } else {
+          return service_ == null ?
+              registrar.Registrar.ServiceDescription.getDefaultInstance() : service_;
+        }
+      }
+      /**
+       * <code>optional .registrar.ServiceDescription Service = 1;</code>
+       */
+      private com.google.protobuf.SingleFieldBuilderV3<
+          registrar.Registrar.ServiceDescription, registrar.Registrar.ServiceDescription.Builder, registrar.Registrar.ServiceDescriptionOrBuilder> 
+          getServiceFieldBuilder() {
+        if (serviceBuilder_ == null) {
+          serviceBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
+              registrar.Registrar.ServiceDescription, registrar.Registrar.ServiceDescription.Builder, registrar.Registrar.ServiceDescriptionOrBuilder>(
+                  getService(),
+                  getParentForChildren(),
+                  isClean());
+          service_ = null;
+        }
+        return serviceBuilder_;
+      }
+
+      private java.util.List<registrar.Registrar.ServiceAddress> address_ =
+        java.util.Collections.emptyList();
+      private void ensureAddressIsMutable() {
+        if (!((bitField0_ & 0x00000002) == 0x00000002)) {
+          address_ = new java.util.ArrayList<registrar.Registrar.ServiceAddress>(address_);
+          bitField0_ |= 0x00000002;
+         }
+      }
+
+      private com.google.protobuf.RepeatedFieldBuilderV3<
+          registrar.Registrar.ServiceAddress, registrar.Registrar.ServiceAddress.Builder, registrar.Registrar.ServiceAddressOrBuilder> addressBuilder_;
+
+      /**
+       * <code>repeated .registrar.ServiceAddress Address = 2;</code>
+       */
+      public java.util.List<registrar.Registrar.ServiceAddress> getAddressList() {
+        if (addressBuilder_ == null) {
+          return java.util.Collections.unmodifiableList(address_);
+        } else {
+          return addressBuilder_.getMessageList();
+        }
+      }
+      /**
+       * <code>repeated .registrar.ServiceAddress Address = 2;</code>
+       */
+      public int getAddressCount() {
+        if (addressBuilder_ == null) {
+          return address_.size();
+        } else {
+          return addressBuilder_.getCount();
+        }
+      }
+      /**
+       * <code>repeated .registrar.ServiceAddress Address = 2;</code>
+       */
+      public registrar.Registrar.ServiceAddress getAddress(int index) {
+        if (addressBuilder_ == null) {
+          return address_.get(index);
+        } else {
+          return addressBuilder_.getMessage(index);
+        }
+      }
+      /**
+       * <code>repeated .registrar.ServiceAddress Address = 2;</code>
+       */
+      public Builder setAddress(
+          int index, registrar.Registrar.ServiceAddress value) {
+        if (addressBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureAddressIsMutable();
+          address_.set(index, value);
+          onChanged();
+        } else {
+          addressBuilder_.setMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .registrar.ServiceAddress Address = 2;</code>
+       */
+      public Builder setAddress(
+          int index, registrar.Registrar.ServiceAddress.Builder builderForValue) {
+        if (addressBuilder_ == null) {
+          ensureAddressIsMutable();
+          address_.set(index, builderForValue.build());
+          onChanged();
+        } else {
+          addressBuilder_.setMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .registrar.ServiceAddress Address = 2;</code>
+       */
+      public Builder addAddress(registrar.Registrar.ServiceAddress value) {
+        if (addressBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureAddressIsMutable();
+          address_.add(value);
+          onChanged();
+        } else {
+          addressBuilder_.addMessage(value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .registrar.ServiceAddress Address = 2;</code>
+       */
+      public Builder addAddress(
+          int index, registrar.Registrar.ServiceAddress value) {
+        if (addressBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureAddressIsMutable();
+          address_.add(index, value);
+          onChanged();
+        } else {
+          addressBuilder_.addMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .registrar.ServiceAddress Address = 2;</code>
+       */
+      public Builder addAddress(
+          registrar.Registrar.ServiceAddress.Builder builderForValue) {
+        if (addressBuilder_ == null) {
+          ensureAddressIsMutable();
+          address_.add(builderForValue.build());
+          onChanged();
+        } else {
+          addressBuilder_.addMessage(builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .registrar.ServiceAddress Address = 2;</code>
+       */
+      public Builder addAddress(
+          int index, registrar.Registrar.ServiceAddress.Builder builderForValue) {
+        if (addressBuilder_ == null) {
+          ensureAddressIsMutable();
+          address_.add(index, builderForValue.build());
+          onChanged();
+        } else {
+          addressBuilder_.addMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .registrar.ServiceAddress Address = 2;</code>
+       */
+      public Builder addAllAddress(
+          java.lang.Iterable<? extends registrar.Registrar.ServiceAddress> values) {
+        if (addressBuilder_ == null) {
+          ensureAddressIsMutable();
+          com.google.protobuf.AbstractMessageLite.Builder.addAll(
+              values, address_);
+          onChanged();
+        } else {
+          addressBuilder_.addAllMessages(values);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .registrar.ServiceAddress Address = 2;</code>
+       */
+      public Builder clearAddress() {
+        if (addressBuilder_ == null) {
+          address_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000002);
+          onChanged();
+        } else {
+          addressBuilder_.clear();
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .registrar.ServiceAddress Address = 2;</code>
+       */
+      public Builder removeAddress(int index) {
+        if (addressBuilder_ == null) {
+          ensureAddressIsMutable();
+          address_.remove(index);
+          onChanged();
+        } else {
+          addressBuilder_.remove(index);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .registrar.ServiceAddress Address = 2;</code>
+       */
+      public registrar.Registrar.ServiceAddress.Builder getAddressBuilder(
+          int index) {
+        return getAddressFieldBuilder().getBuilder(index);
+      }
+      /**
+       * <code>repeated .registrar.ServiceAddress Address = 2;</code>
+       */
+      public registrar.Registrar.ServiceAddressOrBuilder getAddressOrBuilder(
+          int index) {
+        if (addressBuilder_ == null) {
+          return address_.get(index);  } else {
+          return addressBuilder_.getMessageOrBuilder(index);
+        }
+      }
+      /**
+       * <code>repeated .registrar.ServiceAddress Address = 2;</code>
+       */
+      public java.util.List<? extends registrar.Registrar.ServiceAddressOrBuilder> 
+           getAddressOrBuilderList() {
+        if (addressBuilder_ != null) {
+          return addressBuilder_.getMessageOrBuilderList();
+        } else {
+          return java.util.Collections.unmodifiableList(address_);
+        }
+      }
+      /**
+       * <code>repeated .registrar.ServiceAddress Address = 2;</code>
+       */
+      public registrar.Registrar.ServiceAddress.Builder addAddressBuilder() {
+        return getAddressFieldBuilder().addBuilder(
+            registrar.Registrar.ServiceAddress.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .registrar.ServiceAddress Address = 2;</code>
+       */
+      public registrar.Registrar.ServiceAddress.Builder addAddressBuilder(
+          int index) {
+        return getAddressFieldBuilder().addBuilder(
+            index, registrar.Registrar.ServiceAddress.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .registrar.ServiceAddress Address = 2;</code>
+       */
+      public java.util.List<registrar.Registrar.ServiceAddress.Builder> 
+           getAddressBuilderList() {
+        return getAddressFieldBuilder().getBuilderList();
+      }
+      private com.google.protobuf.RepeatedFieldBuilderV3<
+          registrar.Registrar.ServiceAddress, registrar.Registrar.ServiceAddress.Builder, registrar.Registrar.ServiceAddressOrBuilder> 
+          getAddressFieldBuilder() {
+        if (addressBuilder_ == null) {
+          addressBuilder_ = new com.google.protobuf.RepeatedFieldBuilderV3<
+              registrar.Registrar.ServiceAddress, registrar.Registrar.ServiceAddress.Builder, registrar.Registrar.ServiceAddressOrBuilder>(
+                  address_,
+                  ((bitField0_ & 0x00000002) == 0x00000002),
+                  getParentForChildren(),
+                  isClean());
+          address_ = null;
+        }
+        return addressBuilder_;
       }
       public final Builder setUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
@@ -1500,60 +2231,73 @@ public final class Registrar {
       }
 
 
-      // @@protoc_insertion_point(builder_scope:registrar.PingRequest)
+      // @@protoc_insertion_point(builder_scope:registrar.ServiceLocation)
     }
 
-    // @@protoc_insertion_point(class_scope:registrar.PingRequest)
-    private static final registrar.Registrar.PingRequest DEFAULT_INSTANCE;
+    // @@protoc_insertion_point(class_scope:registrar.ServiceLocation)
+    private static final registrar.Registrar.ServiceLocation DEFAULT_INSTANCE;
     static {
-      DEFAULT_INSTANCE = new registrar.Registrar.PingRequest();
+      DEFAULT_INSTANCE = new registrar.Registrar.ServiceLocation();
     }
 
-    public static registrar.Registrar.PingRequest getDefaultInstance() {
+    public static registrar.Registrar.ServiceLocation getDefaultInstance() {
       return DEFAULT_INSTANCE;
     }
 
-    private static final com.google.protobuf.Parser<PingRequest>
-        PARSER = new com.google.protobuf.AbstractParser<PingRequest>() {
-      public PingRequest parsePartialFrom(
+    private static final com.google.protobuf.Parser<ServiceLocation>
+        PARSER = new com.google.protobuf.AbstractParser<ServiceLocation>() {
+      public ServiceLocation parsePartialFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
-          return new PingRequest(input, extensionRegistry);
+          return new ServiceLocation(input, extensionRegistry);
       }
     };
 
-    public static com.google.protobuf.Parser<PingRequest> parser() {
+    public static com.google.protobuf.Parser<ServiceLocation> parser() {
       return PARSER;
     }
 
     @java.lang.Override
-    public com.google.protobuf.Parser<PingRequest> getParserForType() {
+    public com.google.protobuf.Parser<ServiceLocation> getParserForType() {
       return PARSER;
     }
 
-    public registrar.Registrar.PingRequest getDefaultInstanceForType() {
+    public registrar.Registrar.ServiceLocation getDefaultInstanceForType() {
       return DEFAULT_INSTANCE;
     }
 
   }
 
-  public interface PingResponseOrBuilder extends
-      // @@protoc_insertion_point(interface_extends:registrar.PingResponse)
+  public interface GetRequestOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:registrar.GetRequest)
       com.google.protobuf.MessageOrBuilder {
+
+    /**
+     * <code>optional .registrar.ServiceDescription Service = 1;</code>
+     */
+    boolean hasService();
+    /**
+     * <code>optional .registrar.ServiceDescription Service = 1;</code>
+     */
+    registrar.Registrar.ServiceDescription getService();
+    /**
+     * <code>optional .registrar.ServiceDescription Service = 1;</code>
+     */
+    registrar.Registrar.ServiceDescriptionOrBuilder getServiceOrBuilder();
   }
   /**
-   * Protobuf type {@code registrar.PingResponse}
+   * Protobuf type {@code registrar.GetRequest}
    */
-  public  static final class PingResponse extends
+  public  static final class GetRequest extends
       com.google.protobuf.GeneratedMessageV3 implements
-      // @@protoc_insertion_point(message_implements:registrar.PingResponse)
-      PingResponseOrBuilder {
-    // Use PingResponse.newBuilder() to construct.
-    private PingResponse(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+      // @@protoc_insertion_point(message_implements:registrar.GetRequest)
+      GetRequestOrBuilder {
+    // Use GetRequest.newBuilder() to construct.
+    private GetRequest(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
     }
-    private PingResponse() {
+    private GetRequest() {
     }
 
     @java.lang.Override
@@ -1561,11 +2305,12 @@ public final class Registrar {
     getUnknownFields() {
       return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
     }
-    private PingResponse(
+    private GetRequest(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       this();
+      int mutable_bitField0_ = 0;
       try {
         boolean done = false;
         while (!done) {
@@ -1578,6 +2323,19 @@ public final class Registrar {
               if (!input.skipField(tag)) {
                 done = true;
               }
+              break;
+            }
+            case 10: {
+              registrar.Registrar.ServiceDescription.Builder subBuilder = null;
+              if (service_ != null) {
+                subBuilder = service_.toBuilder();
+              }
+              service_ = input.readMessage(registrar.Registrar.ServiceDescription.parser(), extensionRegistry);
+              if (subBuilder != null) {
+                subBuilder.mergeFrom(service_);
+                service_ = subBuilder.buildPartial();
+              }
+
               break;
             }
           }
@@ -1593,14 +2351,35 @@ public final class Registrar {
     }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return registrar.Registrar.internal_static_registrar_PingResponse_descriptor;
+      return registrar.Registrar.internal_static_registrar_GetRequest_descriptor;
     }
 
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return registrar.Registrar.internal_static_registrar_PingResponse_fieldAccessorTable
+      return registrar.Registrar.internal_static_registrar_GetRequest_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              registrar.Registrar.PingResponse.class, registrar.Registrar.PingResponse.Builder.class);
+              registrar.Registrar.GetRequest.class, registrar.Registrar.GetRequest.Builder.class);
+    }
+
+    public static final int SERVICE_FIELD_NUMBER = 1;
+    private registrar.Registrar.ServiceDescription service_;
+    /**
+     * <code>optional .registrar.ServiceDescription Service = 1;</code>
+     */
+    public boolean hasService() {
+      return service_ != null;
+    }
+    /**
+     * <code>optional .registrar.ServiceDescription Service = 1;</code>
+     */
+    public registrar.Registrar.ServiceDescription getService() {
+      return service_ == null ? registrar.Registrar.ServiceDescription.getDefaultInstance() : service_;
+    }
+    /**
+     * <code>optional .registrar.ServiceDescription Service = 1;</code>
+     */
+    public registrar.Registrar.ServiceDescriptionOrBuilder getServiceOrBuilder() {
+      return getService();
     }
 
     private byte memoizedIsInitialized = -1;
@@ -1615,6 +2394,9 @@ public final class Registrar {
 
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
+      if (service_ != null) {
+        output.writeMessage(1, getService());
+      }
     }
 
     public int getSerializedSize() {
@@ -1622,6 +2404,10 @@ public final class Registrar {
       if (size != -1) return size;
 
       size = 0;
+      if (service_ != null) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(1, getService());
+      }
       memoizedSize = size;
       return size;
     }
@@ -1632,12 +2418,17 @@ public final class Registrar {
       if (obj == this) {
        return true;
       }
-      if (!(obj instanceof registrar.Registrar.PingResponse)) {
+      if (!(obj instanceof registrar.Registrar.GetRequest)) {
         return super.equals(obj);
       }
-      registrar.Registrar.PingResponse other = (registrar.Registrar.PingResponse) obj;
+      registrar.Registrar.GetRequest other = (registrar.Registrar.GetRequest) obj;
 
       boolean result = true;
+      result = result && (hasService() == other.hasService());
+      if (hasService()) {
+        result = result && getService()
+            .equals(other.getService());
+      }
       return result;
     }
 
@@ -1648,63 +2439,67 @@ public final class Registrar {
       }
       int hash = 41;
       hash = (19 * hash) + getDescriptorForType().hashCode();
+      if (hasService()) {
+        hash = (37 * hash) + SERVICE_FIELD_NUMBER;
+        hash = (53 * hash) + getService().hashCode();
+      }
       hash = (29 * hash) + unknownFields.hashCode();
       memoizedHashCode = hash;
       return hash;
     }
 
-    public static registrar.Registrar.PingResponse parseFrom(
+    public static registrar.Registrar.GetRequest parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static registrar.Registrar.PingResponse parseFrom(
+    public static registrar.Registrar.GetRequest parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static registrar.Registrar.PingResponse parseFrom(byte[] data)
+    public static registrar.Registrar.GetRequest parseFrom(byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static registrar.Registrar.PingResponse parseFrom(
+    public static registrar.Registrar.GetRequest parseFrom(
         byte[] data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static registrar.Registrar.PingResponse parseFrom(java.io.InputStream input)
+    public static registrar.Registrar.GetRequest parseFrom(java.io.InputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input);
     }
-    public static registrar.Registrar.PingResponse parseFrom(
+    public static registrar.Registrar.GetRequest parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input, extensionRegistry);
     }
-    public static registrar.Registrar.PingResponse parseDelimitedFrom(java.io.InputStream input)
+    public static registrar.Registrar.GetRequest parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseDelimitedWithIOException(PARSER, input);
     }
-    public static registrar.Registrar.PingResponse parseDelimitedFrom(
+    public static registrar.Registrar.GetRequest parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
-    public static registrar.Registrar.PingResponse parseFrom(
+    public static registrar.Registrar.GetRequest parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input);
     }
-    public static registrar.Registrar.PingResponse parseFrom(
+    public static registrar.Registrar.GetRequest parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
@@ -1716,7 +2511,7 @@ public final class Registrar {
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
-    public static Builder newBuilder(registrar.Registrar.PingResponse prototype) {
+    public static Builder newBuilder(registrar.Registrar.GetRequest prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
     public Builder toBuilder() {
@@ -1731,25 +2526,25 @@ public final class Registrar {
       return builder;
     }
     /**
-     * Protobuf type {@code registrar.PingResponse}
+     * Protobuf type {@code registrar.GetRequest}
      */
     public static final class Builder extends
         com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-        // @@protoc_insertion_point(builder_implements:registrar.PingResponse)
-        registrar.Registrar.PingResponseOrBuilder {
+        // @@protoc_insertion_point(builder_implements:registrar.GetRequest)
+        registrar.Registrar.GetRequestOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
-        return registrar.Registrar.internal_static_registrar_PingResponse_descriptor;
+        return registrar.Registrar.internal_static_registrar_GetRequest_descriptor;
       }
 
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
           internalGetFieldAccessorTable() {
-        return registrar.Registrar.internal_static_registrar_PingResponse_fieldAccessorTable
+        return registrar.Registrar.internal_static_registrar_GetRequest_fieldAccessorTable
             .ensureFieldAccessorsInitialized(
-                registrar.Registrar.PingResponse.class, registrar.Registrar.PingResponse.Builder.class);
+                registrar.Registrar.GetRequest.class, registrar.Registrar.GetRequest.Builder.class);
       }
 
-      // Construct using registrar.Registrar.PingResponse.newBuilder()
+      // Construct using registrar.Registrar.GetRequest.newBuilder()
       private Builder() {
         maybeForceBuilderInitialization();
       }
@@ -1766,28 +2561,39 @@ public final class Registrar {
       }
       public Builder clear() {
         super.clear();
+        if (serviceBuilder_ == null) {
+          service_ = null;
+        } else {
+          service_ = null;
+          serviceBuilder_ = null;
+        }
         return this;
       }
 
       public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
-        return registrar.Registrar.internal_static_registrar_PingResponse_descriptor;
+        return registrar.Registrar.internal_static_registrar_GetRequest_descriptor;
       }
 
-      public registrar.Registrar.PingResponse getDefaultInstanceForType() {
-        return registrar.Registrar.PingResponse.getDefaultInstance();
+      public registrar.Registrar.GetRequest getDefaultInstanceForType() {
+        return registrar.Registrar.GetRequest.getDefaultInstance();
       }
 
-      public registrar.Registrar.PingResponse build() {
-        registrar.Registrar.PingResponse result = buildPartial();
+      public registrar.Registrar.GetRequest build() {
+        registrar.Registrar.GetRequest result = buildPartial();
         if (!result.isInitialized()) {
           throw newUninitializedMessageException(result);
         }
         return result;
       }
 
-      public registrar.Registrar.PingResponse buildPartial() {
-        registrar.Registrar.PingResponse result = new registrar.Registrar.PingResponse(this);
+      public registrar.Registrar.GetRequest buildPartial() {
+        registrar.Registrar.GetRequest result = new registrar.Registrar.GetRequest(this);
+        if (serviceBuilder_ == null) {
+          result.service_ = service_;
+        } else {
+          result.service_ = serviceBuilder_.build();
+        }
         onBuilt();
         return result;
       }
@@ -1819,16 +2625,19 @@ public final class Registrar {
         return (Builder) super.addRepeatedField(field, value);
       }
       public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof registrar.Registrar.PingResponse) {
-          return mergeFrom((registrar.Registrar.PingResponse)other);
+        if (other instanceof registrar.Registrar.GetRequest) {
+          return mergeFrom((registrar.Registrar.GetRequest)other);
         } else {
           super.mergeFrom(other);
           return this;
         }
       }
 
-      public Builder mergeFrom(registrar.Registrar.PingResponse other) {
-        if (other == registrar.Registrar.PingResponse.getDefaultInstance()) return this;
+      public Builder mergeFrom(registrar.Registrar.GetRequest other) {
+        if (other == registrar.Registrar.GetRequest.getDefaultInstance()) return this;
+        if (other.hasService()) {
+          mergeService(other.getService());
+        }
         onChanged();
         return this;
       }
@@ -1841,11 +2650,2160 @@ public final class Registrar {
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        registrar.Registrar.PingResponse parsedMessage = null;
+        registrar.Registrar.GetRequest parsedMessage = null;
         try {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (registrar.Registrar.PingResponse) e.getUnfinishedMessage();
+          parsedMessage = (registrar.Registrar.GetRequest) e.getUnfinishedMessage();
+          throw e.unwrapIOException();
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+
+      private registrar.Registrar.ServiceDescription service_ = null;
+      private com.google.protobuf.SingleFieldBuilderV3<
+          registrar.Registrar.ServiceDescription, registrar.Registrar.ServiceDescription.Builder, registrar.Registrar.ServiceDescriptionOrBuilder> serviceBuilder_;
+      /**
+       * <code>optional .registrar.ServiceDescription Service = 1;</code>
+       */
+      public boolean hasService() {
+        return serviceBuilder_ != null || service_ != null;
+      }
+      /**
+       * <code>optional .registrar.ServiceDescription Service = 1;</code>
+       */
+      public registrar.Registrar.ServiceDescription getService() {
+        if (serviceBuilder_ == null) {
+          return service_ == null ? registrar.Registrar.ServiceDescription.getDefaultInstance() : service_;
+        } else {
+          return serviceBuilder_.getMessage();
+        }
+      }
+      /**
+       * <code>optional .registrar.ServiceDescription Service = 1;</code>
+       */
+      public Builder setService(registrar.Registrar.ServiceDescription value) {
+        if (serviceBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          service_ = value;
+          onChanged();
+        } else {
+          serviceBuilder_.setMessage(value);
+        }
+
+        return this;
+      }
+      /**
+       * <code>optional .registrar.ServiceDescription Service = 1;</code>
+       */
+      public Builder setService(
+          registrar.Registrar.ServiceDescription.Builder builderForValue) {
+        if (serviceBuilder_ == null) {
+          service_ = builderForValue.build();
+          onChanged();
+        } else {
+          serviceBuilder_.setMessage(builderForValue.build());
+        }
+
+        return this;
+      }
+      /**
+       * <code>optional .registrar.ServiceDescription Service = 1;</code>
+       */
+      public Builder mergeService(registrar.Registrar.ServiceDescription value) {
+        if (serviceBuilder_ == null) {
+          if (service_ != null) {
+            service_ =
+              registrar.Registrar.ServiceDescription.newBuilder(service_).mergeFrom(value).buildPartial();
+          } else {
+            service_ = value;
+          }
+          onChanged();
+        } else {
+          serviceBuilder_.mergeFrom(value);
+        }
+
+        return this;
+      }
+      /**
+       * <code>optional .registrar.ServiceDescription Service = 1;</code>
+       */
+      public Builder clearService() {
+        if (serviceBuilder_ == null) {
+          service_ = null;
+          onChanged();
+        } else {
+          service_ = null;
+          serviceBuilder_ = null;
+        }
+
+        return this;
+      }
+      /**
+       * <code>optional .registrar.ServiceDescription Service = 1;</code>
+       */
+      public registrar.Registrar.ServiceDescription.Builder getServiceBuilder() {
+        
+        onChanged();
+        return getServiceFieldBuilder().getBuilder();
+      }
+      /**
+       * <code>optional .registrar.ServiceDescription Service = 1;</code>
+       */
+      public registrar.Registrar.ServiceDescriptionOrBuilder getServiceOrBuilder() {
+        if (serviceBuilder_ != null) {
+          return serviceBuilder_.getMessageOrBuilder();
+        } else {
+          return service_ == null ?
+              registrar.Registrar.ServiceDescription.getDefaultInstance() : service_;
+        }
+      }
+      /**
+       * <code>optional .registrar.ServiceDescription Service = 1;</code>
+       */
+      private com.google.protobuf.SingleFieldBuilderV3<
+          registrar.Registrar.ServiceDescription, registrar.Registrar.ServiceDescription.Builder, registrar.Registrar.ServiceDescriptionOrBuilder> 
+          getServiceFieldBuilder() {
+        if (serviceBuilder_ == null) {
+          serviceBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
+              registrar.Registrar.ServiceDescription, registrar.Registrar.ServiceDescription.Builder, registrar.Registrar.ServiceDescriptionOrBuilder>(
+                  getService(),
+                  getParentForChildren(),
+                  isClean());
+          service_ = null;
+        }
+        return serviceBuilder_;
+      }
+      public final Builder setUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return this;
+      }
+
+      public final Builder mergeUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return this;
+      }
+
+
+      // @@protoc_insertion_point(builder_scope:registrar.GetRequest)
+    }
+
+    // @@protoc_insertion_point(class_scope:registrar.GetRequest)
+    private static final registrar.Registrar.GetRequest DEFAULT_INSTANCE;
+    static {
+      DEFAULT_INSTANCE = new registrar.Registrar.GetRequest();
+    }
+
+    public static registrar.Registrar.GetRequest getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static final com.google.protobuf.Parser<GetRequest>
+        PARSER = new com.google.protobuf.AbstractParser<GetRequest>() {
+      public GetRequest parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+          return new GetRequest(input, extensionRegistry);
+      }
+    };
+
+    public static com.google.protobuf.Parser<GetRequest> parser() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<GetRequest> getParserForType() {
+      return PARSER;
+    }
+
+    public registrar.Registrar.GetRequest getDefaultInstanceForType() {
+      return DEFAULT_INSTANCE;
+    }
+
+  }
+
+  public interface GetResponseOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:registrar.GetResponse)
+      com.google.protobuf.MessageOrBuilder {
+
+    /**
+     * <code>optional .registrar.ServiceDescription service = 1;</code>
+     */
+    boolean hasService();
+    /**
+     * <code>optional .registrar.ServiceDescription service = 1;</code>
+     */
+    registrar.Registrar.ServiceDescription getService();
+    /**
+     * <code>optional .registrar.ServiceDescription service = 1;</code>
+     */
+    registrar.Registrar.ServiceDescriptionOrBuilder getServiceOrBuilder();
+
+    /**
+     * <code>repeated .registrar.ServiceLocation location = 2;</code>
+     */
+    java.util.List<registrar.Registrar.ServiceLocation> 
+        getLocationList();
+    /**
+     * <code>repeated .registrar.ServiceLocation location = 2;</code>
+     */
+    registrar.Registrar.ServiceLocation getLocation(int index);
+    /**
+     * <code>repeated .registrar.ServiceLocation location = 2;</code>
+     */
+    int getLocationCount();
+    /**
+     * <code>repeated .registrar.ServiceLocation location = 2;</code>
+     */
+    java.util.List<? extends registrar.Registrar.ServiceLocationOrBuilder> 
+        getLocationOrBuilderList();
+    /**
+     * <code>repeated .registrar.ServiceLocation location = 2;</code>
+     */
+    registrar.Registrar.ServiceLocationOrBuilder getLocationOrBuilder(
+        int index);
+  }
+  /**
+   * Protobuf type {@code registrar.GetResponse}
+   */
+  public  static final class GetResponse extends
+      com.google.protobuf.GeneratedMessageV3 implements
+      // @@protoc_insertion_point(message_implements:registrar.GetResponse)
+      GetResponseOrBuilder {
+    // Use GetResponse.newBuilder() to construct.
+    private GetResponse(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+      super(builder);
+    }
+    private GetResponse() {
+      location_ = java.util.Collections.emptyList();
+    }
+
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
+    }
+    private GetResponse(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      this();
+      int mutable_bitField0_ = 0;
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            default: {
+              if (!input.skipField(tag)) {
+                done = true;
+              }
+              break;
+            }
+            case 10: {
+              registrar.Registrar.ServiceDescription.Builder subBuilder = null;
+              if (service_ != null) {
+                subBuilder = service_.toBuilder();
+              }
+              service_ = input.readMessage(registrar.Registrar.ServiceDescription.parser(), extensionRegistry);
+              if (subBuilder != null) {
+                subBuilder.mergeFrom(service_);
+                service_ = subBuilder.buildPartial();
+              }
+
+              break;
+            }
+            case 18: {
+              if (!((mutable_bitField0_ & 0x00000002) == 0x00000002)) {
+                location_ = new java.util.ArrayList<registrar.Registrar.ServiceLocation>();
+                mutable_bitField0_ |= 0x00000002;
+              }
+              location_.add(
+                  input.readMessage(registrar.Registrar.ServiceLocation.parser(), extensionRegistry));
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e).setUnfinishedMessage(this);
+      } finally {
+        if (((mutable_bitField0_ & 0x00000002) == 0x00000002)) {
+          location_ = java.util.Collections.unmodifiableList(location_);
+        }
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return registrar.Registrar.internal_static_registrar_GetResponse_descriptor;
+    }
+
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return registrar.Registrar.internal_static_registrar_GetResponse_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              registrar.Registrar.GetResponse.class, registrar.Registrar.GetResponse.Builder.class);
+    }
+
+    private int bitField0_;
+    public static final int SERVICE_FIELD_NUMBER = 1;
+    private registrar.Registrar.ServiceDescription service_;
+    /**
+     * <code>optional .registrar.ServiceDescription service = 1;</code>
+     */
+    public boolean hasService() {
+      return service_ != null;
+    }
+    /**
+     * <code>optional .registrar.ServiceDescription service = 1;</code>
+     */
+    public registrar.Registrar.ServiceDescription getService() {
+      return service_ == null ? registrar.Registrar.ServiceDescription.getDefaultInstance() : service_;
+    }
+    /**
+     * <code>optional .registrar.ServiceDescription service = 1;</code>
+     */
+    public registrar.Registrar.ServiceDescriptionOrBuilder getServiceOrBuilder() {
+      return getService();
+    }
+
+    public static final int LOCATION_FIELD_NUMBER = 2;
+    private java.util.List<registrar.Registrar.ServiceLocation> location_;
+    /**
+     * <code>repeated .registrar.ServiceLocation location = 2;</code>
+     */
+    public java.util.List<registrar.Registrar.ServiceLocation> getLocationList() {
+      return location_;
+    }
+    /**
+     * <code>repeated .registrar.ServiceLocation location = 2;</code>
+     */
+    public java.util.List<? extends registrar.Registrar.ServiceLocationOrBuilder> 
+        getLocationOrBuilderList() {
+      return location_;
+    }
+    /**
+     * <code>repeated .registrar.ServiceLocation location = 2;</code>
+     */
+    public int getLocationCount() {
+      return location_.size();
+    }
+    /**
+     * <code>repeated .registrar.ServiceLocation location = 2;</code>
+     */
+    public registrar.Registrar.ServiceLocation getLocation(int index) {
+      return location_.get(index);
+    }
+    /**
+     * <code>repeated .registrar.ServiceLocation location = 2;</code>
+     */
+    public registrar.Registrar.ServiceLocationOrBuilder getLocationOrBuilder(
+        int index) {
+      return location_.get(index);
+    }
+
+    private byte memoizedIsInitialized = -1;
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
+
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      if (service_ != null) {
+        output.writeMessage(1, getService());
+      }
+      for (int i = 0; i < location_.size(); i++) {
+        output.writeMessage(2, location_.get(i));
+      }
+    }
+
+    public int getSerializedSize() {
+      int size = memoizedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (service_ != null) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(1, getService());
+      }
+      for (int i = 0; i < location_.size(); i++) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(2, location_.get(i));
+      }
+      memoizedSize = size;
+      return size;
+    }
+
+    private static final long serialVersionUID = 0L;
+    @java.lang.Override
+    public boolean equals(final java.lang.Object obj) {
+      if (obj == this) {
+       return true;
+      }
+      if (!(obj instanceof registrar.Registrar.GetResponse)) {
+        return super.equals(obj);
+      }
+      registrar.Registrar.GetResponse other = (registrar.Registrar.GetResponse) obj;
+
+      boolean result = true;
+      result = result && (hasService() == other.hasService());
+      if (hasService()) {
+        result = result && getService()
+            .equals(other.getService());
+      }
+      result = result && getLocationList()
+          .equals(other.getLocationList());
+      return result;
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+      if (memoizedHashCode != 0) {
+        return memoizedHashCode;
+      }
+      int hash = 41;
+      hash = (19 * hash) + getDescriptorForType().hashCode();
+      if (hasService()) {
+        hash = (37 * hash) + SERVICE_FIELD_NUMBER;
+        hash = (53 * hash) + getService().hashCode();
+      }
+      if (getLocationCount() > 0) {
+        hash = (37 * hash) + LOCATION_FIELD_NUMBER;
+        hash = (53 * hash) + getLocationList().hashCode();
+      }
+      hash = (29 * hash) + unknownFields.hashCode();
+      memoizedHashCode = hash;
+      return hash;
+    }
+
+    public static registrar.Registrar.GetResponse parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static registrar.Registrar.GetResponse parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static registrar.Registrar.GetResponse parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static registrar.Registrar.GetResponse parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static registrar.Registrar.GetResponse parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static registrar.Registrar.GetResponse parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static registrar.Registrar.GetResponse parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input);
+    }
+    public static registrar.Registrar.GetResponse parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static registrar.Registrar.GetResponse parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static registrar.Registrar.GetResponse parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder() {
+      return DEFAULT_INSTANCE.toBuilder();
+    }
+    public static Builder newBuilder(registrar.Registrar.GetResponse prototype) {
+      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+    }
+    public Builder toBuilder() {
+      return this == DEFAULT_INSTANCE
+          ? new Builder() : new Builder().mergeFrom(this);
+    }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code registrar.GetResponse}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:registrar.GetResponse)
+        registrar.Registrar.GetResponseOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return registrar.Registrar.internal_static_registrar_GetResponse_descriptor;
+      }
+
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return registrar.Registrar.internal_static_registrar_GetResponse_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                registrar.Registrar.GetResponse.class, registrar.Registrar.GetResponse.Builder.class);
+      }
+
+      // Construct using registrar.Registrar.GetResponse.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessageV3
+                .alwaysUseFieldBuilders) {
+          getLocationFieldBuilder();
+        }
+      }
+      public Builder clear() {
+        super.clear();
+        if (serviceBuilder_ == null) {
+          service_ = null;
+        } else {
+          service_ = null;
+          serviceBuilder_ = null;
+        }
+        if (locationBuilder_ == null) {
+          location_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000002);
+        } else {
+          locationBuilder_.clear();
+        }
+        return this;
+      }
+
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return registrar.Registrar.internal_static_registrar_GetResponse_descriptor;
+      }
+
+      public registrar.Registrar.GetResponse getDefaultInstanceForType() {
+        return registrar.Registrar.GetResponse.getDefaultInstance();
+      }
+
+      public registrar.Registrar.GetResponse build() {
+        registrar.Registrar.GetResponse result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      public registrar.Registrar.GetResponse buildPartial() {
+        registrar.Registrar.GetResponse result = new registrar.Registrar.GetResponse(this);
+        int from_bitField0_ = bitField0_;
+        int to_bitField0_ = 0;
+        if (serviceBuilder_ == null) {
+          result.service_ = service_;
+        } else {
+          result.service_ = serviceBuilder_.build();
+        }
+        if (locationBuilder_ == null) {
+          if (((bitField0_ & 0x00000002) == 0x00000002)) {
+            location_ = java.util.Collections.unmodifiableList(location_);
+            bitField0_ = (bitField0_ & ~0x00000002);
+          }
+          result.location_ = location_;
+        } else {
+          result.location_ = locationBuilder_.build();
+        }
+        result.bitField0_ = to_bitField0_;
+        onBuilt();
+        return result;
+      }
+
+      public Builder clone() {
+        return (Builder) super.clone();
+      }
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          Object value) {
+        return (Builder) super.setField(field, value);
+      }
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return (Builder) super.clearField(field);
+      }
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return (Builder) super.clearOneof(oneof);
+      }
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, Object value) {
+        return (Builder) super.setRepeatedField(field, index, value);
+      }
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          Object value) {
+        return (Builder) super.addRepeatedField(field, value);
+      }
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof registrar.Registrar.GetResponse) {
+          return mergeFrom((registrar.Registrar.GetResponse)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(registrar.Registrar.GetResponse other) {
+        if (other == registrar.Registrar.GetResponse.getDefaultInstance()) return this;
+        if (other.hasService()) {
+          mergeService(other.getService());
+        }
+        if (locationBuilder_ == null) {
+          if (!other.location_.isEmpty()) {
+            if (location_.isEmpty()) {
+              location_ = other.location_;
+              bitField0_ = (bitField0_ & ~0x00000002);
+            } else {
+              ensureLocationIsMutable();
+              location_.addAll(other.location_);
+            }
+            onChanged();
+          }
+        } else {
+          if (!other.location_.isEmpty()) {
+            if (locationBuilder_.isEmpty()) {
+              locationBuilder_.dispose();
+              locationBuilder_ = null;
+              location_ = other.location_;
+              bitField0_ = (bitField0_ & ~0x00000002);
+              locationBuilder_ = 
+                com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders ?
+                   getLocationFieldBuilder() : null;
+            } else {
+              locationBuilder_.addAllMessages(other.location_);
+            }
+          }
+        }
+        onChanged();
+        return this;
+      }
+
+      public final boolean isInitialized() {
+        return true;
+      }
+
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        registrar.Registrar.GetResponse parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (registrar.Registrar.GetResponse) e.getUnfinishedMessage();
+          throw e.unwrapIOException();
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+      private int bitField0_;
+
+      private registrar.Registrar.ServiceDescription service_ = null;
+      private com.google.protobuf.SingleFieldBuilderV3<
+          registrar.Registrar.ServiceDescription, registrar.Registrar.ServiceDescription.Builder, registrar.Registrar.ServiceDescriptionOrBuilder> serviceBuilder_;
+      /**
+       * <code>optional .registrar.ServiceDescription service = 1;</code>
+       */
+      public boolean hasService() {
+        return serviceBuilder_ != null || service_ != null;
+      }
+      /**
+       * <code>optional .registrar.ServiceDescription service = 1;</code>
+       */
+      public registrar.Registrar.ServiceDescription getService() {
+        if (serviceBuilder_ == null) {
+          return service_ == null ? registrar.Registrar.ServiceDescription.getDefaultInstance() : service_;
+        } else {
+          return serviceBuilder_.getMessage();
+        }
+      }
+      /**
+       * <code>optional .registrar.ServiceDescription service = 1;</code>
+       */
+      public Builder setService(registrar.Registrar.ServiceDescription value) {
+        if (serviceBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          service_ = value;
+          onChanged();
+        } else {
+          serviceBuilder_.setMessage(value);
+        }
+
+        return this;
+      }
+      /**
+       * <code>optional .registrar.ServiceDescription service = 1;</code>
+       */
+      public Builder setService(
+          registrar.Registrar.ServiceDescription.Builder builderForValue) {
+        if (serviceBuilder_ == null) {
+          service_ = builderForValue.build();
+          onChanged();
+        } else {
+          serviceBuilder_.setMessage(builderForValue.build());
+        }
+
+        return this;
+      }
+      /**
+       * <code>optional .registrar.ServiceDescription service = 1;</code>
+       */
+      public Builder mergeService(registrar.Registrar.ServiceDescription value) {
+        if (serviceBuilder_ == null) {
+          if (service_ != null) {
+            service_ =
+              registrar.Registrar.ServiceDescription.newBuilder(service_).mergeFrom(value).buildPartial();
+          } else {
+            service_ = value;
+          }
+          onChanged();
+        } else {
+          serviceBuilder_.mergeFrom(value);
+        }
+
+        return this;
+      }
+      /**
+       * <code>optional .registrar.ServiceDescription service = 1;</code>
+       */
+      public Builder clearService() {
+        if (serviceBuilder_ == null) {
+          service_ = null;
+          onChanged();
+        } else {
+          service_ = null;
+          serviceBuilder_ = null;
+        }
+
+        return this;
+      }
+      /**
+       * <code>optional .registrar.ServiceDescription service = 1;</code>
+       */
+      public registrar.Registrar.ServiceDescription.Builder getServiceBuilder() {
+        
+        onChanged();
+        return getServiceFieldBuilder().getBuilder();
+      }
+      /**
+       * <code>optional .registrar.ServiceDescription service = 1;</code>
+       */
+      public registrar.Registrar.ServiceDescriptionOrBuilder getServiceOrBuilder() {
+        if (serviceBuilder_ != null) {
+          return serviceBuilder_.getMessageOrBuilder();
+        } else {
+          return service_ == null ?
+              registrar.Registrar.ServiceDescription.getDefaultInstance() : service_;
+        }
+      }
+      /**
+       * <code>optional .registrar.ServiceDescription service = 1;</code>
+       */
+      private com.google.protobuf.SingleFieldBuilderV3<
+          registrar.Registrar.ServiceDescription, registrar.Registrar.ServiceDescription.Builder, registrar.Registrar.ServiceDescriptionOrBuilder> 
+          getServiceFieldBuilder() {
+        if (serviceBuilder_ == null) {
+          serviceBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
+              registrar.Registrar.ServiceDescription, registrar.Registrar.ServiceDescription.Builder, registrar.Registrar.ServiceDescriptionOrBuilder>(
+                  getService(),
+                  getParentForChildren(),
+                  isClean());
+          service_ = null;
+        }
+        return serviceBuilder_;
+      }
+
+      private java.util.List<registrar.Registrar.ServiceLocation> location_ =
+        java.util.Collections.emptyList();
+      private void ensureLocationIsMutable() {
+        if (!((bitField0_ & 0x00000002) == 0x00000002)) {
+          location_ = new java.util.ArrayList<registrar.Registrar.ServiceLocation>(location_);
+          bitField0_ |= 0x00000002;
+         }
+      }
+
+      private com.google.protobuf.RepeatedFieldBuilderV3<
+          registrar.Registrar.ServiceLocation, registrar.Registrar.ServiceLocation.Builder, registrar.Registrar.ServiceLocationOrBuilder> locationBuilder_;
+
+      /**
+       * <code>repeated .registrar.ServiceLocation location = 2;</code>
+       */
+      public java.util.List<registrar.Registrar.ServiceLocation> getLocationList() {
+        if (locationBuilder_ == null) {
+          return java.util.Collections.unmodifiableList(location_);
+        } else {
+          return locationBuilder_.getMessageList();
+        }
+      }
+      /**
+       * <code>repeated .registrar.ServiceLocation location = 2;</code>
+       */
+      public int getLocationCount() {
+        if (locationBuilder_ == null) {
+          return location_.size();
+        } else {
+          return locationBuilder_.getCount();
+        }
+      }
+      /**
+       * <code>repeated .registrar.ServiceLocation location = 2;</code>
+       */
+      public registrar.Registrar.ServiceLocation getLocation(int index) {
+        if (locationBuilder_ == null) {
+          return location_.get(index);
+        } else {
+          return locationBuilder_.getMessage(index);
+        }
+      }
+      /**
+       * <code>repeated .registrar.ServiceLocation location = 2;</code>
+       */
+      public Builder setLocation(
+          int index, registrar.Registrar.ServiceLocation value) {
+        if (locationBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureLocationIsMutable();
+          location_.set(index, value);
+          onChanged();
+        } else {
+          locationBuilder_.setMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .registrar.ServiceLocation location = 2;</code>
+       */
+      public Builder setLocation(
+          int index, registrar.Registrar.ServiceLocation.Builder builderForValue) {
+        if (locationBuilder_ == null) {
+          ensureLocationIsMutable();
+          location_.set(index, builderForValue.build());
+          onChanged();
+        } else {
+          locationBuilder_.setMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .registrar.ServiceLocation location = 2;</code>
+       */
+      public Builder addLocation(registrar.Registrar.ServiceLocation value) {
+        if (locationBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureLocationIsMutable();
+          location_.add(value);
+          onChanged();
+        } else {
+          locationBuilder_.addMessage(value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .registrar.ServiceLocation location = 2;</code>
+       */
+      public Builder addLocation(
+          int index, registrar.Registrar.ServiceLocation value) {
+        if (locationBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureLocationIsMutable();
+          location_.add(index, value);
+          onChanged();
+        } else {
+          locationBuilder_.addMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .registrar.ServiceLocation location = 2;</code>
+       */
+      public Builder addLocation(
+          registrar.Registrar.ServiceLocation.Builder builderForValue) {
+        if (locationBuilder_ == null) {
+          ensureLocationIsMutable();
+          location_.add(builderForValue.build());
+          onChanged();
+        } else {
+          locationBuilder_.addMessage(builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .registrar.ServiceLocation location = 2;</code>
+       */
+      public Builder addLocation(
+          int index, registrar.Registrar.ServiceLocation.Builder builderForValue) {
+        if (locationBuilder_ == null) {
+          ensureLocationIsMutable();
+          location_.add(index, builderForValue.build());
+          onChanged();
+        } else {
+          locationBuilder_.addMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .registrar.ServiceLocation location = 2;</code>
+       */
+      public Builder addAllLocation(
+          java.lang.Iterable<? extends registrar.Registrar.ServiceLocation> values) {
+        if (locationBuilder_ == null) {
+          ensureLocationIsMutable();
+          com.google.protobuf.AbstractMessageLite.Builder.addAll(
+              values, location_);
+          onChanged();
+        } else {
+          locationBuilder_.addAllMessages(values);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .registrar.ServiceLocation location = 2;</code>
+       */
+      public Builder clearLocation() {
+        if (locationBuilder_ == null) {
+          location_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000002);
+          onChanged();
+        } else {
+          locationBuilder_.clear();
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .registrar.ServiceLocation location = 2;</code>
+       */
+      public Builder removeLocation(int index) {
+        if (locationBuilder_ == null) {
+          ensureLocationIsMutable();
+          location_.remove(index);
+          onChanged();
+        } else {
+          locationBuilder_.remove(index);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .registrar.ServiceLocation location = 2;</code>
+       */
+      public registrar.Registrar.ServiceLocation.Builder getLocationBuilder(
+          int index) {
+        return getLocationFieldBuilder().getBuilder(index);
+      }
+      /**
+       * <code>repeated .registrar.ServiceLocation location = 2;</code>
+       */
+      public registrar.Registrar.ServiceLocationOrBuilder getLocationOrBuilder(
+          int index) {
+        if (locationBuilder_ == null) {
+          return location_.get(index);  } else {
+          return locationBuilder_.getMessageOrBuilder(index);
+        }
+      }
+      /**
+       * <code>repeated .registrar.ServiceLocation location = 2;</code>
+       */
+      public java.util.List<? extends registrar.Registrar.ServiceLocationOrBuilder> 
+           getLocationOrBuilderList() {
+        if (locationBuilder_ != null) {
+          return locationBuilder_.getMessageOrBuilderList();
+        } else {
+          return java.util.Collections.unmodifiableList(location_);
+        }
+      }
+      /**
+       * <code>repeated .registrar.ServiceLocation location = 2;</code>
+       */
+      public registrar.Registrar.ServiceLocation.Builder addLocationBuilder() {
+        return getLocationFieldBuilder().addBuilder(
+            registrar.Registrar.ServiceLocation.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .registrar.ServiceLocation location = 2;</code>
+       */
+      public registrar.Registrar.ServiceLocation.Builder addLocationBuilder(
+          int index) {
+        return getLocationFieldBuilder().addBuilder(
+            index, registrar.Registrar.ServiceLocation.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .registrar.ServiceLocation location = 2;</code>
+       */
+      public java.util.List<registrar.Registrar.ServiceLocation.Builder> 
+           getLocationBuilderList() {
+        return getLocationFieldBuilder().getBuilderList();
+      }
+      private com.google.protobuf.RepeatedFieldBuilderV3<
+          registrar.Registrar.ServiceLocation, registrar.Registrar.ServiceLocation.Builder, registrar.Registrar.ServiceLocationOrBuilder> 
+          getLocationFieldBuilder() {
+        if (locationBuilder_ == null) {
+          locationBuilder_ = new com.google.protobuf.RepeatedFieldBuilderV3<
+              registrar.Registrar.ServiceLocation, registrar.Registrar.ServiceLocation.Builder, registrar.Registrar.ServiceLocationOrBuilder>(
+                  location_,
+                  ((bitField0_ & 0x00000002) == 0x00000002),
+                  getParentForChildren(),
+                  isClean());
+          location_ = null;
+        }
+        return locationBuilder_;
+      }
+      public final Builder setUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return this;
+      }
+
+      public final Builder mergeUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return this;
+      }
+
+
+      // @@protoc_insertion_point(builder_scope:registrar.GetResponse)
+    }
+
+    // @@protoc_insertion_point(class_scope:registrar.GetResponse)
+    private static final registrar.Registrar.GetResponse DEFAULT_INSTANCE;
+    static {
+      DEFAULT_INSTANCE = new registrar.Registrar.GetResponse();
+    }
+
+    public static registrar.Registrar.GetResponse getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static final com.google.protobuf.Parser<GetResponse>
+        PARSER = new com.google.protobuf.AbstractParser<GetResponse>() {
+      public GetResponse parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+          return new GetResponse(input, extensionRegistry);
+      }
+    };
+
+    public static com.google.protobuf.Parser<GetResponse> parser() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<GetResponse> getParserForType() {
+      return PARSER;
+    }
+
+    public registrar.Registrar.GetResponse getDefaultInstanceForType() {
+      return DEFAULT_INSTANCE;
+    }
+
+  }
+
+  public interface ListResponseOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:registrar.ListResponse)
+      com.google.protobuf.MessageOrBuilder {
+
+    /**
+     * <code>repeated .registrar.GetResponse service = 3;</code>
+     */
+    java.util.List<registrar.Registrar.GetResponse> 
+        getServiceList();
+    /**
+     * <code>repeated .registrar.GetResponse service = 3;</code>
+     */
+    registrar.Registrar.GetResponse getService(int index);
+    /**
+     * <code>repeated .registrar.GetResponse service = 3;</code>
+     */
+    int getServiceCount();
+    /**
+     * <code>repeated .registrar.GetResponse service = 3;</code>
+     */
+    java.util.List<? extends registrar.Registrar.GetResponseOrBuilder> 
+        getServiceOrBuilderList();
+    /**
+     * <code>repeated .registrar.GetResponse service = 3;</code>
+     */
+    registrar.Registrar.GetResponseOrBuilder getServiceOrBuilder(
+        int index);
+  }
+  /**
+   * Protobuf type {@code registrar.ListResponse}
+   */
+  public  static final class ListResponse extends
+      com.google.protobuf.GeneratedMessageV3 implements
+      // @@protoc_insertion_point(message_implements:registrar.ListResponse)
+      ListResponseOrBuilder {
+    // Use ListResponse.newBuilder() to construct.
+    private ListResponse(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+      super(builder);
+    }
+    private ListResponse() {
+      service_ = java.util.Collections.emptyList();
+    }
+
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
+    }
+    private ListResponse(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      this();
+      int mutable_bitField0_ = 0;
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            default: {
+              if (!input.skipField(tag)) {
+                done = true;
+              }
+              break;
+            }
+            case 26: {
+              if (!((mutable_bitField0_ & 0x00000001) == 0x00000001)) {
+                service_ = new java.util.ArrayList<registrar.Registrar.GetResponse>();
+                mutable_bitField0_ |= 0x00000001;
+              }
+              service_.add(
+                  input.readMessage(registrar.Registrar.GetResponse.parser(), extensionRegistry));
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e).setUnfinishedMessage(this);
+      } finally {
+        if (((mutable_bitField0_ & 0x00000001) == 0x00000001)) {
+          service_ = java.util.Collections.unmodifiableList(service_);
+        }
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return registrar.Registrar.internal_static_registrar_ListResponse_descriptor;
+    }
+
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return registrar.Registrar.internal_static_registrar_ListResponse_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              registrar.Registrar.ListResponse.class, registrar.Registrar.ListResponse.Builder.class);
+    }
+
+    public static final int SERVICE_FIELD_NUMBER = 3;
+    private java.util.List<registrar.Registrar.GetResponse> service_;
+    /**
+     * <code>repeated .registrar.GetResponse service = 3;</code>
+     */
+    public java.util.List<registrar.Registrar.GetResponse> getServiceList() {
+      return service_;
+    }
+    /**
+     * <code>repeated .registrar.GetResponse service = 3;</code>
+     */
+    public java.util.List<? extends registrar.Registrar.GetResponseOrBuilder> 
+        getServiceOrBuilderList() {
+      return service_;
+    }
+    /**
+     * <code>repeated .registrar.GetResponse service = 3;</code>
+     */
+    public int getServiceCount() {
+      return service_.size();
+    }
+    /**
+     * <code>repeated .registrar.GetResponse service = 3;</code>
+     */
+    public registrar.Registrar.GetResponse getService(int index) {
+      return service_.get(index);
+    }
+    /**
+     * <code>repeated .registrar.GetResponse service = 3;</code>
+     */
+    public registrar.Registrar.GetResponseOrBuilder getServiceOrBuilder(
+        int index) {
+      return service_.get(index);
+    }
+
+    private byte memoizedIsInitialized = -1;
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
+
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      for (int i = 0; i < service_.size(); i++) {
+        output.writeMessage(3, service_.get(i));
+      }
+    }
+
+    public int getSerializedSize() {
+      int size = memoizedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      for (int i = 0; i < service_.size(); i++) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(3, service_.get(i));
+      }
+      memoizedSize = size;
+      return size;
+    }
+
+    private static final long serialVersionUID = 0L;
+    @java.lang.Override
+    public boolean equals(final java.lang.Object obj) {
+      if (obj == this) {
+       return true;
+      }
+      if (!(obj instanceof registrar.Registrar.ListResponse)) {
+        return super.equals(obj);
+      }
+      registrar.Registrar.ListResponse other = (registrar.Registrar.ListResponse) obj;
+
+      boolean result = true;
+      result = result && getServiceList()
+          .equals(other.getServiceList());
+      return result;
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+      if (memoizedHashCode != 0) {
+        return memoizedHashCode;
+      }
+      int hash = 41;
+      hash = (19 * hash) + getDescriptorForType().hashCode();
+      if (getServiceCount() > 0) {
+        hash = (37 * hash) + SERVICE_FIELD_NUMBER;
+        hash = (53 * hash) + getServiceList().hashCode();
+      }
+      hash = (29 * hash) + unknownFields.hashCode();
+      memoizedHashCode = hash;
+      return hash;
+    }
+
+    public static registrar.Registrar.ListResponse parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static registrar.Registrar.ListResponse parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static registrar.Registrar.ListResponse parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static registrar.Registrar.ListResponse parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static registrar.Registrar.ListResponse parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static registrar.Registrar.ListResponse parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static registrar.Registrar.ListResponse parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input);
+    }
+    public static registrar.Registrar.ListResponse parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static registrar.Registrar.ListResponse parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static registrar.Registrar.ListResponse parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder() {
+      return DEFAULT_INSTANCE.toBuilder();
+    }
+    public static Builder newBuilder(registrar.Registrar.ListResponse prototype) {
+      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+    }
+    public Builder toBuilder() {
+      return this == DEFAULT_INSTANCE
+          ? new Builder() : new Builder().mergeFrom(this);
+    }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code registrar.ListResponse}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:registrar.ListResponse)
+        registrar.Registrar.ListResponseOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return registrar.Registrar.internal_static_registrar_ListResponse_descriptor;
+      }
+
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return registrar.Registrar.internal_static_registrar_ListResponse_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                registrar.Registrar.ListResponse.class, registrar.Registrar.ListResponse.Builder.class);
+      }
+
+      // Construct using registrar.Registrar.ListResponse.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessageV3
+                .alwaysUseFieldBuilders) {
+          getServiceFieldBuilder();
+        }
+      }
+      public Builder clear() {
+        super.clear();
+        if (serviceBuilder_ == null) {
+          service_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000001);
+        } else {
+          serviceBuilder_.clear();
+        }
+        return this;
+      }
+
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return registrar.Registrar.internal_static_registrar_ListResponse_descriptor;
+      }
+
+      public registrar.Registrar.ListResponse getDefaultInstanceForType() {
+        return registrar.Registrar.ListResponse.getDefaultInstance();
+      }
+
+      public registrar.Registrar.ListResponse build() {
+        registrar.Registrar.ListResponse result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      public registrar.Registrar.ListResponse buildPartial() {
+        registrar.Registrar.ListResponse result = new registrar.Registrar.ListResponse(this);
+        int from_bitField0_ = bitField0_;
+        if (serviceBuilder_ == null) {
+          if (((bitField0_ & 0x00000001) == 0x00000001)) {
+            service_ = java.util.Collections.unmodifiableList(service_);
+            bitField0_ = (bitField0_ & ~0x00000001);
+          }
+          result.service_ = service_;
+        } else {
+          result.service_ = serviceBuilder_.build();
+        }
+        onBuilt();
+        return result;
+      }
+
+      public Builder clone() {
+        return (Builder) super.clone();
+      }
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          Object value) {
+        return (Builder) super.setField(field, value);
+      }
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return (Builder) super.clearField(field);
+      }
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return (Builder) super.clearOneof(oneof);
+      }
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, Object value) {
+        return (Builder) super.setRepeatedField(field, index, value);
+      }
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          Object value) {
+        return (Builder) super.addRepeatedField(field, value);
+      }
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof registrar.Registrar.ListResponse) {
+          return mergeFrom((registrar.Registrar.ListResponse)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(registrar.Registrar.ListResponse other) {
+        if (other == registrar.Registrar.ListResponse.getDefaultInstance()) return this;
+        if (serviceBuilder_ == null) {
+          if (!other.service_.isEmpty()) {
+            if (service_.isEmpty()) {
+              service_ = other.service_;
+              bitField0_ = (bitField0_ & ~0x00000001);
+            } else {
+              ensureServiceIsMutable();
+              service_.addAll(other.service_);
+            }
+            onChanged();
+          }
+        } else {
+          if (!other.service_.isEmpty()) {
+            if (serviceBuilder_.isEmpty()) {
+              serviceBuilder_.dispose();
+              serviceBuilder_ = null;
+              service_ = other.service_;
+              bitField0_ = (bitField0_ & ~0x00000001);
+              serviceBuilder_ = 
+                com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders ?
+                   getServiceFieldBuilder() : null;
+            } else {
+              serviceBuilder_.addAllMessages(other.service_);
+            }
+          }
+        }
+        onChanged();
+        return this;
+      }
+
+      public final boolean isInitialized() {
+        return true;
+      }
+
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        registrar.Registrar.ListResponse parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (registrar.Registrar.ListResponse) e.getUnfinishedMessage();
+          throw e.unwrapIOException();
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+      private int bitField0_;
+
+      private java.util.List<registrar.Registrar.GetResponse> service_ =
+        java.util.Collections.emptyList();
+      private void ensureServiceIsMutable() {
+        if (!((bitField0_ & 0x00000001) == 0x00000001)) {
+          service_ = new java.util.ArrayList<registrar.Registrar.GetResponse>(service_);
+          bitField0_ |= 0x00000001;
+         }
+      }
+
+      private com.google.protobuf.RepeatedFieldBuilderV3<
+          registrar.Registrar.GetResponse, registrar.Registrar.GetResponse.Builder, registrar.Registrar.GetResponseOrBuilder> serviceBuilder_;
+
+      /**
+       * <code>repeated .registrar.GetResponse service = 3;</code>
+       */
+      public java.util.List<registrar.Registrar.GetResponse> getServiceList() {
+        if (serviceBuilder_ == null) {
+          return java.util.Collections.unmodifiableList(service_);
+        } else {
+          return serviceBuilder_.getMessageList();
+        }
+      }
+      /**
+       * <code>repeated .registrar.GetResponse service = 3;</code>
+       */
+      public int getServiceCount() {
+        if (serviceBuilder_ == null) {
+          return service_.size();
+        } else {
+          return serviceBuilder_.getCount();
+        }
+      }
+      /**
+       * <code>repeated .registrar.GetResponse service = 3;</code>
+       */
+      public registrar.Registrar.GetResponse getService(int index) {
+        if (serviceBuilder_ == null) {
+          return service_.get(index);
+        } else {
+          return serviceBuilder_.getMessage(index);
+        }
+      }
+      /**
+       * <code>repeated .registrar.GetResponse service = 3;</code>
+       */
+      public Builder setService(
+          int index, registrar.Registrar.GetResponse value) {
+        if (serviceBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureServiceIsMutable();
+          service_.set(index, value);
+          onChanged();
+        } else {
+          serviceBuilder_.setMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .registrar.GetResponse service = 3;</code>
+       */
+      public Builder setService(
+          int index, registrar.Registrar.GetResponse.Builder builderForValue) {
+        if (serviceBuilder_ == null) {
+          ensureServiceIsMutable();
+          service_.set(index, builderForValue.build());
+          onChanged();
+        } else {
+          serviceBuilder_.setMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .registrar.GetResponse service = 3;</code>
+       */
+      public Builder addService(registrar.Registrar.GetResponse value) {
+        if (serviceBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureServiceIsMutable();
+          service_.add(value);
+          onChanged();
+        } else {
+          serviceBuilder_.addMessage(value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .registrar.GetResponse service = 3;</code>
+       */
+      public Builder addService(
+          int index, registrar.Registrar.GetResponse value) {
+        if (serviceBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureServiceIsMutable();
+          service_.add(index, value);
+          onChanged();
+        } else {
+          serviceBuilder_.addMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .registrar.GetResponse service = 3;</code>
+       */
+      public Builder addService(
+          registrar.Registrar.GetResponse.Builder builderForValue) {
+        if (serviceBuilder_ == null) {
+          ensureServiceIsMutable();
+          service_.add(builderForValue.build());
+          onChanged();
+        } else {
+          serviceBuilder_.addMessage(builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .registrar.GetResponse service = 3;</code>
+       */
+      public Builder addService(
+          int index, registrar.Registrar.GetResponse.Builder builderForValue) {
+        if (serviceBuilder_ == null) {
+          ensureServiceIsMutable();
+          service_.add(index, builderForValue.build());
+          onChanged();
+        } else {
+          serviceBuilder_.addMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .registrar.GetResponse service = 3;</code>
+       */
+      public Builder addAllService(
+          java.lang.Iterable<? extends registrar.Registrar.GetResponse> values) {
+        if (serviceBuilder_ == null) {
+          ensureServiceIsMutable();
+          com.google.protobuf.AbstractMessageLite.Builder.addAll(
+              values, service_);
+          onChanged();
+        } else {
+          serviceBuilder_.addAllMessages(values);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .registrar.GetResponse service = 3;</code>
+       */
+      public Builder clearService() {
+        if (serviceBuilder_ == null) {
+          service_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000001);
+          onChanged();
+        } else {
+          serviceBuilder_.clear();
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .registrar.GetResponse service = 3;</code>
+       */
+      public Builder removeService(int index) {
+        if (serviceBuilder_ == null) {
+          ensureServiceIsMutable();
+          service_.remove(index);
+          onChanged();
+        } else {
+          serviceBuilder_.remove(index);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .registrar.GetResponse service = 3;</code>
+       */
+      public registrar.Registrar.GetResponse.Builder getServiceBuilder(
+          int index) {
+        return getServiceFieldBuilder().getBuilder(index);
+      }
+      /**
+       * <code>repeated .registrar.GetResponse service = 3;</code>
+       */
+      public registrar.Registrar.GetResponseOrBuilder getServiceOrBuilder(
+          int index) {
+        if (serviceBuilder_ == null) {
+          return service_.get(index);  } else {
+          return serviceBuilder_.getMessageOrBuilder(index);
+        }
+      }
+      /**
+       * <code>repeated .registrar.GetResponse service = 3;</code>
+       */
+      public java.util.List<? extends registrar.Registrar.GetResponseOrBuilder> 
+           getServiceOrBuilderList() {
+        if (serviceBuilder_ != null) {
+          return serviceBuilder_.getMessageOrBuilderList();
+        } else {
+          return java.util.Collections.unmodifiableList(service_);
+        }
+      }
+      /**
+       * <code>repeated .registrar.GetResponse service = 3;</code>
+       */
+      public registrar.Registrar.GetResponse.Builder addServiceBuilder() {
+        return getServiceFieldBuilder().addBuilder(
+            registrar.Registrar.GetResponse.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .registrar.GetResponse service = 3;</code>
+       */
+      public registrar.Registrar.GetResponse.Builder addServiceBuilder(
+          int index) {
+        return getServiceFieldBuilder().addBuilder(
+            index, registrar.Registrar.GetResponse.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .registrar.GetResponse service = 3;</code>
+       */
+      public java.util.List<registrar.Registrar.GetResponse.Builder> 
+           getServiceBuilderList() {
+        return getServiceFieldBuilder().getBuilderList();
+      }
+      private com.google.protobuf.RepeatedFieldBuilderV3<
+          registrar.Registrar.GetResponse, registrar.Registrar.GetResponse.Builder, registrar.Registrar.GetResponseOrBuilder> 
+          getServiceFieldBuilder() {
+        if (serviceBuilder_ == null) {
+          serviceBuilder_ = new com.google.protobuf.RepeatedFieldBuilderV3<
+              registrar.Registrar.GetResponse, registrar.Registrar.GetResponse.Builder, registrar.Registrar.GetResponseOrBuilder>(
+                  service_,
+                  ((bitField0_ & 0x00000001) == 0x00000001),
+                  getParentForChildren(),
+                  isClean());
+          service_ = null;
+        }
+        return serviceBuilder_;
+      }
+      public final Builder setUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return this;
+      }
+
+      public final Builder mergeUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return this;
+      }
+
+
+      // @@protoc_insertion_point(builder_scope:registrar.ListResponse)
+    }
+
+    // @@protoc_insertion_point(class_scope:registrar.ListResponse)
+    private static final registrar.Registrar.ListResponse DEFAULT_INSTANCE;
+    static {
+      DEFAULT_INSTANCE = new registrar.Registrar.ListResponse();
+    }
+
+    public static registrar.Registrar.ListResponse getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static final com.google.protobuf.Parser<ListResponse>
+        PARSER = new com.google.protobuf.AbstractParser<ListResponse>() {
+      public ListResponse parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+          return new ListResponse(input, extensionRegistry);
+      }
+    };
+
+    public static com.google.protobuf.Parser<ListResponse> parser() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<ListResponse> getParserForType() {
+      return PARSER;
+    }
+
+    public registrar.Registrar.ListResponse getDefaultInstanceForType() {
+      return DEFAULT_INSTANCE;
+    }
+
+  }
+
+  public interface ListRequestOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:registrar.ListRequest)
+      com.google.protobuf.MessageOrBuilder {
+  }
+  /**
+   * Protobuf type {@code registrar.ListRequest}
+   */
+  public  static final class ListRequest extends
+      com.google.protobuf.GeneratedMessageV3 implements
+      // @@protoc_insertion_point(message_implements:registrar.ListRequest)
+      ListRequestOrBuilder {
+    // Use ListRequest.newBuilder() to construct.
+    private ListRequest(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+      super(builder);
+    }
+    private ListRequest() {
+    }
+
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
+    }
+    private ListRequest(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      this();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            default: {
+              if (!input.skipField(tag)) {
+                done = true;
+              }
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e).setUnfinishedMessage(this);
+      } finally {
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return registrar.Registrar.internal_static_registrar_ListRequest_descriptor;
+    }
+
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return registrar.Registrar.internal_static_registrar_ListRequest_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              registrar.Registrar.ListRequest.class, registrar.Registrar.ListRequest.Builder.class);
+    }
+
+    private byte memoizedIsInitialized = -1;
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
+
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+    }
+
+    public int getSerializedSize() {
+      int size = memoizedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      memoizedSize = size;
+      return size;
+    }
+
+    private static final long serialVersionUID = 0L;
+    @java.lang.Override
+    public boolean equals(final java.lang.Object obj) {
+      if (obj == this) {
+       return true;
+      }
+      if (!(obj instanceof registrar.Registrar.ListRequest)) {
+        return super.equals(obj);
+      }
+      registrar.Registrar.ListRequest other = (registrar.Registrar.ListRequest) obj;
+
+      boolean result = true;
+      return result;
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+      if (memoizedHashCode != 0) {
+        return memoizedHashCode;
+      }
+      int hash = 41;
+      hash = (19 * hash) + getDescriptorForType().hashCode();
+      hash = (29 * hash) + unknownFields.hashCode();
+      memoizedHashCode = hash;
+      return hash;
+    }
+
+    public static registrar.Registrar.ListRequest parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static registrar.Registrar.ListRequest parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static registrar.Registrar.ListRequest parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static registrar.Registrar.ListRequest parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static registrar.Registrar.ListRequest parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static registrar.Registrar.ListRequest parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static registrar.Registrar.ListRequest parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input);
+    }
+    public static registrar.Registrar.ListRequest parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static registrar.Registrar.ListRequest parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static registrar.Registrar.ListRequest parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder() {
+      return DEFAULT_INSTANCE.toBuilder();
+    }
+    public static Builder newBuilder(registrar.Registrar.ListRequest prototype) {
+      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+    }
+    public Builder toBuilder() {
+      return this == DEFAULT_INSTANCE
+          ? new Builder() : new Builder().mergeFrom(this);
+    }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code registrar.ListRequest}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:registrar.ListRequest)
+        registrar.Registrar.ListRequestOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return registrar.Registrar.internal_static_registrar_ListRequest_descriptor;
+      }
+
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return registrar.Registrar.internal_static_registrar_ListRequest_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                registrar.Registrar.ListRequest.class, registrar.Registrar.ListRequest.Builder.class);
+      }
+
+      // Construct using registrar.Registrar.ListRequest.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessageV3
+                .alwaysUseFieldBuilders) {
+        }
+      }
+      public Builder clear() {
+        super.clear();
+        return this;
+      }
+
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return registrar.Registrar.internal_static_registrar_ListRequest_descriptor;
+      }
+
+      public registrar.Registrar.ListRequest getDefaultInstanceForType() {
+        return registrar.Registrar.ListRequest.getDefaultInstance();
+      }
+
+      public registrar.Registrar.ListRequest build() {
+        registrar.Registrar.ListRequest result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      public registrar.Registrar.ListRequest buildPartial() {
+        registrar.Registrar.ListRequest result = new registrar.Registrar.ListRequest(this);
+        onBuilt();
+        return result;
+      }
+
+      public Builder clone() {
+        return (Builder) super.clone();
+      }
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          Object value) {
+        return (Builder) super.setField(field, value);
+      }
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return (Builder) super.clearField(field);
+      }
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return (Builder) super.clearOneof(oneof);
+      }
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, Object value) {
+        return (Builder) super.setRepeatedField(field, index, value);
+      }
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          Object value) {
+        return (Builder) super.addRepeatedField(field, value);
+      }
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof registrar.Registrar.ListRequest) {
+          return mergeFrom((registrar.Registrar.ListRequest)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(registrar.Registrar.ListRequest other) {
+        if (other == registrar.Registrar.ListRequest.getDefaultInstance()) return this;
+        onChanged();
+        return this;
+      }
+
+      public final boolean isInitialized() {
+        return true;
+      }
+
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        registrar.Registrar.ListRequest parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (registrar.Registrar.ListRequest) e.getUnfinishedMessage();
           throw e.unwrapIOException();
         } finally {
           if (parsedMessage != null) {
@@ -1865,64 +4823,79 @@ public final class Registrar {
       }
 
 
-      // @@protoc_insertion_point(builder_scope:registrar.PingResponse)
+      // @@protoc_insertion_point(builder_scope:registrar.ListRequest)
     }
 
-    // @@protoc_insertion_point(class_scope:registrar.PingResponse)
-    private static final registrar.Registrar.PingResponse DEFAULT_INSTANCE;
+    // @@protoc_insertion_point(class_scope:registrar.ListRequest)
+    private static final registrar.Registrar.ListRequest DEFAULT_INSTANCE;
     static {
-      DEFAULT_INSTANCE = new registrar.Registrar.PingResponse();
+      DEFAULT_INSTANCE = new registrar.Registrar.ListRequest();
     }
 
-    public static registrar.Registrar.PingResponse getDefaultInstance() {
+    public static registrar.Registrar.ListRequest getDefaultInstance() {
       return DEFAULT_INSTANCE;
     }
 
-    private static final com.google.protobuf.Parser<PingResponse>
-        PARSER = new com.google.protobuf.AbstractParser<PingResponse>() {
-      public PingResponse parsePartialFrom(
+    private static final com.google.protobuf.Parser<ListRequest>
+        PARSER = new com.google.protobuf.AbstractParser<ListRequest>() {
+      public ListRequest parsePartialFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
-          return new PingResponse(input, extensionRegistry);
+          return new ListRequest(input, extensionRegistry);
       }
     };
 
-    public static com.google.protobuf.Parser<PingResponse> parser() {
+    public static com.google.protobuf.Parser<ListRequest> parser() {
       return PARSER;
     }
 
     @java.lang.Override
-    public com.google.protobuf.Parser<PingResponse> getParserForType() {
+    public com.google.protobuf.Parser<ListRequest> getParserForType() {
       return PARSER;
     }
 
-    public registrar.Registrar.PingResponse getDefaultInstanceForType() {
+    public registrar.Registrar.ListRequest getDefaultInstanceForType() {
       return DEFAULT_INSTANCE;
     }
 
   }
 
   private static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_registrar_CreateRequest_descriptor;
+    internal_static_registrar_ServiceDescription_descriptor;
   private static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-      internal_static_registrar_CreateRequest_fieldAccessorTable;
+      internal_static_registrar_ServiceDescription_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_registrar_CreateResponse_descriptor;
+    internal_static_registrar_ServiceAddress_descriptor;
   private static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-      internal_static_registrar_CreateResponse_fieldAccessorTable;
+      internal_static_registrar_ServiceAddress_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_registrar_PingRequest_descriptor;
+    internal_static_registrar_ServiceLocation_descriptor;
   private static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-      internal_static_registrar_PingRequest_fieldAccessorTable;
+      internal_static_registrar_ServiceLocation_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_registrar_PingResponse_descriptor;
+    internal_static_registrar_GetRequest_descriptor;
   private static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-      internal_static_registrar_PingResponse_fieldAccessorTable;
+      internal_static_registrar_GetRequest_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_registrar_GetResponse_descriptor;
+  private static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_registrar_GetResponse_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_registrar_ListResponse_descriptor;
+  private static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_registrar_ListResponse_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_registrar_ListRequest_descriptor;
+  private static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_registrar_ListRequest_fieldAccessorTable;
 
   public static com.google.protobuf.Descriptors.FileDescriptor
       getDescriptor() {
@@ -1933,15 +4906,26 @@ public final class Registrar {
   static {
     java.lang.String[] descriptorData = {
       "\n\025proto/registrar.proto\022\tregistrar\032\034goog" +
-      "le/api/annotations.proto\"-\n\rCreateReques" +
-      "t\022\014\n\004Name\030\001 \001(\t\022\016\n\006Access\030\002 \001(\t\"%\n\016Creat" +
-      "eResponse\022\023\n\013Certificate\030\001 \001(\t\"\r\n\013PingRe" +
-      "quest\"\016\n\014PingResponse2\304\001\n\nVpnManager\022d\n\t" +
-      "CreateVpn\022\030.registrar.CreateRequest\032\031.re" +
-      "gistrar.CreateResponse\"\"\202\323\344\223\002\034\022\032/vpnmgr/" +
-      "v1/vpn/certificate\022P\n\004Ping\022\026.registrar.P" +
-      "ingRequest\032\027.registrar.PingResponse\"\027\202\323\344" +
-      "\223\002\021\022\017/vpnmgr/v1/pingb\006proto3"
+      "le/api/annotations.proto\"\215\001\n\022ServiceDesc" +
+      "ription\022\014\n\004name\030\001 \001(\t\022\r\n\005build\030\002 \001(\003\0227\n\004" +
+      "type\030\004 \001(\0162).registrar.ServiceDescriptio" +
+      "n.Servicetype\"!\n\013Servicetype\022\010\n\004grpc\020\000\022\010" +
+      "\n\004json\020\001\",\n\016ServiceAddress\022\014\n\004Host\030\001 \001(\t" +
+      "\022\014\n\004Port\030\002 \001(\005\"m\n\017ServiceLocation\022.\n\007Ser" +
+      "vice\030\001 \001(\0132\035.registrar.ServiceDescriptio" +
+      "n\022*\n\007Address\030\002 \003(\0132\031.registrar.ServiceAd" +
+      "dress\"<\n\nGetRequest\022.\n\007Service\030\001 \001(\0132\035.r",
+      "egistrar.ServiceDescription\"k\n\013GetRespon" +
+      "se\022.\n\007service\030\001 \001(\0132\035.registrar.ServiceD" +
+      "escription\022,\n\010location\030\002 \003(\0132\032.registrar" +
+      ".ServiceLocation\"7\n\014ListResponse\022\'\n\007serv" +
+      "ice\030\003 \003(\0132\026.registrar.GetResponse\"\r\n\013Lis" +
+      "tRequest2\326\001\n\010Registry\022E\n\017RegisterService" +
+      "\022\032.registrar.ServiceLocation\032\026.registrar" +
+      ".GetResponse\022B\n\021GetServiceAddress\022\025.regi" +
+      "strar.GetRequest\032\026.registrar.GetResponse" +
+      "\022?\n\014ListServices\022\026.registrar.ListRequest",
+      "\032\027.registrar.ListResponseb\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -1956,35 +4940,48 @@ public final class Registrar {
         new com.google.protobuf.Descriptors.FileDescriptor[] {
           com.google.api.AnnotationsProto.getDescriptor(),
         }, assigner);
-    internal_static_registrar_CreateRequest_descriptor =
+    internal_static_registrar_ServiceDescription_descriptor =
       getDescriptor().getMessageTypes().get(0);
-    internal_static_registrar_CreateRequest_fieldAccessorTable = new
+    internal_static_registrar_ServiceDescription_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-        internal_static_registrar_CreateRequest_descriptor,
-        new java.lang.String[] { "Name", "Access", });
-    internal_static_registrar_CreateResponse_descriptor =
+        internal_static_registrar_ServiceDescription_descriptor,
+        new java.lang.String[] { "Name", "Build", "Type", });
+    internal_static_registrar_ServiceAddress_descriptor =
       getDescriptor().getMessageTypes().get(1);
-    internal_static_registrar_CreateResponse_fieldAccessorTable = new
+    internal_static_registrar_ServiceAddress_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-        internal_static_registrar_CreateResponse_descriptor,
-        new java.lang.String[] { "Certificate", });
-    internal_static_registrar_PingRequest_descriptor =
+        internal_static_registrar_ServiceAddress_descriptor,
+        new java.lang.String[] { "Host", "Port", });
+    internal_static_registrar_ServiceLocation_descriptor =
       getDescriptor().getMessageTypes().get(2);
-    internal_static_registrar_PingRequest_fieldAccessorTable = new
+    internal_static_registrar_ServiceLocation_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-        internal_static_registrar_PingRequest_descriptor,
-        new java.lang.String[] { });
-    internal_static_registrar_PingResponse_descriptor =
+        internal_static_registrar_ServiceLocation_descriptor,
+        new java.lang.String[] { "Service", "Address", });
+    internal_static_registrar_GetRequest_descriptor =
       getDescriptor().getMessageTypes().get(3);
-    internal_static_registrar_PingResponse_fieldAccessorTable = new
+    internal_static_registrar_GetRequest_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-        internal_static_registrar_PingResponse_descriptor,
+        internal_static_registrar_GetRequest_descriptor,
+        new java.lang.String[] { "Service", });
+    internal_static_registrar_GetResponse_descriptor =
+      getDescriptor().getMessageTypes().get(4);
+    internal_static_registrar_GetResponse_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_registrar_GetResponse_descriptor,
+        new java.lang.String[] { "Service", "Location", });
+    internal_static_registrar_ListResponse_descriptor =
+      getDescriptor().getMessageTypes().get(5);
+    internal_static_registrar_ListResponse_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_registrar_ListResponse_descriptor,
+        new java.lang.String[] { "Service", });
+    internal_static_registrar_ListRequest_descriptor =
+      getDescriptor().getMessageTypes().get(6);
+    internal_static_registrar_ListRequest_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_registrar_ListRequest_descriptor,
         new java.lang.String[] { });
-    com.google.protobuf.ExtensionRegistry registry =
-        com.google.protobuf.ExtensionRegistry.newInstance();
-    registry.add(com.google.api.AnnotationsProto.http);
-    com.google.protobuf.Descriptors.FileDescriptor
-        .internalUpdateFileDescriptor(descriptor, registry);
     com.google.api.AnnotationsProto.getDescriptor();
   }
 

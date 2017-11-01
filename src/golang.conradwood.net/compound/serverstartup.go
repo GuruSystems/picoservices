@@ -12,21 +12,23 @@ import (
 	"google.golang.org/grpc/credentials"
 	"google.golang.org/grpc/reflection"
 	//	"google.golang.org/grpc/peer"
+	pb "golang.conradwood.net/registrar/proto"
 	"google.golang.org/grpc/codes"
+
 	"io/ioutil"
 	"net"
 )
 
 var (
-	crt    = flag.String("certificate", "/etc/grpc/server/certificate.pem", "filename of the server certificate")
-	key    = flag.String("key", "/etc/grpc/server/privatekey.pem", "the key for the server certificate")
-	ca     = flag.String("ca", "/etc/grpc/server/ca.pem", "filename of the the CA certificate which signed both client and server certificate")
-	dbhost = flag.String("dbhost", "postgres", "hostname of the postgres database rdms")
-	dbdb   = flag.String("database", "rpcusers", "database to use for authentication")
-	dbuser = flag.String("dbuser", "root", "username for the database to use for authentication")
-	dbpw   = flag.String("dbpw", "pw", "password for the database to use for authentication")
-
-	auth Authenticator
+	crt      = flag.String("certificate", "/etc/grpc/server/certificate.pem", "filename of the server certificate")
+	certkey  = flag.String("certkey", "/etc/grpc/server/privatekey.pem", "the key for the server certificate")
+	ca       = flag.String("ca", "/etc/grpc/server/ca.pem", "filename of the the CA certificate which signed both client and server certificate")
+	dbhost   = flag.String("dbhost", "postgres", "hostname of the postgres database rdms")
+	dbdb     = flag.String("database", "rpcusers", "database to use for authentication")
+	dbuser   = flag.String("dbuser", "root", "username for the database to use for authentication")
+	dbpw     = flag.String("dbpw", "pw", "password for the database to use for authentication")
+	registry = flag.String("registry", "localhost:5000", "Registry server address")
+	auth     Authenticator
 )
 
 type Register func(server *grpc.Server) error
@@ -48,7 +50,7 @@ func (s *ServerDef) init() {
 		s.Certificate = *crt
 	}
 	if s.Key == "" {
-		s.Key = *key
+		s.Key = *certkey
 	}
 	if s.CA == "" {
 		s.CA = *ca
@@ -140,6 +142,10 @@ func ServerStartup(def ServerDef) error {
 	}
 	for name, _ := range srv.GetServiceInfo() {
 		fmt.Println("Registered Server: ", name)
+		err = AddRegistry(name, def.Port)
+		if err != nil {
+			return fmt.Errorf("Failed to register %s with registry server", name, err)
+		}
 	}
 	// something odd?
 	reflection.Register(srv)
@@ -152,5 +158,28 @@ func ServerStartup(def ServerDef) error {
 	if err != nil {
 		return fmt.Errorf("grpc serve error: %s", err)
 	}
+	return nil
+}
+
+func AddRegistry(name string, port int) error {
+	fmt.Printf("Registering service %s with registry server\n", name)
+	opts := []grpc.DialOption{grpc.WithInsecure()}
+	conn, err := grpc.Dial(*registry, opts...)
+	if err != nil {
+		fmt.Println("failed to dial registry server: %v", err)
+		return err
+	}
+	defer conn.Close()
+	client := pb.NewRegistryClient(conn)
+	req := pb.ServiceLocation{}
+	req.Service = &pb.ServiceDescription{}
+	req.Service.Name = name
+	req.Address = []*pb.ServiceAddress{{Port: int32(port)}}
+	resp, err := client.RegisterService(context.Background(), &req)
+	if err != nil {
+		fmt.Println("failed to register services:", err)
+		return err
+	}
+	fmt.Printf("Response to register service: %v\n", resp)
 	return nil
 }

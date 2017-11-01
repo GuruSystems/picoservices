@@ -11,32 +11,43 @@ import "examples/sub/message.proto";
 import "examples/sub2/message.proto";
 import "google/protobuf/timestamp.proto";
 */
-message CreateRequest {
- string Name = 1;
- string Access = 2;
+
+message ServiceDescription {
+string name = 1;
+int64 build =2;
+enum Servicetype {
+grpc = 0;
+json = 1;
+}
+Servicetype type = 4;
 }
 
-message CreateResponse {
- string Certificate=1;
+message ServiceAddress {
+string Host=1;
+int32 Port=2;
 }
 
-message PingRequest {}
-message PingResponse {}
+message ServiceLocation {
+ServiceDescription Service=1;
+repeated ServiceAddress Address=2;
+}
 
-service VpnManager {
- rpc CreateVpn(CreateRequest) returns (CreateResponse){
-     option (google.api.http) = { get: "/vpnmgr/v1/vpn/certificate" };
- }
+message GetRequest {
+ServiceDescription Service=1;
+}
+message GetResponse {
+ServiceDescription service=1;
+repeated ServiceLocation location=2;
+}
 
- rpc Ping(PingRequest) returns (PingResponse) {
-     option (google.api.http) = { get: "/vpnmgr/v1/ping" };
- }
+message ListResponse {
+repeated GetResponse service = 3;
+}
 
- /*
- option(google.api.http) = {
-   post: "/v1/echo"
-   body: "*"
- };
- }
- */
+message ListRequest{}
+
+service Registry {
+ rpc RegisterService(ServiceLocation) returns (GetResponse);
+ rpc GetServiceAddress(GetRequest) returns (GetResponse);
+ rpc ListServices(ListRequest) returns (ListResponse);
 }

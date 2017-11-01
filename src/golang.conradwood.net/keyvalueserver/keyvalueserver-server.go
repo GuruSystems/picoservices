@@ -16,6 +16,7 @@ var (
 	port = flag.Int("port", 10000, "The server port")
 )
 
+// callback from the compound initialisation
 func st(server *grpc.Server) error {
 	s := new(KeyValueServer)
 	// Register the handler object

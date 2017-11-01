@@ -24,7 +24,7 @@ func main() {
 	flag.Parse()
 	conn, err := compound.DialWrapper("keyvalueserver")
 	if err != nil {
-		fmt.Println("fail to dial: %v", err)
+		fmt.Println("failed to dial: %v", err)
 		return
 	}
 	defer conn.Close()
@@ -33,14 +33,15 @@ func main() {
 		req := pb.PutRequest{Key: "foo", Value: "bar"}
 		_, err := client.Put(context.Background(), &req)
 		if err != nil {
-			fmt.Println("fail to put key to store:", err)
+			fmt.Println("failed to put key to store:", err)
 		}
 	} else if *action == "get" {
 		req := pb.GetRequest{Key: "foo"}
 		resp, err := client.Get(context.Background(), &req)
 		if err != nil {
-			fmt.Println("fail to get key from store:", err)
+			fmt.Println("failed to get key from store:", err)
+		} else {
+			fmt.Printf("Value of key %s: \"%s\"\n", resp.Value)
 		}
-		fmt.Printf("Value of key %s: \"%s\"\n", resp.Value)
 	}
 }

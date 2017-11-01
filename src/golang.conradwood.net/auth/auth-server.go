@@ -33,11 +33,11 @@ func st(server *grpc.Server) error {
 	return nil
 }
 func start() error {
-	sd := common.ServerDef{
+	sd := compound.ServerDef{
 		Port: *port,
 	}
 	sd.Register = st
-	err := common.ServerStartup(sd)
+	err := compound.ServerStartup(sd)
 	if err != nil {
 		fmt.Printf("failed to start server: %s\n", err)
 	}

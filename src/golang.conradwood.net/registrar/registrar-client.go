@@ -15,8 +15,8 @@ import (
 
 // static variables for flag parser
 var (
-	serverAddr = flag.String("server_addr", "127.0.0.1:10000", "The server address in the format of host:port")
-	port       = flag.Int("port", 10000, "The server port")
+	serverAddr = flag.String("server_addr", "127.0.0.1:5000", "The server address in the format of host:port")
+	port       = flag.Int("port", 5000, "The server port")
 )
 
 func main() {
@@ -25,14 +25,14 @@ func main() {
 	fmt.Println("Connecting to server...")
 	conn, err := grpc.Dial(*serverAddr, opts...)
 	if err != nil {
-		log.Fatalf("fail to dial: %v", err)
+		log.Fatalf("failed to dial: %v", err)
 	}
 	defer conn.Close()
-	client := pb.NewVpnManagerClient(conn)
-	req := pb.CreateRequest{Name: "clientvpn", Access: "testaccess"}
-	resp, err := client.CreateVpn(context.Background(), &req)
+	client := pb.NewRegistryClient(conn)
+	req := pb.ListRequest{}
+	resp, err := client.ListServices(context.Background(), &req)
 	if err != nil {
-		log.Fatalf("fail to createvpn: %v", err)
+		log.Fatalf("failed to list services: %v", err)
 	}
-	fmt.Printf("Response to createvpn: %v\n", resp)
+	fmt.Printf("Response to list services: %v\n", resp)
 }
