@@ -1,0 +1,42 @@
+
+syntax = "proto3";
+
+package keyvalueserver;
+
+import "google/api/annotations.proto";
+/*
+import "google/protobuf/empty.proto";
+import "google/protobuf/duration.proto";
+import "examples/sub/message.proto";
+import "examples/sub2/message.proto";
+import "google/protobuf/timestamp.proto";
+*/
+message CreateRequest {
+ string Name = 1;
+ string Access = 2;
+}
+
+message CreateResponse {
+ string Certificate=1;
+}
+
+message PingRequest {}
+message PingResponse {}
+
+service VpnManager {
+ rpc CreateVpn(CreateRequest) returns (CreateResponse){
+     option (google.api.http) = { get: "/vpnmgr/v1/vpn/certificate" };
+ }
+
+ rpc Ping(PingRequest) returns (PingResponse) {
+     option (google.api.http) = { get: "/vpnmgr/v1/ping" };
+ }
+
+ /*
+ option(google.api.http) = {
+   post: "/v1/echo"
+   body: "*"
+ };
+ }
+ */
+}
