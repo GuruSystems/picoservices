@@ -8,9 +8,9 @@ PROTOCINC += -I${GOPATH}/src/github.com/grpc-ecosystem/grpc-gateway/third_party/
 PKG=auth
 
 server:
-	go install ${PKG}-server.go
+	echo "no server for auth lib"
 client:
-	go install ${PKG}-client.go
+	echo "no client for auth lib"
 
 .PHONY: proto
 proto:

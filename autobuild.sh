@@ -5,6 +5,7 @@ export GOPATH=`pwd`
 echo "GOPATH=$GOPATH"
 mkdir $GOBIN
 BUILD() {
+    echo
     echo "building $1"
 MYSRC=src/golang.conradwood.net/$1
 ( cd ${MYSRC} && make proto ) || exit 10
