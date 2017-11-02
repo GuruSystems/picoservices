@@ -44,22 +44,33 @@ func main() {
 ***********************************/
 func FindService(sd *pb.ServiceDescription) *pb.ServiceLocation {
 	for e := services.Front(); e != nil; e = e.Next() {
-		srvloc := e.Value.(pb.ServiceLocation)
+		srvloc := e.Value.(*pb.ServiceLocation)
 		if srvloc.Service.Name == sd.Name {
-			return &srvloc
+			return srvloc
 		}
 	}
 	return nil
 }
-func AddService(sd *pb.ServiceDescription, address string) {
-	sl := new(pb.ServiceLocation)
-	sl.Service = new(pb.ServiceDescription)
-	*sl.Service = *sd
+func AddService(sd *pb.ServiceDescription, hostname string, port int32) {
 	if sd.Name == "" {
-		fmt.Printf("NO NAME: %v\n%v\n", sd, sl)
+		fmt.Printf("NO NAME: %v\n", sd)
+		return
 	}
-	services.PushFront(sl)
-	fmt.Printf("Registered service %s (%s) at %s\n", sd.Name, sd.Type, address)
+
+	sl := FindService(sd)
+	if sl == nil {
+		sl = new(pb.ServiceLocation)
+		sl.Service = new(pb.ServiceDescription)
+		*sl.Service = *sd
+		services.PushFront(sl)
+	}
+
+	// append address to service location
+	sa := new(pb.ServiceAddress)
+	sa.Host = hostname
+	sa.Port = port
+	sl.Address = append(sl.Address, sa)
+	fmt.Printf("Registered service %s (%s) at %s:%d\n", sd.Name, sd.Type, hostname, port)
 }
 
 /**********************************
@@ -109,8 +120,7 @@ func (s *RegistryService) RegisterService(ctx context.Context, pr *pb.ServiceLoc
 		if host == "" {
 			host = peerhost
 		}
-		addr := fmt.Sprintf("%s:%d", host, address.Port)
-		AddService(pr.Service, addr)
+		AddService(pr.Service, host, address.Port)
 	}
 	rr := new(pb.GetResponse)
 	return rr, nil
@@ -118,7 +128,16 @@ func (s *RegistryService) RegisterService(ctx context.Context, pr *pb.ServiceLoc
 
 func (s *RegistryService) ListServices(ctx context.Context, pr *pb.ListRequest) (*pb.ListResponse, error) {
 	lr := new(pb.ListResponse)
+	lr.Service = []*pb.GetResponse{}
+	// one GetResponse per element
 	for e := services.Front(); e != nil; e = e.Next() {
+		getr := pb.GetResponse{}
+		lr.Service = append(lr.Service, &getr)
+		sloc := e.Value.(*pb.ServiceLocation)
+		getr.Location = sloc
+		sd := sloc.Service
+		getr.Service = sd
+		fmt.Println("Listing service: ", getr)
 	}
 	return lr, nil
 }

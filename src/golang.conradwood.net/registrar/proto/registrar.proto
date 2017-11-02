@@ -36,12 +36,12 @@ message GetRequest {
 ServiceDescription Service=1;
 }
 message GetResponse {
-ServiceDescription service=1;
-repeated ServiceLocation location=2;
+ServiceDescription Service=1;
+ServiceLocation Location=2;
 }
 
 message ListResponse {
-repeated GetResponse service = 3;
+repeated GetResponse Service = 3;
 }
 
 message ListRequest{}

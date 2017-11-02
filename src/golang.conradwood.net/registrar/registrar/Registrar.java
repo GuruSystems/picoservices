@@ -2834,41 +2834,30 @@ public final class Registrar {
       com.google.protobuf.MessageOrBuilder {
 
     /**
-     * <code>optional .registrar.ServiceDescription service = 1;</code>
+     * <code>optional .registrar.ServiceDescription Service = 1;</code>
      */
     boolean hasService();
     /**
-     * <code>optional .registrar.ServiceDescription service = 1;</code>
+     * <code>optional .registrar.ServiceDescription Service = 1;</code>
      */
     registrar.Registrar.ServiceDescription getService();
     /**
-     * <code>optional .registrar.ServiceDescription service = 1;</code>
+     * <code>optional .registrar.ServiceDescription Service = 1;</code>
      */
     registrar.Registrar.ServiceDescriptionOrBuilder getServiceOrBuilder();
 
     /**
-     * <code>repeated .registrar.ServiceLocation location = 2;</code>
+     * <code>optional .registrar.ServiceLocation Location = 2;</code>
      */
-    java.util.List<registrar.Registrar.ServiceLocation> 
-        getLocationList();
+    boolean hasLocation();
     /**
-     * <code>repeated .registrar.ServiceLocation location = 2;</code>
+     * <code>optional .registrar.ServiceLocation Location = 2;</code>
      */
-    registrar.Registrar.ServiceLocation getLocation(int index);
+    registrar.Registrar.ServiceLocation getLocation();
     /**
-     * <code>repeated .registrar.ServiceLocation location = 2;</code>
+     * <code>optional .registrar.ServiceLocation Location = 2;</code>
      */
-    int getLocationCount();
-    /**
-     * <code>repeated .registrar.ServiceLocation location = 2;</code>
-     */
-    java.util.List<? extends registrar.Registrar.ServiceLocationOrBuilder> 
-        getLocationOrBuilderList();
-    /**
-     * <code>repeated .registrar.ServiceLocation location = 2;</code>
-     */
-    registrar.Registrar.ServiceLocationOrBuilder getLocationOrBuilder(
-        int index);
+    registrar.Registrar.ServiceLocationOrBuilder getLocationOrBuilder();
   }
   /**
    * Protobuf type {@code registrar.GetResponse}
@@ -2882,7 +2871,6 @@ public final class Registrar {
       super(builder);
     }
     private GetResponse() {
-      location_ = java.util.Collections.emptyList();
     }
 
     @java.lang.Override
@@ -2924,12 +2912,16 @@ public final class Registrar {
               break;
             }
             case 18: {
-              if (!((mutable_bitField0_ & 0x00000002) == 0x00000002)) {
-                location_ = new java.util.ArrayList<registrar.Registrar.ServiceLocation>();
-                mutable_bitField0_ |= 0x00000002;
+              registrar.Registrar.ServiceLocation.Builder subBuilder = null;
+              if (location_ != null) {
+                subBuilder = location_.toBuilder();
               }
-              location_.add(
-                  input.readMessage(registrar.Registrar.ServiceLocation.parser(), extensionRegistry));
+              location_ = input.readMessage(registrar.Registrar.ServiceLocation.parser(), extensionRegistry);
+              if (subBuilder != null) {
+                subBuilder.mergeFrom(location_);
+                location_ = subBuilder.buildPartial();
+              }
+
               break;
             }
           }
@@ -2940,9 +2932,6 @@ public final class Registrar {
         throw new com.google.protobuf.InvalidProtocolBufferException(
             e).setUnfinishedMessage(this);
       } finally {
-        if (((mutable_bitField0_ & 0x00000002) == 0x00000002)) {
-          location_ = java.util.Collections.unmodifiableList(location_);
-        }
         makeExtensionsImmutable();
       }
     }
@@ -2958,61 +2947,46 @@ public final class Registrar {
               registrar.Registrar.GetResponse.class, registrar.Registrar.GetResponse.Builder.class);
     }
 
-    private int bitField0_;
     public static final int SERVICE_FIELD_NUMBER = 1;
     private registrar.Registrar.ServiceDescription service_;
     /**
-     * <code>optional .registrar.ServiceDescription service = 1;</code>
+     * <code>optional .registrar.ServiceDescription Service = 1;</code>
      */
     public boolean hasService() {
       return service_ != null;
     }
     /**
-     * <code>optional .registrar.ServiceDescription service = 1;</code>
+     * <code>optional .registrar.ServiceDescription Service = 1;</code>
      */
     public registrar.Registrar.ServiceDescription getService() {
       return service_ == null ? registrar.Registrar.ServiceDescription.getDefaultInstance() : service_;
     }
     /**
-     * <code>optional .registrar.ServiceDescription service = 1;</code>
+     * <code>optional .registrar.ServiceDescription Service = 1;</code>
      */
     public registrar.Registrar.ServiceDescriptionOrBuilder getServiceOrBuilder() {
       return getService();
     }
 
     public static final int LOCATION_FIELD_NUMBER = 2;
-    private java.util.List<registrar.Registrar.ServiceLocation> location_;
+    private registrar.Registrar.ServiceLocation location_;
     /**
-     * <code>repeated .registrar.ServiceLocation location = 2;</code>
+     * <code>optional .registrar.ServiceLocation Location = 2;</code>
      */
-    public java.util.List<registrar.Registrar.ServiceLocation> getLocationList() {
-      return location_;
+    public boolean hasLocation() {
+      return location_ != null;
     }
     /**
-     * <code>repeated .registrar.ServiceLocation location = 2;</code>
+     * <code>optional .registrar.ServiceLocation Location = 2;</code>
      */
-    public java.util.List<? extends registrar.Registrar.ServiceLocationOrBuilder> 
-        getLocationOrBuilderList() {
-      return location_;
+    public registrar.Registrar.ServiceLocation getLocation() {
+      return location_ == null ? registrar.Registrar.ServiceLocation.getDefaultInstance() : location_;
     }
     /**
-     * <code>repeated .registrar.ServiceLocation location = 2;</code>
+     * <code>optional .registrar.ServiceLocation Location = 2;</code>
      */
-    public int getLocationCount() {
-      return location_.size();
-    }
-    /**
-     * <code>repeated .registrar.ServiceLocation location = 2;</code>
-     */
-    public registrar.Registrar.ServiceLocation getLocation(int index) {
-      return location_.get(index);
-    }
-    /**
-     * <code>repeated .registrar.ServiceLocation location = 2;</code>
-     */
-    public registrar.Registrar.ServiceLocationOrBuilder getLocationOrBuilder(
-        int index) {
-      return location_.get(index);
+    public registrar.Registrar.ServiceLocationOrBuilder getLocationOrBuilder() {
+      return getLocation();
     }
 
     private byte memoizedIsInitialized = -1;
@@ -3030,8 +3004,8 @@ public final class Registrar {
       if (service_ != null) {
         output.writeMessage(1, getService());
       }
-      for (int i = 0; i < location_.size(); i++) {
-        output.writeMessage(2, location_.get(i));
+      if (location_ != null) {
+        output.writeMessage(2, getLocation());
       }
     }
 
@@ -3044,9 +3018,9 @@ public final class Registrar {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(1, getService());
       }
-      for (int i = 0; i < location_.size(); i++) {
+      if (location_ != null) {
         size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(2, location_.get(i));
+          .computeMessageSize(2, getLocation());
       }
       memoizedSize = size;
       return size;
@@ -3069,8 +3043,11 @@ public final class Registrar {
         result = result && getService()
             .equals(other.getService());
       }
-      result = result && getLocationList()
-          .equals(other.getLocationList());
+      result = result && (hasLocation() == other.hasLocation());
+      if (hasLocation()) {
+        result = result && getLocation()
+            .equals(other.getLocation());
+      }
       return result;
     }
 
@@ -3085,9 +3062,9 @@ public final class Registrar {
         hash = (37 * hash) + SERVICE_FIELD_NUMBER;
         hash = (53 * hash) + getService().hashCode();
       }
-      if (getLocationCount() > 0) {
+      if (hasLocation()) {
         hash = (37 * hash) + LOCATION_FIELD_NUMBER;
-        hash = (53 * hash) + getLocationList().hashCode();
+        hash = (53 * hash) + getLocation().hashCode();
       }
       hash = (29 * hash) + unknownFields.hashCode();
       memoizedHashCode = hash;
@@ -3203,7 +3180,6 @@ public final class Registrar {
       private void maybeForceBuilderInitialization() {
         if (com.google.protobuf.GeneratedMessageV3
                 .alwaysUseFieldBuilders) {
-          getLocationFieldBuilder();
         }
       }
       public Builder clear() {
@@ -3215,10 +3191,10 @@ public final class Registrar {
           serviceBuilder_ = null;
         }
         if (locationBuilder_ == null) {
-          location_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00000002);
+          location_ = null;
         } else {
-          locationBuilder_.clear();
+          location_ = null;
+          locationBuilder_ = null;
         }
         return this;
       }
@@ -3242,23 +3218,16 @@ public final class Registrar {
 
       public registrar.Registrar.GetResponse buildPartial() {
         registrar.Registrar.GetResponse result = new registrar.Registrar.GetResponse(this);
-        int from_bitField0_ = bitField0_;
-        int to_bitField0_ = 0;
         if (serviceBuilder_ == null) {
           result.service_ = service_;
         } else {
           result.service_ = serviceBuilder_.build();
         }
         if (locationBuilder_ == null) {
-          if (((bitField0_ & 0x00000002) == 0x00000002)) {
-            location_ = java.util.Collections.unmodifiableList(location_);
-            bitField0_ = (bitField0_ & ~0x00000002);
-          }
           result.location_ = location_;
         } else {
           result.location_ = locationBuilder_.build();
         }
-        result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
       }
@@ -3303,31 +3272,8 @@ public final class Registrar {
         if (other.hasService()) {
           mergeService(other.getService());
         }
-        if (locationBuilder_ == null) {
-          if (!other.location_.isEmpty()) {
-            if (location_.isEmpty()) {
-              location_ = other.location_;
-              bitField0_ = (bitField0_ & ~0x00000002);
-            } else {
-              ensureLocationIsMutable();
-              location_.addAll(other.location_);
-            }
-            onChanged();
-          }
-        } else {
-          if (!other.location_.isEmpty()) {
-            if (locationBuilder_.isEmpty()) {
-              locationBuilder_.dispose();
-              locationBuilder_ = null;
-              location_ = other.location_;
-              bitField0_ = (bitField0_ & ~0x00000002);
-              locationBuilder_ = 
-                com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders ?
-                   getLocationFieldBuilder() : null;
-            } else {
-              locationBuilder_.addAllMessages(other.location_);
-            }
-          }
+        if (other.hasLocation()) {
+          mergeLocation(other.getLocation());
         }
         onChanged();
         return this;
@@ -3354,19 +3300,18 @@ public final class Registrar {
         }
         return this;
       }
-      private int bitField0_;
 
       private registrar.Registrar.ServiceDescription service_ = null;
       private com.google.protobuf.SingleFieldBuilderV3<
           registrar.Registrar.ServiceDescription, registrar.Registrar.ServiceDescription.Builder, registrar.Registrar.ServiceDescriptionOrBuilder> serviceBuilder_;
       /**
-       * <code>optional .registrar.ServiceDescription service = 1;</code>
+       * <code>optional .registrar.ServiceDescription Service = 1;</code>
        */
       public boolean hasService() {
         return serviceBuilder_ != null || service_ != null;
       }
       /**
-       * <code>optional .registrar.ServiceDescription service = 1;</code>
+       * <code>optional .registrar.ServiceDescription Service = 1;</code>
        */
       public registrar.Registrar.ServiceDescription getService() {
         if (serviceBuilder_ == null) {
@@ -3376,7 +3321,7 @@ public final class Registrar {
         }
       }
       /**
-       * <code>optional .registrar.ServiceDescription service = 1;</code>
+       * <code>optional .registrar.ServiceDescription Service = 1;</code>
        */
       public Builder setService(registrar.Registrar.ServiceDescription value) {
         if (serviceBuilder_ == null) {
@@ -3392,7 +3337,7 @@ public final class Registrar {
         return this;
       }
       /**
-       * <code>optional .registrar.ServiceDescription service = 1;</code>
+       * <code>optional .registrar.ServiceDescription Service = 1;</code>
        */
       public Builder setService(
           registrar.Registrar.ServiceDescription.Builder builderForValue) {
@@ -3406,7 +3351,7 @@ public final class Registrar {
         return this;
       }
       /**
-       * <code>optional .registrar.ServiceDescription service = 1;</code>
+       * <code>optional .registrar.ServiceDescription Service = 1;</code>
        */
       public Builder mergeService(registrar.Registrar.ServiceDescription value) {
         if (serviceBuilder_ == null) {
@@ -3424,7 +3369,7 @@ public final class Registrar {
         return this;
       }
       /**
-       * <code>optional .registrar.ServiceDescription service = 1;</code>
+       * <code>optional .registrar.ServiceDescription Service = 1;</code>
        */
       public Builder clearService() {
         if (serviceBuilder_ == null) {
@@ -3438,7 +3383,7 @@ public final class Registrar {
         return this;
       }
       /**
-       * <code>optional .registrar.ServiceDescription service = 1;</code>
+       * <code>optional .registrar.ServiceDescription Service = 1;</code>
        */
       public registrar.Registrar.ServiceDescription.Builder getServiceBuilder() {
         
@@ -3446,7 +3391,7 @@ public final class Registrar {
         return getServiceFieldBuilder().getBuilder();
       }
       /**
-       * <code>optional .registrar.ServiceDescription service = 1;</code>
+       * <code>optional .registrar.ServiceDescription Service = 1;</code>
        */
       public registrar.Registrar.ServiceDescriptionOrBuilder getServiceOrBuilder() {
         if (serviceBuilder_ != null) {
@@ -3457,7 +3402,7 @@ public final class Registrar {
         }
       }
       /**
-       * <code>optional .registrar.ServiceDescription service = 1;</code>
+       * <code>optional .registrar.ServiceDescription Service = 1;</code>
        */
       private com.google.protobuf.SingleFieldBuilderV3<
           registrar.Registrar.ServiceDescription, registrar.Registrar.ServiceDescription.Builder, registrar.Registrar.ServiceDescriptionOrBuilder> 
@@ -3473,239 +3418,116 @@ public final class Registrar {
         return serviceBuilder_;
       }
 
-      private java.util.List<registrar.Registrar.ServiceLocation> location_ =
-        java.util.Collections.emptyList();
-      private void ensureLocationIsMutable() {
-        if (!((bitField0_ & 0x00000002) == 0x00000002)) {
-          location_ = new java.util.ArrayList<registrar.Registrar.ServiceLocation>(location_);
-          bitField0_ |= 0x00000002;
-         }
-      }
-
-      private com.google.protobuf.RepeatedFieldBuilderV3<
+      private registrar.Registrar.ServiceLocation location_ = null;
+      private com.google.protobuf.SingleFieldBuilderV3<
           registrar.Registrar.ServiceLocation, registrar.Registrar.ServiceLocation.Builder, registrar.Registrar.ServiceLocationOrBuilder> locationBuilder_;
+      /**
+       * <code>optional .registrar.ServiceLocation Location = 2;</code>
+       */
+      public boolean hasLocation() {
+        return locationBuilder_ != null || location_ != null;
+      }
+      /**
+       * <code>optional .registrar.ServiceLocation Location = 2;</code>
+       */
+      public registrar.Registrar.ServiceLocation getLocation() {
+        if (locationBuilder_ == null) {
+          return location_ == null ? registrar.Registrar.ServiceLocation.getDefaultInstance() : location_;
+        } else {
+          return locationBuilder_.getMessage();
+        }
+      }
+      /**
+       * <code>optional .registrar.ServiceLocation Location = 2;</code>
+       */
+      public Builder setLocation(registrar.Registrar.ServiceLocation value) {
+        if (locationBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          location_ = value;
+          onChanged();
+        } else {
+          locationBuilder_.setMessage(value);
+        }
 
-      /**
-       * <code>repeated .registrar.ServiceLocation location = 2;</code>
-       */
-      public java.util.List<registrar.Registrar.ServiceLocation> getLocationList() {
-        if (locationBuilder_ == null) {
-          return java.util.Collections.unmodifiableList(location_);
-        } else {
-          return locationBuilder_.getMessageList();
-        }
+        return this;
       }
       /**
-       * <code>repeated .registrar.ServiceLocation location = 2;</code>
-       */
-      public int getLocationCount() {
-        if (locationBuilder_ == null) {
-          return location_.size();
-        } else {
-          return locationBuilder_.getCount();
-        }
-      }
-      /**
-       * <code>repeated .registrar.ServiceLocation location = 2;</code>
-       */
-      public registrar.Registrar.ServiceLocation getLocation(int index) {
-        if (locationBuilder_ == null) {
-          return location_.get(index);
-        } else {
-          return locationBuilder_.getMessage(index);
-        }
-      }
-      /**
-       * <code>repeated .registrar.ServiceLocation location = 2;</code>
+       * <code>optional .registrar.ServiceLocation Location = 2;</code>
        */
       public Builder setLocation(
-          int index, registrar.Registrar.ServiceLocation value) {
-        if (locationBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          ensureLocationIsMutable();
-          location_.set(index, value);
-          onChanged();
-        } else {
-          locationBuilder_.setMessage(index, value);
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .registrar.ServiceLocation location = 2;</code>
-       */
-      public Builder setLocation(
-          int index, registrar.Registrar.ServiceLocation.Builder builderForValue) {
-        if (locationBuilder_ == null) {
-          ensureLocationIsMutable();
-          location_.set(index, builderForValue.build());
-          onChanged();
-        } else {
-          locationBuilder_.setMessage(index, builderForValue.build());
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .registrar.ServiceLocation location = 2;</code>
-       */
-      public Builder addLocation(registrar.Registrar.ServiceLocation value) {
-        if (locationBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          ensureLocationIsMutable();
-          location_.add(value);
-          onChanged();
-        } else {
-          locationBuilder_.addMessage(value);
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .registrar.ServiceLocation location = 2;</code>
-       */
-      public Builder addLocation(
-          int index, registrar.Registrar.ServiceLocation value) {
-        if (locationBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          ensureLocationIsMutable();
-          location_.add(index, value);
-          onChanged();
-        } else {
-          locationBuilder_.addMessage(index, value);
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .registrar.ServiceLocation location = 2;</code>
-       */
-      public Builder addLocation(
           registrar.Registrar.ServiceLocation.Builder builderForValue) {
         if (locationBuilder_ == null) {
-          ensureLocationIsMutable();
-          location_.add(builderForValue.build());
+          location_ = builderForValue.build();
           onChanged();
         } else {
-          locationBuilder_.addMessage(builderForValue.build());
+          locationBuilder_.setMessage(builderForValue.build());
         }
+
         return this;
       }
       /**
-       * <code>repeated .registrar.ServiceLocation location = 2;</code>
+       * <code>optional .registrar.ServiceLocation Location = 2;</code>
        */
-      public Builder addLocation(
-          int index, registrar.Registrar.ServiceLocation.Builder builderForValue) {
+      public Builder mergeLocation(registrar.Registrar.ServiceLocation value) {
         if (locationBuilder_ == null) {
-          ensureLocationIsMutable();
-          location_.add(index, builderForValue.build());
+          if (location_ != null) {
+            location_ =
+              registrar.Registrar.ServiceLocation.newBuilder(location_).mergeFrom(value).buildPartial();
+          } else {
+            location_ = value;
+          }
           onChanged();
         } else {
-          locationBuilder_.addMessage(index, builderForValue.build());
+          locationBuilder_.mergeFrom(value);
         }
+
         return this;
       }
       /**
-       * <code>repeated .registrar.ServiceLocation location = 2;</code>
-       */
-      public Builder addAllLocation(
-          java.lang.Iterable<? extends registrar.Registrar.ServiceLocation> values) {
-        if (locationBuilder_ == null) {
-          ensureLocationIsMutable();
-          com.google.protobuf.AbstractMessageLite.Builder.addAll(
-              values, location_);
-          onChanged();
-        } else {
-          locationBuilder_.addAllMessages(values);
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .registrar.ServiceLocation location = 2;</code>
+       * <code>optional .registrar.ServiceLocation Location = 2;</code>
        */
       public Builder clearLocation() {
         if (locationBuilder_ == null) {
-          location_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00000002);
+          location_ = null;
           onChanged();
         } else {
-          locationBuilder_.clear();
+          location_ = null;
+          locationBuilder_ = null;
         }
+
         return this;
       }
       /**
-       * <code>repeated .registrar.ServiceLocation location = 2;</code>
+       * <code>optional .registrar.ServiceLocation Location = 2;</code>
        */
-      public Builder removeLocation(int index) {
-        if (locationBuilder_ == null) {
-          ensureLocationIsMutable();
-          location_.remove(index);
-          onChanged();
-        } else {
-          locationBuilder_.remove(index);
-        }
-        return this;
+      public registrar.Registrar.ServiceLocation.Builder getLocationBuilder() {
+        
+        onChanged();
+        return getLocationFieldBuilder().getBuilder();
       }
       /**
-       * <code>repeated .registrar.ServiceLocation location = 2;</code>
+       * <code>optional .registrar.ServiceLocation Location = 2;</code>
        */
-      public registrar.Registrar.ServiceLocation.Builder getLocationBuilder(
-          int index) {
-        return getLocationFieldBuilder().getBuilder(index);
-      }
-      /**
-       * <code>repeated .registrar.ServiceLocation location = 2;</code>
-       */
-      public registrar.Registrar.ServiceLocationOrBuilder getLocationOrBuilder(
-          int index) {
-        if (locationBuilder_ == null) {
-          return location_.get(index);  } else {
-          return locationBuilder_.getMessageOrBuilder(index);
-        }
-      }
-      /**
-       * <code>repeated .registrar.ServiceLocation location = 2;</code>
-       */
-      public java.util.List<? extends registrar.Registrar.ServiceLocationOrBuilder> 
-           getLocationOrBuilderList() {
+      public registrar.Registrar.ServiceLocationOrBuilder getLocationOrBuilder() {
         if (locationBuilder_ != null) {
-          return locationBuilder_.getMessageOrBuilderList();
+          return locationBuilder_.getMessageOrBuilder();
         } else {
-          return java.util.Collections.unmodifiableList(location_);
+          return location_ == null ?
+              registrar.Registrar.ServiceLocation.getDefaultInstance() : location_;
         }
       }
       /**
-       * <code>repeated .registrar.ServiceLocation location = 2;</code>
+       * <code>optional .registrar.ServiceLocation Location = 2;</code>
        */
-      public registrar.Registrar.ServiceLocation.Builder addLocationBuilder() {
-        return getLocationFieldBuilder().addBuilder(
-            registrar.Registrar.ServiceLocation.getDefaultInstance());
-      }
-      /**
-       * <code>repeated .registrar.ServiceLocation location = 2;</code>
-       */
-      public registrar.Registrar.ServiceLocation.Builder addLocationBuilder(
-          int index) {
-        return getLocationFieldBuilder().addBuilder(
-            index, registrar.Registrar.ServiceLocation.getDefaultInstance());
-      }
-      /**
-       * <code>repeated .registrar.ServiceLocation location = 2;</code>
-       */
-      public java.util.List<registrar.Registrar.ServiceLocation.Builder> 
-           getLocationBuilderList() {
-        return getLocationFieldBuilder().getBuilderList();
-      }
-      private com.google.protobuf.RepeatedFieldBuilderV3<
+      private com.google.protobuf.SingleFieldBuilderV3<
           registrar.Registrar.ServiceLocation, registrar.Registrar.ServiceLocation.Builder, registrar.Registrar.ServiceLocationOrBuilder> 
           getLocationFieldBuilder() {
         if (locationBuilder_ == null) {
-          locationBuilder_ = new com.google.protobuf.RepeatedFieldBuilderV3<
+          locationBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
               registrar.Registrar.ServiceLocation, registrar.Registrar.ServiceLocation.Builder, registrar.Registrar.ServiceLocationOrBuilder>(
-                  location_,
-                  ((bitField0_ & 0x00000002) == 0x00000002),
+                  getLocation(),
                   getParentForChildren(),
                   isClean());
           location_ = null;
@@ -3766,25 +3588,25 @@ public final class Registrar {
       com.google.protobuf.MessageOrBuilder {
 
     /**
-     * <code>repeated .registrar.GetResponse service = 3;</code>
+     * <code>repeated .registrar.GetResponse Service = 3;</code>
      */
     java.util.List<registrar.Registrar.GetResponse> 
         getServiceList();
     /**
-     * <code>repeated .registrar.GetResponse service = 3;</code>
+     * <code>repeated .registrar.GetResponse Service = 3;</code>
      */
     registrar.Registrar.GetResponse getService(int index);
     /**
-     * <code>repeated .registrar.GetResponse service = 3;</code>
+     * <code>repeated .registrar.GetResponse Service = 3;</code>
      */
     int getServiceCount();
     /**
-     * <code>repeated .registrar.GetResponse service = 3;</code>
+     * <code>repeated .registrar.GetResponse Service = 3;</code>
      */
     java.util.List<? extends registrar.Registrar.GetResponseOrBuilder> 
         getServiceOrBuilderList();
     /**
-     * <code>repeated .registrar.GetResponse service = 3;</code>
+     * <code>repeated .registrar.GetResponse Service = 3;</code>
      */
     registrar.Registrar.GetResponseOrBuilder getServiceOrBuilder(
         int index);
@@ -3867,32 +3689,32 @@ public final class Registrar {
     public static final int SERVICE_FIELD_NUMBER = 3;
     private java.util.List<registrar.Registrar.GetResponse> service_;
     /**
-     * <code>repeated .registrar.GetResponse service = 3;</code>
+     * <code>repeated .registrar.GetResponse Service = 3;</code>
      */
     public java.util.List<registrar.Registrar.GetResponse> getServiceList() {
       return service_;
     }
     /**
-     * <code>repeated .registrar.GetResponse service = 3;</code>
+     * <code>repeated .registrar.GetResponse Service = 3;</code>
      */
     public java.util.List<? extends registrar.Registrar.GetResponseOrBuilder> 
         getServiceOrBuilderList() {
       return service_;
     }
     /**
-     * <code>repeated .registrar.GetResponse service = 3;</code>
+     * <code>repeated .registrar.GetResponse Service = 3;</code>
      */
     public int getServiceCount() {
       return service_.size();
     }
     /**
-     * <code>repeated .registrar.GetResponse service = 3;</code>
+     * <code>repeated .registrar.GetResponse Service = 3;</code>
      */
     public registrar.Registrar.GetResponse getService(int index) {
       return service_.get(index);
     }
     /**
-     * <code>repeated .registrar.GetResponse service = 3;</code>
+     * <code>repeated .registrar.GetResponse Service = 3;</code>
      */
     public registrar.Registrar.GetResponseOrBuilder getServiceOrBuilder(
         int index) {
@@ -4221,7 +4043,7 @@ public final class Registrar {
           registrar.Registrar.GetResponse, registrar.Registrar.GetResponse.Builder, registrar.Registrar.GetResponseOrBuilder> serviceBuilder_;
 
       /**
-       * <code>repeated .registrar.GetResponse service = 3;</code>
+       * <code>repeated .registrar.GetResponse Service = 3;</code>
        */
       public java.util.List<registrar.Registrar.GetResponse> getServiceList() {
         if (serviceBuilder_ == null) {
@@ -4231,7 +4053,7 @@ public final class Registrar {
         }
       }
       /**
-       * <code>repeated .registrar.GetResponse service = 3;</code>
+       * <code>repeated .registrar.GetResponse Service = 3;</code>
        */
       public int getServiceCount() {
         if (serviceBuilder_ == null) {
@@ -4241,7 +4063,7 @@ public final class Registrar {
         }
       }
       /**
-       * <code>repeated .registrar.GetResponse service = 3;</code>
+       * <code>repeated .registrar.GetResponse Service = 3;</code>
        */
       public registrar.Registrar.GetResponse getService(int index) {
         if (serviceBuilder_ == null) {
@@ -4251,7 +4073,7 @@ public final class Registrar {
         }
       }
       /**
-       * <code>repeated .registrar.GetResponse service = 3;</code>
+       * <code>repeated .registrar.GetResponse Service = 3;</code>
        */
       public Builder setService(
           int index, registrar.Registrar.GetResponse value) {
@@ -4268,7 +4090,7 @@ public final class Registrar {
         return this;
       }
       /**
-       * <code>repeated .registrar.GetResponse service = 3;</code>
+       * <code>repeated .registrar.GetResponse Service = 3;</code>
        */
       public Builder setService(
           int index, registrar.Registrar.GetResponse.Builder builderForValue) {
@@ -4282,7 +4104,7 @@ public final class Registrar {
         return this;
       }
       /**
-       * <code>repeated .registrar.GetResponse service = 3;</code>
+       * <code>repeated .registrar.GetResponse Service = 3;</code>
        */
       public Builder addService(registrar.Registrar.GetResponse value) {
         if (serviceBuilder_ == null) {
@@ -4298,7 +4120,7 @@ public final class Registrar {
         return this;
       }
       /**
-       * <code>repeated .registrar.GetResponse service = 3;</code>
+       * <code>repeated .registrar.GetResponse Service = 3;</code>
        */
       public Builder addService(
           int index, registrar.Registrar.GetResponse value) {
@@ -4315,7 +4137,7 @@ public final class Registrar {
         return this;
       }
       /**
-       * <code>repeated .registrar.GetResponse service = 3;</code>
+       * <code>repeated .registrar.GetResponse Service = 3;</code>
        */
       public Builder addService(
           registrar.Registrar.GetResponse.Builder builderForValue) {
@@ -4329,7 +4151,7 @@ public final class Registrar {
         return this;
       }
       /**
-       * <code>repeated .registrar.GetResponse service = 3;</code>
+       * <code>repeated .registrar.GetResponse Service = 3;</code>
        */
       public Builder addService(
           int index, registrar.Registrar.GetResponse.Builder builderForValue) {
@@ -4343,7 +4165,7 @@ public final class Registrar {
         return this;
       }
       /**
-       * <code>repeated .registrar.GetResponse service = 3;</code>
+       * <code>repeated .registrar.GetResponse Service = 3;</code>
        */
       public Builder addAllService(
           java.lang.Iterable<? extends registrar.Registrar.GetResponse> values) {
@@ -4358,7 +4180,7 @@ public final class Registrar {
         return this;
       }
       /**
-       * <code>repeated .registrar.GetResponse service = 3;</code>
+       * <code>repeated .registrar.GetResponse Service = 3;</code>
        */
       public Builder clearService() {
         if (serviceBuilder_ == null) {
@@ -4371,7 +4193,7 @@ public final class Registrar {
         return this;
       }
       /**
-       * <code>repeated .registrar.GetResponse service = 3;</code>
+       * <code>repeated .registrar.GetResponse Service = 3;</code>
        */
       public Builder removeService(int index) {
         if (serviceBuilder_ == null) {
@@ -4384,14 +4206,14 @@ public final class Registrar {
         return this;
       }
       /**
-       * <code>repeated .registrar.GetResponse service = 3;</code>
+       * <code>repeated .registrar.GetResponse Service = 3;</code>
        */
       public registrar.Registrar.GetResponse.Builder getServiceBuilder(
           int index) {
         return getServiceFieldBuilder().getBuilder(index);
       }
       /**
-       * <code>repeated .registrar.GetResponse service = 3;</code>
+       * <code>repeated .registrar.GetResponse Service = 3;</code>
        */
       public registrar.Registrar.GetResponseOrBuilder getServiceOrBuilder(
           int index) {
@@ -4401,7 +4223,7 @@ public final class Registrar {
         }
       }
       /**
-       * <code>repeated .registrar.GetResponse service = 3;</code>
+       * <code>repeated .registrar.GetResponse Service = 3;</code>
        */
       public java.util.List<? extends registrar.Registrar.GetResponseOrBuilder> 
            getServiceOrBuilderList() {
@@ -4412,14 +4234,14 @@ public final class Registrar {
         }
       }
       /**
-       * <code>repeated .registrar.GetResponse service = 3;</code>
+       * <code>repeated .registrar.GetResponse Service = 3;</code>
        */
       public registrar.Registrar.GetResponse.Builder addServiceBuilder() {
         return getServiceFieldBuilder().addBuilder(
             registrar.Registrar.GetResponse.getDefaultInstance());
       }
       /**
-       * <code>repeated .registrar.GetResponse service = 3;</code>
+       * <code>repeated .registrar.GetResponse Service = 3;</code>
        */
       public registrar.Registrar.GetResponse.Builder addServiceBuilder(
           int index) {
@@ -4427,7 +4249,7 @@ public final class Registrar {
             index, registrar.Registrar.GetResponse.getDefaultInstance());
       }
       /**
-       * <code>repeated .registrar.GetResponse service = 3;</code>
+       * <code>repeated .registrar.GetResponse Service = 3;</code>
        */
       public java.util.List<registrar.Registrar.GetResponse.Builder> 
            getServiceBuilderList() {
@@ -4916,9 +4738,9 @@ public final class Registrar {
       "n\022*\n\007Address\030\002 \003(\0132\031.registrar.ServiceAd" +
       "dress\"<\n\nGetRequest\022.\n\007Service\030\001 \001(\0132\035.r",
       "egistrar.ServiceDescription\"k\n\013GetRespon" +
-      "se\022.\n\007service\030\001 \001(\0132\035.registrar.ServiceD" +
-      "escription\022,\n\010location\030\002 \003(\0132\032.registrar" +
-      ".ServiceLocation\"7\n\014ListResponse\022\'\n\007serv" +
+      "se\022.\n\007Service\030\001 \001(\0132\035.registrar.ServiceD" +
+      "escription\022,\n\010Location\030\002 \001(\0132\032.registrar" +
+      ".ServiceLocation\"7\n\014ListResponse\022\'\n\007Serv" +
       "ice\030\003 \003(\0132\026.registrar.GetResponse\"\r\n\013Lis" +
       "tRequest2\326\001\n\010Registry\022E\n\017RegisterService" +
       "\022\032.registrar.ServiceLocation\032\026.registrar" +

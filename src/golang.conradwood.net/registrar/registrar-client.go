@@ -34,5 +34,11 @@ func main() {
 	if err != nil {
 		log.Fatalf("failed to list services: %v", err)
 	}
-	fmt.Printf("Response to list services: %v\n", resp)
+	fmt.Printf("%d services registered\n", len(resp.Service))
+	for _, getr := range resp.Service {
+		fmt.Printf("Service: %s\n", getr.Service.Name)
+		for _, addr := range getr.Location.Address {
+			fmt.Printf("   %s:%d\n", addr.Host, addr.Port)
+		}
+	}
 }
