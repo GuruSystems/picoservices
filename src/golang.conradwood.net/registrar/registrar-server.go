@@ -109,12 +109,11 @@ func (s *RegistryService) RegisterService(ctx context.Context, pr *pb.ServiceLoc
 		fmt.Println("Error getting peer ")
 		return nil, errors.New("Error getting peer from context")
 	}
-	fmt.Println("Connection from %v", peer.Addr)
 	peerhost, peerport, err := net.SplitHostPort(peer.Addr.String())
 	if err != nil {
 		return nil, errors.New("Invalid peer")
 	}
-	fmt.Printf("Connection from host %s on port %d\n", peerhost, peerport)
+	fmt.Printf("Connection from host %s on port %s\n", peerhost, peerport)
 	if len(pr.Address) == 0 {
 		return nil, errors.New("Missing address!")
 	}
@@ -122,7 +121,7 @@ func (s *RegistryService) RegisterService(ctx context.Context, pr *pb.ServiceLoc
 		return nil, errors.New("Missing servicename!")
 	}
 	for _, address := range pr.Address {
-		fmt.Printf("%s @ %v\n", pr.Service.Name, address)
+		fmt.Printf("  reported: \"%s\" @ \"%s, port %d\"\n", pr.Service.Name, address.Host, address.Port)
 		host := address.Host
 		if host == "" {
 			host = peerhost
