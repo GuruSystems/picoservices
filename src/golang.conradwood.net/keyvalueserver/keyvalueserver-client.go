@@ -22,7 +22,7 @@ var (
 
 func main() {
 	flag.Parse()
-	conn, err := compound.DialWrapper("keyvalueserver")
+	conn, err := compound.DialWrapper("keyvalueserver.KeyValueService")
 	if err != nil {
 		fmt.Println("failed to dial: %v", err)
 		return

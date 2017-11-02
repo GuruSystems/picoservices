@@ -13,8 +13,8 @@ import "google/protobuf/timestamp.proto";
 */
 
 message ServiceDescription {
-string name = 1;
-int64 build =2;
+string Name = 1;
+int64 Build =2;
 enum Servicetype {
 grpc = 0;
 json = 1;

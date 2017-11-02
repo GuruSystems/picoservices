@@ -91,7 +91,14 @@ func (s *RegistryService) GetServiceAddress(ctx context.Context, gr *pb.GetReque
 		return nil, errors.New("Error getting peer from contextn")
 	}
 	fmt.Printf("%s called get service address for service %s\n", peer.Addr, gr.Service.Name)
+	sl := FindService(gr.Service)
+	if sl == nil {
+		fmt.Printf("Service \"%s\" is not currently registered\n", gr.Service.Name)
+		return nil, errors.New("service not registered")
+	}
 	resp := pb.GetResponse{}
+	resp.Service = gr.Service
+	resp.Location = sl
 	return &resp, nil
 }
 

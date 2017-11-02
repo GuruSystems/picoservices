@@ -19,17 +19,17 @@ public final class Registrar {
       com.google.protobuf.MessageOrBuilder {
 
     /**
-     * <code>optional string name = 1;</code>
+     * <code>optional string Name = 1;</code>
      */
     java.lang.String getName();
     /**
-     * <code>optional string name = 1;</code>
+     * <code>optional string Name = 1;</code>
      */
     com.google.protobuf.ByteString
         getNameBytes();
 
     /**
-     * <code>optional int64 build = 2;</code>
+     * <code>optional int64 Build = 2;</code>
      */
     long getBuild();
 
@@ -225,7 +225,7 @@ public final class Registrar {
     public static final int NAME_FIELD_NUMBER = 1;
     private volatile java.lang.Object name_;
     /**
-     * <code>optional string name = 1;</code>
+     * <code>optional string Name = 1;</code>
      */
     public java.lang.String getName() {
       java.lang.Object ref = name_;
@@ -240,7 +240,7 @@ public final class Registrar {
       }
     }
     /**
-     * <code>optional string name = 1;</code>
+     * <code>optional string Name = 1;</code>
      */
     public com.google.protobuf.ByteString
         getNameBytes() {
@@ -259,7 +259,7 @@ public final class Registrar {
     public static final int BUILD_FIELD_NUMBER = 2;
     private long build_;
     /**
-     * <code>optional int64 build = 2;</code>
+     * <code>optional int64 Build = 2;</code>
      */
     public long getBuild() {
       return build_;
@@ -586,7 +586,7 @@ public final class Registrar {
 
       private java.lang.Object name_ = "";
       /**
-       * <code>optional string name = 1;</code>
+       * <code>optional string Name = 1;</code>
        */
       public java.lang.String getName() {
         java.lang.Object ref = name_;
@@ -601,7 +601,7 @@ public final class Registrar {
         }
       }
       /**
-       * <code>optional string name = 1;</code>
+       * <code>optional string Name = 1;</code>
        */
       public com.google.protobuf.ByteString
           getNameBytes() {
@@ -617,7 +617,7 @@ public final class Registrar {
         }
       }
       /**
-       * <code>optional string name = 1;</code>
+       * <code>optional string Name = 1;</code>
        */
       public Builder setName(
           java.lang.String value) {
@@ -630,7 +630,7 @@ public final class Registrar {
         return this;
       }
       /**
-       * <code>optional string name = 1;</code>
+       * <code>optional string Name = 1;</code>
        */
       public Builder clearName() {
         
@@ -639,7 +639,7 @@ public final class Registrar {
         return this;
       }
       /**
-       * <code>optional string name = 1;</code>
+       * <code>optional string Name = 1;</code>
        */
       public Builder setNameBytes(
           com.google.protobuf.ByteString value) {
@@ -655,13 +655,13 @@ public final class Registrar {
 
       private long build_ ;
       /**
-       * <code>optional int64 build = 2;</code>
+       * <code>optional int64 Build = 2;</code>
        */
       public long getBuild() {
         return build_;
       }
       /**
-       * <code>optional int64 build = 2;</code>
+       * <code>optional int64 Build = 2;</code>
        */
       public Builder setBuild(long value) {
         
@@ -670,7 +670,7 @@ public final class Registrar {
         return this;
       }
       /**
-       * <code>optional int64 build = 2;</code>
+       * <code>optional int64 Build = 2;</code>
        */
       public Builder clearBuild() {
         
@@ -4729,7 +4729,7 @@ public final class Registrar {
     java.lang.String[] descriptorData = {
       "\n\025proto/registrar.proto\022\tregistrar\032\034goog" +
       "le/api/annotations.proto\"\215\001\n\022ServiceDesc" +
-      "ription\022\014\n\004name\030\001 \001(\t\022\r\n\005build\030\002 \001(\003\0227\n\004" +
+      "ription\022\014\n\004Name\030\001 \001(\t\022\r\n\005Build\030\002 \001(\003\0227\n\004" +
       "type\030\004 \001(\0162).registrar.ServiceDescriptio" +
       "n.Servicetype\"!\n\013Servicetype\022\010\n\004grpc\020\000\022\010" +
       "\n\004json\020\001\",\n\016ServiceAddress\022\014\n\004Host\030\001 \001(\t" +
