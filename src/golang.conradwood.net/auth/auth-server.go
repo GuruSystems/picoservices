@@ -12,10 +12,11 @@ import (
 
 // static variables for flag parser
 var (
-	port = flag.Int("port", 10000, "The server port")
-	crt  = "/etc/cnw/certs/rfc-server/certificate.pem"
-	key  = "/etc/cnw/certs/rfc-server/privatekey.pem"
-	ca   = "/etc/cnw/certs/rfc-server/ca.pem"
+	port   = flag.Int("port", 10000, "The server port")
+	dbhost = flag.String("dbhost", "postgres", "hostname of the postgres database rdms")
+	dbdb   = flag.String("database", "rpcusers", "database to use for authentication")
+	dbuser = flag.String("dbuser", "root", "username for the database to use for authentication")
+	dbpw   = flag.String("dbpw", "pw", "password for the database to use for authentication")
 )
 
 func main() {
@@ -27,7 +28,8 @@ func main() {
 }
 
 func st(server *grpc.Server) error {
-	s := new(RFCManagerServer)
+	s := new(AuthServer)
+
 	// Register the handler object
 	pb.RegisterAuthenticationServiceServer(server, s)
 	return nil
@@ -49,7 +51,7 @@ func start() error {
 /**********************************
 * implementing the functions here:
 ***********************************/
-type RFCManagerServer struct {
+type AuthServer struct {
 	wtf int
 }
 
@@ -57,7 +59,7 @@ type RFCManagerServer struct {
 // in java/python we also put pointers to functions into structs and but call them "objects" instead
 // in Go we don't put functions pointers into structs, we "associate" a function with a struct.
 // (I think that's more or less the same as what C does, just different Syntax)
-func (s *RFCManagerServer) VerifyUserToken(ctx context.Context, req *pb.VerifyRequest) (*pb.VerifyResponse, error) {
+func (s *AuthServer) VerifyUserToken(ctx context.Context, req *pb.VerifyRequest) (*pb.VerifyResponse, error) {
 	peer, ok := peer.FromContext(ctx)
 	if !ok {
 		fmt.Println("Error getting peer ")

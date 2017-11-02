@@ -23,10 +23,6 @@ var (
 	servercrt     = flag.String("certificate", "/etc/grpc/server/certificate.pem", "filename of the server certificate")
 	servercertkey = flag.String("certkey", "/etc/grpc/server/privatekey.pem", "the key for the server certificate")
 	serverca      = flag.String("ca", "/etc/grpc/server/ca.pem", "filename of the the CA certificate which signed both client and server certificate")
-	dbhost        = flag.String("dbhost", "postgres", "hostname of the postgres database rdms")
-	dbdb          = flag.String("database", "rpcusers", "database to use for authentication")
-	dbuser        = flag.String("dbuser", "root", "username for the database to use for authentication")
-	dbpw          = flag.String("dbpw", "pw", "password for the database to use for authentication")
 	registry      = flag.String("registry", "localhost:5000", "Registry server address")
 	auth          Authenticator
 )
