@@ -10,6 +10,7 @@ import (
 	"golang.org/x/net/context"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials"
+	"google.golang.org/grpc/metadata"
 	"io/ioutil"
 )
 
@@ -76,4 +77,10 @@ func DialWrapper(servicename string) (*grpc.ClientConn, error) {
 	//defer cc.Close()
 
 	return cc, nil
+}
+
+func SetAuthToken(token string) context.Context {
+	md := metadata.Pairs("token", "valid-token")
+	ctx := metadata.NewOutgoingContext(context.Background(), md)
+	return ctx
 }

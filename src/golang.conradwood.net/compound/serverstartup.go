@@ -39,6 +39,8 @@ type ServerDef struct {
 	Key         string
 	CA          string
 	Register    Register
+	// set to true if this server does NOT require authentication (default: it does need authentication)
+	NoAuth bool
 }
 
 func CheckCookie(cookie string) bool {
@@ -73,13 +75,17 @@ func UnaryAuthInterceptor(ctx context.Context, req interface{}, info *grpc.Unary
 	return handler(ctx, req)
 }
 
+// we must not return useful errormessages here,
+// so we print them to stdout instead and return a generic message
 func authenticate(meta metadata.MD) error {
 	if len(meta["token"]) != 1 {
+		fmt.Println("Invalid number of tokens: ", len(meta["token"]))
 		return grpc.Errorf(codes.Unauthenticated, "invalid token")
 	}
 	token := meta["token"][0]
 	if auth == nil {
-		return grpc.Errorf(codes.Unauthenticated, "No authenticator enabled (in server)")
+		fmt.Println("No authenticator available")
+		return grpc.Errorf(codes.Unauthenticated, "invalid token")
 	}
 	user, err := auth.Authenticate(token)
 	if err != nil {
@@ -128,13 +134,22 @@ func ServerStartup(def ServerDef) error {
 	roots.AppendCertsFromPEM(ImCert)
 
 	creds := credentials.NewServerTLSFromCert(&cert)
+	var srv *grpc.Server
+	if def.NoAuth {
+		srv = grpc.NewServer(grpc.Creds(creds))
+	} else {
+		// Create the gRPC server with the credentials
+		srv = grpc.NewServer(grpc.Creds(creds),
+			grpc.UnaryInterceptor(UnaryAuthInterceptor),
+			grpc.StreamInterceptor(StreamAuthInterceptor),
+		)
+		// add an authenticator
+		auth, err = NewPostgresAuthenticator(*dbhost, *dbdb, *dbuser, *dbpw)
+		if err != nil {
+			return fmt.Errorf("Failed to init authenticator: %s", err)
+		}
+	}
 
-	// Create the gRPC server with the credentials
-	srv := grpc.NewServer(grpc.Creds(creds),
-		grpc.UnaryInterceptor(UnaryAuthInterceptor),
-		grpc.StreamInterceptor(StreamAuthInterceptor),
-	)
-	//srv := grpc.NewServer()
 	grpc.EnableTracing = true
 	def.Register(srv)
 	if err != nil {
@@ -149,11 +164,7 @@ func ServerStartup(def ServerDef) error {
 	}
 	// something odd?
 	reflection.Register(srv)
-	// add an authenticator
-	auth, err = NewPostgresAuthenticator(*dbhost, *dbdb, *dbuser, *dbpw)
-	if err != nil {
-		return fmt.Errorf("Failed to init authenticator: %s", err)
-	} // Serve and Listen
+	// Serve and Listen
 	err = srv.Serve(lis)
 	if err != nil {
 		return fmt.Errorf("grpc serve error: %s", err)

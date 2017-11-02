@@ -3,12 +3,8 @@ package main
 // see: https://grpc.io/docs/tutorials/basic/go.html
 
 import (
-	"fmt"
-	//"google.golang.org/grpc"
-	//	"github.com/golang/protobuf/proto"
 	"flag"
-	"golang.org/x/net/context"
-	//	"net"
+	"fmt"
 	"golang.conradwood.net/compound"
 	pb "golang.conradwood.net/keyvalueserver/proto"
 )
@@ -28,16 +24,18 @@ func main() {
 		return
 	}
 	defer conn.Close()
+	ctx := compound.SetAuthToken("valid-token")
+
 	client := pb.NewKeyValueServiceClient(conn)
 	if *action == "put" {
 		req := pb.PutRequest{Key: "foo", Value: "bar"}
-		_, err := client.Put(context.Background(), &req)
+		_, err := client.Put(ctx, &req)
 		if err != nil {
 			fmt.Println("failed to put key to store:", err)
 		}
 	} else if *action == "get" {
 		req := pb.GetRequest{Key: "foo"}
-		resp, err := client.Get(context.Background(), &req)
+		resp, err := client.Get(ctx, &req)
 		if err != nil {
 			fmt.Println("failed to get key from store:", err)
 		} else {

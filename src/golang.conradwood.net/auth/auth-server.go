@@ -34,7 +34,8 @@ func st(server *grpc.Server) error {
 }
 func start() error {
 	sd := compound.ServerDef{
-		Port: *port,
+		Port:   *port,
+		NoAuth: true,
 	}
 	sd.Register = st
 	err := compound.ServerStartup(sd)
