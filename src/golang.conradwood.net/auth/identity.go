@@ -2,16 +2,18 @@ package auth
 
 // TODO: how/when do we close database connections? (pooling?)
 
-import (
-	"errors"
-	"fmt"
-)
+import ()
 
 type User struct {
 	FirstName string
 	LastName  string
 	Email     string
-	id        string
+	ID        string
+}
+
+// injected into a context
+type AuthInfo struct {
+	UserID string
 }
 
 type Authenticator interface {

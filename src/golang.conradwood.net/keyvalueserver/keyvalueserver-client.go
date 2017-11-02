@@ -28,18 +28,18 @@ func main() {
 
 	client := pb.NewKeyValueServiceClient(conn)
 	if *action == "put" {
-		req := pb.PutRequest{Key: "foo", Value: "bar"}
+		req := pb.PutRequest{Key: *key, Value: "bar"}
 		_, err := client.Put(ctx, &req)
 		if err != nil {
 			fmt.Println("failed to put key to store:", err)
 		}
 	} else if *action == "get" {
-		req := pb.GetRequest{Key: "foo"}
+		req := pb.GetRequest{Key: *key}
 		resp, err := client.Get(ctx, &req)
 		if err != nil {
 			fmt.Println("failed to get key from store:", err)
 		} else {
-			fmt.Printf("Value of key %s: \"%s\"\n", resp.Value)
+			fmt.Printf("Value of key %s: \"%s\"\n", *key, resp.Value)
 		}
 	}
 }

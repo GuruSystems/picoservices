@@ -80,7 +80,9 @@ func DialWrapper(servicename string) (*grpc.ClientConn, error) {
 }
 
 func SetAuthToken(token string) context.Context {
-	md := metadata.Pairs("token", "valid-token")
+	md := metadata.Pairs("token", "valid-token",
+		"clid", "itsme",
+	)
 	ctx := metadata.NewOutgoingContext(context.Background(), md)
 	return ctx
 }

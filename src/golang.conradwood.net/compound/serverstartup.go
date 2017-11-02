@@ -12,6 +12,8 @@ import (
 	"google.golang.org/grpc/credentials"
 	"google.golang.org/grpc/reflection"
 	//	"google.golang.org/grpc/peer"
+	"golang.conradwood.net/auth"
+	apb "golang.conradwood.net/auth/proto"
 	pb "golang.conradwood.net/registrar/proto"
 	"google.golang.org/grpc/codes"
 
@@ -24,7 +26,7 @@ var (
 	servercertkey = flag.String("certkey", "/etc/grpc/server/privatekey.pem", "the key for the server certificate")
 	serverca      = flag.String("ca", "/etc/grpc/server/ca.pem", "filename of the the CA certificate which signed both client and server certificate")
 	registry      = flag.String("registry", "localhost:5000", "Registry server address")
-	auth          Authenticator
+	authconn      *grpc.ClientConn
 )
 
 type Register func(server *grpc.Server) error
@@ -64,31 +66,40 @@ func UnaryAuthInterceptor(ctx context.Context, req interface{}, info *grpc.Unary
 	if !ok {
 		return nil, grpc.Errorf(codes.Unauthenticated, "missing context metadata")
 	}
-	err := authenticate(meta)
+	nctx, err := authenticate(ctx, meta)
 	if err != nil {
 		return nil, err
 	}
-	return handler(ctx, req)
+	return handler(nctx, req)
 }
 
 // we must not return useful errormessages here,
 // so we print them to stdout instead and return a generic message
-func authenticate(meta metadata.MD) error {
+func authenticate(ctx context.Context, meta metadata.MD) (context.Context, error) {
 	if len(meta["token"]) != 1 {
 		fmt.Println("Invalid number of tokens: ", len(meta["token"]))
-		return grpc.Errorf(codes.Unauthenticated, "invalid token")
+		return nil, grpc.Errorf(codes.Unauthenticated, "invalid token")
 	}
 	token := meta["token"][0]
-	if auth == nil {
+	if authconn == nil {
 		fmt.Println("No authenticator available")
-		return grpc.Errorf(codes.Unauthenticated, "invalid token")
+		return nil, grpc.Errorf(codes.Unauthenticated, "invalid token")
 	}
-	user, err := auth.Authenticate(token)
+	client := apb.NewAuthenticationServiceClient(authconn)
+	req := &apb.VerifyRequest{Token: token}
+	resp, err := client.VerifyUserToken(ctx, req)
 	if err != nil {
-		return err
+		return nil, err
 	}
-	fmt.Printf("Authenticated user \"%s\".\n", user)
-	return nil
+	// should never happen - but it's auth, so extra check doesn't hurt
+	if resp.UserID == "" {
+		fmt.Println("BUG: a user was authenticated but no userid returned!")
+		return nil, grpc.Errorf(codes.Unauthenticated, "invalid token")
+	}
+	ai := auth.AuthInfo{UserID: resp.UserID}
+	fmt.Printf("Authenticated user \"%s\".\n", resp.UserID)
+	nctx := context.WithValue(ctx, "authinfo", ai)
+	return nctx, nil
 }
 
 // this is our typical gRPC server startup
@@ -139,10 +150,11 @@ func ServerStartup(def ServerDef) error {
 			grpc.UnaryInterceptor(UnaryAuthInterceptor),
 			grpc.StreamInterceptor(StreamAuthInterceptor),
 		)
-		// add an authenticator
-		auth, err = NewPostgresAuthenticator(*dbhost, *dbdb, *dbuser, *dbpw)
+
+		// set up a connection to our authentication service
+		authconn, err = DialWrapper("auth.AuthenticationService")
 		if err != nil {
-			return fmt.Errorf("Failed to init authenticator: %s", err)
+			return fmt.Errorf("Failed to connect to authserver")
 		}
 	}
 

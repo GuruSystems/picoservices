@@ -120,6 +120,12 @@ func (s *RegistryService) RegisterService(ctx context.Context, pr *pb.ServiceLoc
 	if pr.Service.Name == "" {
 		return nil, errors.New("Missing servicename!")
 	}
+	rr := new(pb.GetResponse)
+	rr.Service = pr.Service
+	rr.Location = new(pb.ServiceLocation)
+	rr.Location.Service = pr.Service
+	rr.Location.Address = []*pb.ServiceAddress{}
+
 	for _, address := range pr.Address {
 		fmt.Printf("  reported: \"%s\" @ \"%s, port %d\"\n", pr.Service.Name, address.Host, address.Port)
 		host := address.Host
@@ -127,8 +133,8 @@ func (s *RegistryService) RegisterService(ctx context.Context, pr *pb.ServiceLoc
 			host = peerhost
 		}
 		AddService(pr.Service, host, address.Port)
+		rr.Location.Address = append(rr.Location.Address, &pb.ServiceAddress{Host: host, Port: address.Port})
 	}
-	rr := new(pb.GetResponse)
 	return rr, nil
 }
 
