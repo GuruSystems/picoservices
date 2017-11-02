@@ -10,3 +10,7 @@ planned:
 it's basic, it's only a few days work...
 
 
+The layout of this repository is such that one can point GOPATH at the root of
+this repositry. it includes all dependencies (on purposes)
+
+
