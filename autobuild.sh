@@ -15,6 +15,7 @@ cp -rvf ${MYSRC}/proto dist/
 }
 
 BUILD auth
+BUILD authserver
 BUILD registrar
 BUILD keyvalueserver
 exit 0

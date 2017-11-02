@@ -8,17 +8,9 @@ PROTOCINC += -I${GOPATH}/src/github.com/grpc-ecosystem/grpc-gateway/third_party/
 PKG=auth
 
 server:
-	go install ${PKG}-server.go
+	go install ${PKG}-server.go auth-postgres.go
 client:
 	go install ${PKG}-client.go
 
-.PHONY: proto
 proto:
-	@echo compiling Go proto stubs
-	@protoc ${PROTOCINC} --go_out=plugins=grpc:. proto/${PKG}.proto
-	# for json gateway to compile you need the plugins:
-	# 1. protoc-gen-swagger
-	# 2. protoc-gen-grpc-gateway
-	# they are in package github.com/grpc-ecosystem/grpc-gateway
-	@protoc ${PROTOCINC} --java_out=. proto/${PKG}.proto
-
+	@echo no proto for server
