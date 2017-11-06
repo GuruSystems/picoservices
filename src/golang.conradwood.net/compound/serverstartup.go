@@ -25,7 +25,8 @@ var (
 	servercrt     = flag.String("certificate", "/etc/grpc/server/certificate.pem", "filename of the server certificate")
 	servercertkey = flag.String("certkey", "/etc/grpc/server/privatekey.pem", "the key for the server certificate")
 	serverca      = flag.String("ca", "/etc/grpc/server/ca.pem", "filename of the the CA certificate which signed both client and server certificate")
-	registry      = flag.String("registry", "localhost:5000", "Registry server address")
+	registry      = flag.String("registry", "localhost:5000", "Registrar server address (to register with)")
+	serveraddr    = flag.String("address", "", "Address (default: derive from connection to registrar. does not work well with localhost)")
 	authconn      *grpc.ClientConn
 )
 
@@ -194,6 +195,9 @@ func AddRegistry(name string, port int) error {
 	req.Service = &pb.ServiceDescription{}
 	req.Service.Name = name
 	req.Address = []*pb.ServiceAddress{{Port: int32(port)}}
+	if *serveraddr != "" {
+		req.Address[0].Host = *serveraddr
+	}
 	resp, err := client.RegisterService(context.Background(), &req)
 	if err != nil {
 		fmt.Println("failed to register services:", err)

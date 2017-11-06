@@ -18,4 +18,9 @@ BUILD auth
 BUILD authserver
 BUILD registrar
 BUILD keyvalueserver
+
+env
+
+#build-repo-client -
+
 exit 0

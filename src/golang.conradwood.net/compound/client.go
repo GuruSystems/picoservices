@@ -15,7 +15,7 @@ import (
 )
 
 var (
-	registrar = flag.String("registrar", "localhost:5000", "address of the registrar server")
+	registrar = flag.String("registrar", "localhost:5000", "address of the registrar server (for lookups)")
 	clientcrt = "/etc/cnw/certs/rfc-client/certificate.pem"
 	clientkey = "/etc/cnw/certs/rfc-client/privatekey.pem"
 	clientca  = "/etc/cnw/certs/rfc-client/ca.pem"
