@@ -5,19 +5,29 @@ import (
 	"google.golang.org/grpc"
 	//	"github.com/golang/protobuf/proto"
 	"container/list"
+	"crypto/tls"
 	"errors"
 	"flag"
 	pb "golang.conradwood.net/registrar/proto"
 	"golang.org/x/net/context"
 	"google.golang.org/grpc/peer"
+	"io/ioutil"
 	"log"
 	"net"
+	"net/http"
+	"time"
 )
+
+type serviceEntry struct {
+	loc      *pb.ServiceLocation
+	failures int
+}
 
 // static variables for flag parser
 var (
-	port     = flag.Int("port", 5000, "The server port")
-	services *list.List
+	port      = flag.Int("port", 5000, "The server port")
+	keepAlive = flag.Int("keepalive", 2, "keep alive interval in seconds to check each registered service")
+	services  *list.List
 )
 
 func main() {
@@ -36,7 +46,54 @@ func main() {
 	s := new(RegistryService)
 	pb.RegisterRegistryServer(grpcServer, s) // created by proto
 
+	ticker := time.NewTicker(time.Duration(*keepAlive) * time.Second)
+	go func() {
+		for _ = range ticker.C {
+			CheckRegistry()
+		}
+	}()
+	fmt.Println("ticker: ", ticker)
 	grpcServer.Serve(lis)
+}
+
+/**********************************
+* check registered servers regularly
+***********************************/
+func CheckRegistry() {
+	for e := services.Front(); e != nil; e = e.Next() {
+		sloc := e.Value.(serviceEntry).loc
+		for _, adr := range sloc.Address {
+			err := CheckService(sloc.Service, adr)
+			if err != nil {
+				fmt.Printf("Service %s@%s failed: %s\n", sloc.Service, adr, err)
+			}
+		}
+	}
+}
+func CheckService(desc *pb.ServiceDescription, addr *pb.ServiceAddress) error {
+	url := fmt.Sprintf("https://%s:%d/service-info/name", addr.Host, addr.Port)
+	//	fmt.Printf("Checking service %s@%s\n", desc.Name, url)
+
+	tr := &http.Transport{
+		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+	}
+	client := &http.Client{Transport: tr}
+
+	resp, err := client.Get(url)
+	if err != nil {
+		return err
+	}
+	defer resp.Body.Close()
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return err
+	}
+	sn := string(body)
+	if sn != desc.Name {
+		fmt.Printf("Reported Service: \"%s\", expected: \"%s\"\n", sn, desc.Name)
+		return errors.New("Servicename mismatch")
+	}
+	return nil
 }
 
 /**********************************
@@ -44,7 +101,7 @@ func main() {
 ***********************************/
 func FindService(sd *pb.ServiceDescription) *pb.ServiceLocation {
 	for e := services.Front(); e != nil; e = e.Next() {
-		srvloc := e.Value.(*pb.ServiceLocation)
+		srvloc := e.Value.(serviceEntry).loc
 		if srvloc.Service.Name == sd.Name {
 			return srvloc
 		}
@@ -62,7 +119,8 @@ func AddService(sd *pb.ServiceDescription, hostname string, port int32) {
 		sl = new(pb.ServiceLocation)
 		sl.Service = new(pb.ServiceDescription)
 		*sl.Service = *sd
-		services.PushFront(sl)
+		se := serviceEntry{loc: sl}
+		services.PushFront(se)
 	}
 
 	// append address to service location
@@ -145,7 +203,7 @@ func (s *RegistryService) ListServices(ctx context.Context, pr *pb.ListRequest) 
 	for e := services.Front(); e != nil; e = e.Next() {
 		getr := pb.GetResponse{}
 		lr.Service = append(lr.Service, &getr)
-		sloc := e.Value.(*pb.ServiceLocation)
+		sloc := e.Value.(serviceEntry).loc
 		getr.Location = sloc
 		sd := sloc.Service
 		getr.Service = sd

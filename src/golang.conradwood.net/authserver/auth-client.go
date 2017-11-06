@@ -11,6 +11,7 @@ import (
 	"flag"
 	"golang.org/x/net/context"
 	//	"net"
+	"crypto/tls"
 	"crypto/x509"
 	pb "golang.conradwood.net/auth/proto"
 	"google.golang.org/grpc/credentials"
@@ -28,14 +29,23 @@ var (
 func main() {
 	flag.Parse()
 	roots := x509.NewCertPool()
+	FrontendKey, _ := ioutil.ReadFile(key)
+
 	FrontendCert, _ := ioutil.ReadFile(crt)
 	roots.AppendCertsFromPEM(FrontendCert)
 	ImCert, _ := ioutil.ReadFile(ca)
 	roots.AppendCertsFromPEM(ImCert)
 
 	// Create credentials
-	creds := credentials.NewClientTLSFromCert(roots, "")
+	//	creds := credentials.NewClientTLSFromCert(roots, "")
+	cert, err := tls.X509KeyPair(FrontendCert, FrontendKey)
 
+	creds := credentials.NewTLS(&tls.Config{
+		ServerName:         *serverAddr,
+		Certificates:       []tls.Certificate{cert},
+		RootCAs:            roots,
+		InsecureSkipVerify: true,
+	})
 	fmt.Println("Connecting to server...", *serverAddr, creds)
 	//conn, err := grpc.Dial(*serverAddr, grpc.WithInsecure())
 	conn, err := grpc.Dial(*serverAddr, grpc.WithTransportCredentials(creds))
@@ -47,8 +57,10 @@ func main() {
 	fmt.Println("Creating client...")
 	client := pb.NewAuthenticationServiceClient(conn)
 	req := pb.VerifyRequest{Token: "bla"}
-	fmt.Println("RPC call...")
 	ctx := context.Background()
+
+	// if TLS is f*** we break here:
+	fmt.Println("RPC call to auth server...")
 	resp, err := client.VerifyUserToken(ctx, &req)
 	if err != nil {
 		fmt.Printf("failed to verify user token: %v", err)

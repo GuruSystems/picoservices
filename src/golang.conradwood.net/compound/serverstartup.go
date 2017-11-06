@@ -3,6 +3,7 @@ package compound
 import (
 	"flag"
 	"fmt"
+	"github.com/grpc-ecosystem/grpc-gateway/runtime"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/metadata"
 	//	"github.com/golang/protobuf/proto"
@@ -16,9 +17,10 @@ import (
 	apb "golang.conradwood.net/auth/proto"
 	pb "golang.conradwood.net/registrar/proto"
 	"google.golang.org/grpc/codes"
-
 	"io/ioutil"
 	"net"
+	"net/http"
+	"strings"
 )
 
 var (
@@ -40,6 +42,7 @@ type ServerDef struct {
 	Register    Register
 	// set to true if this server does NOT require authentication (default: it does need authentication)
 	NoAuth bool
+	names  []string
 }
 
 func CheckCookie(cookie string) bool {
@@ -114,11 +117,6 @@ func ServerStartup(def ServerDef) error {
 	listenAddr := fmt.Sprintf(":%d", def.Port)
 	fmt.Println("Starting server on ", listenAddr)
 
-	// Create the channel to listen on
-	lis, err := net.Listen("tcp", listenAddr)
-	if err != nil {
-		return fmt.Errorf("could not listen on %s: %s", listenAddr, err)
-	}
 	BackendCert, err := ioutil.ReadFile(def.Certificate)
 	if err != nil {
 		return fmt.Errorf("Failed to read certificate from file \"%s\": %s", def.Certificate, err)
@@ -142,12 +140,12 @@ func ServerStartup(def ServerDef) error {
 	roots.AppendCertsFromPEM(ImCert)
 
 	creds := credentials.NewServerTLSFromCert(&cert)
-	var srv *grpc.Server
+	var grpcServer *grpc.Server
 	if def.NoAuth {
-		srv = grpc.NewServer(grpc.Creds(creds))
+		grpcServer = grpc.NewServer(grpc.Creds(creds))
 	} else {
 		// Create the gRPC server with the credentials
-		srv = grpc.NewServer(grpc.Creds(creds),
+		grpcServer = grpc.NewServer(grpc.Creds(creds),
 			grpc.UnaryInterceptor(UnaryAuthInterceptor),
 			grpc.StreamInterceptor(StreamAuthInterceptor),
 		)
@@ -160,11 +158,12 @@ func ServerStartup(def ServerDef) error {
 	}
 
 	grpc.EnableTracing = true
-	def.Register(srv)
+	def.Register(grpcServer)
 	if err != nil {
 		return fmt.Errorf("grpc register error: %s", err)
 	}
-	for name, _ := range srv.GetServiceInfo() {
+	for name, _ := range grpcServer.GetServiceInfo() {
+		def.names = append(def.names, name)
 		fmt.Println("Registered Server: ", name)
 		err = AddRegistry(name, def.Port)
 		if err != nil {
@@ -172,13 +171,77 @@ func ServerStartup(def ServerDef) error {
 		}
 	}
 	// something odd?
-	reflection.Register(srv)
+	reflection.Register(grpcServer)
 	// Serve and Listen
-	err = srv.Serve(lis)
+	err = startHttpServe(def, grpcServer)
+
+	// Create the channel to listen on
+
+	lis, err := net.Listen("tcp", listenAddr)
+	if err != nil {
+		return fmt.Errorf("could not listen on %s: %s", listenAddr, err)
+	}
+	err = grpcServer.Serve(lis)
 	if err != nil {
 		return fmt.Errorf("grpc serve error: %s", err)
 	}
 	return nil
+}
+
+func startHttpServe(sd ServerDef, grpcServer *grpc.Server) error {
+	mux := http.NewServeMux()
+	mux.HandleFunc("/service-info/", func(w http.ResponseWriter, req *http.Request) {
+		for _, name := range sd.names {
+			w.Write([]byte(name))
+		}
+	})
+
+	gwmux := runtime.NewServeMux()
+	mux.Handle("/", gwmux)
+	serveSwagger(mux)
+
+	conn, err := net.Listen("tcp", fmt.Sprintf(":%d", sd.Port))
+	if err != nil {
+		panic(err)
+	}
+
+	BackendCert, err := ioutil.ReadFile(sd.Certificate)
+	if err != nil {
+		return fmt.Errorf("Failed to read certificate from file \"%s\": %s", sd.Certificate, err)
+	}
+	BackendKey, err := ioutil.ReadFile(sd.Key)
+	if err != nil {
+		return fmt.Errorf("Failed to read key from file \"%s\": %s", sd.Key, err)
+	}
+	cert, err := tls.X509KeyPair(BackendCert, BackendKey)
+
+	srv := &http.Server{
+		Addr:    fmt.Sprintf(":%d", sd.Port),
+		Handler: grpcHandlerFunc(grpcServer, mux),
+		TLSConfig: &tls.Config{
+			Certificates:       []tls.Certificate{cert},
+			NextProtos:         []string{"h2"},
+			InsecureSkipVerify: true,
+		},
+	}
+
+	fmt.Printf("grpc on port: %d\n", sd.Port)
+	err = srv.Serve(tls.NewListener(conn, srv.TLSConfig))
+	return err
+}
+func serveSwagger(mux *http.ServeMux) {
+	fmt.Println("serverSwagger??", mux)
+}
+func grpcHandlerFunc(grpcServer *grpc.Server, otherHandler http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		path := r.URL.Path
+		if strings.HasPrefix(path, "/service-info") {
+			otherHandler.ServeHTTP(w, r)
+		} else {
+			fmt.Println("Req: ", path)
+			grpcServer.ServeHTTP(w, r)
+		}
+	})
 }
 
 func AddRegistry(name string, port int) error {
