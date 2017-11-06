@@ -21,6 +21,6 @@ BUILD keyvalueserver
 
 env
 
-build-repo-client -branch=${GIT_BRANCH} -build=${BUILD_NUMBER} -commitid=${COMMIT_ID} -commitmsg="commit msg unknown" -repository=${PROJECT_NAME} -server_addr=apps.gurusys.co.uk:5004
+build-repo-client -branch=${GIT_BRANCH} -build=${BUILD_NUMBER} -commitid=${COMMIT_ID} -commitmsg="commit msg unknown" -repository=${PROJECT_NAME} -server_addr=apps.gurusys.co.uk:5004 dist/*
 
 exit 0
