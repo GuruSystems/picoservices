@@ -25,8 +25,8 @@ string UserID = 1;
 message GetDetailResponse {
 string UserID = 1;
 string Email = 2;
-string Firstname = 3;
-string Lastname =4;
+string FirstName = 3;
+string LastName =4;
 }
 
 

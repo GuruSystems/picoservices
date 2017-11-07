@@ -65,6 +65,13 @@ func main() {
 	resp, err := client.VerifyUserToken(ctx, &req)
 	if err != nil {
 		fmt.Printf("failed to verify user token: %v", err)
+		return
 	}
 	fmt.Printf("Response to verify token: %v\n", resp)
+	gdr := pb.GetDetailRequest{UserID: resp.UserID}
+	det, err := client.GetUserDetail(ctx, &gdr)
+	if err != nil {
+		fmt.Printf("failed to retrieve user %i: %s", resp.UserID, err)
+	}
+	fmt.Println("User: ", det)
 }

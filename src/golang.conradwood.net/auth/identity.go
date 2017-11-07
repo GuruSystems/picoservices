@@ -17,5 +17,7 @@ type AuthInfo struct {
 }
 
 type Authenticator interface {
-	Authenticate(token string) (*User, error)
+	// give token -> return userid
+	Authenticate(token string) (string, error)
+	GetUserDetail(userid string) (*User, error)
 }

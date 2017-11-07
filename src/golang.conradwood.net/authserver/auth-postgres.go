@@ -17,22 +17,22 @@ type PostGresAuthenticator struct {
 	connDetails map[string]string
 }
 
-func (pga *PostGresAuthenticator) Authenticate(token string) (*auth.User, error) {
+func (pga *PostGresAuthenticator) Authenticate(token string) (string, error) {
 	rows, err := pga.dbcon.Query("SELECT usertable.id as uid,email,firstname,lastname FROM usertoken,usertable where usertoken.userid = usertable.id")
 	if err != nil {
-		return nil, err
+		return "", err
 	}
 	for rows.Next() {
 		user := auth.User{}
 		err = rows.Scan(&user.ID, &user.FirstName, &user.LastName, &user.Email)
 		if err == nil {
-			return nil, errors.New("error scanning row")
+			return "", errors.New("error scanning row")
 		}
 		fmt.Println("uid | username | department | created ")
 		fmt.Printf("%3v | %8v | %6v | %6v\n", &user.ID, &user.FirstName, &user.LastName, &user.Email)
 	}
 
-	return nil, errors.New(fmt.Sprintf("Not a valid token: \"%s\"", token))
+	return "", errors.New(fmt.Sprintf("Not a valid token: \"%s\"", token))
 }
 
 func NewPostgresAuthenticator(host string, username string, password string, database string) (auth.Authenticator, error) {

@@ -10,6 +10,7 @@ import (
 	"golang.org/x/net/context"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/peer"
+	"os"
 )
 
 // static variables for flag parser
@@ -53,7 +54,15 @@ func start() error {
 			fmt.Println("Failed to create file authenticator", err)
 			return err
 		}
+	} else if *backend == "none" {
+		authBE = &NilAuthenticator{}
+	} else if *backend == "any" {
+		authBE = &AnyAuthenticator{}
+	} else {
+		fmt.Sprintf("Invalid backend \"%s\"\n", *backend)
+		os.Exit(10)
 	}
+
 	sd := compound.ServerDef{
 		Port: *port,
 		// we ARE the authentication service so don't insist on authenticated calls
@@ -75,6 +84,29 @@ type AuthServer struct {
 	wtf int
 }
 
+func getUserFromToken(token string) (*auth.User, error) {
+	if token == "" {
+		fmt.Println("Cannot get user from token without a token")
+		return nil, errors.New("Missing token")
+	}
+	user, err := authBE.Authenticate(token)
+	if err != nil {
+		fmt.Println("Failed to authenticate ", err)
+		return nil, err
+	}
+	if user == "" {
+		fmt.Println("Authenticate failed. (no result but no error)")
+		return nil, errors.New("Internal authentication-server error")
+	}
+	au, err := getUserByID(user)
+	return au, err
+}
+
+func getUserByID(userid string) (*auth.User, error) {
+	a, err := authBE.GetUserDetail(userid)
+	return a, err
+}
+
 // in C we put methods into structs and call them pointers to functions
 // in java/python we also put pointers to functions into structs and but call them "objects" instead
 // in Go we don't put functions pointers into structs, we "associate" a function with a struct.
@@ -85,29 +117,31 @@ func (s *AuthServer) VerifyUserToken(ctx context.Context, req *pb.VerifyRequest)
 		fmt.Println("Error getting peer ")
 	}
 	fmt.Printf("backend \"%s\" has been asked by \"%s\" to verify token: \"%s\"\n", *backend, peer.Addr, req.Token)
-	resp := &pb.VerifyResponse{}
-	if *backend == "none" {
-		return nil, errors.New("backend \"none\" never authenticates anyone")
-	} else if *backend == "any" {
-		resp.UserID = "backend-any-user"
-		return resp, nil
-	} else if (*backend == "postgres") || (*backend == "file") {
-		user, err := authBE.Authenticate(req.Token)
-		if err != nil {
-			fmt.Println("Failed to authenticate ", err)
-			return nil, err
-		}
-		if user == nil {
-			fmt.Println("Authenticate failed. (no result but no error)")
-			return nil, errors.New("Internal authentication-server error")
-		}
-		resp.UserID = user.ID
-		return resp, nil
-	} else {
-		return nil, errors.New(fmt.Sprintf("backend \"%s\" is not implemented", *backend))
+	au, err := getUserFromToken(req.Token)
+	fmt.Printf("Verified as user: %v (%s)\n", au, err)
+	if err != nil {
+		return nil, err
 	}
+	resp := &pb.VerifyResponse{}
+	if au != nil {
+		resp.UserID = au.ID
+	}
+	return resp, nil
 }
 
 func (s *AuthServer) GetUserDetail(ctx context.Context, req *pb.GetDetailRequest) (*pb.GetDetailResponse, error) {
-	return nil, errors.New("Not implemented yet")
+	fmt.Printf("backend \"%s\" has been asked to get details for user#\"%s\"\n", *backend, req.UserID)
+	if req.UserID == "" {
+		return nil, errors.New("Missing token")
+	}
+	au, err := getUserByID(req.UserID)
+	if err != nil {
+		return nil, err
+	}
+	gd := pb.GetDetailResponse{UserID: au.ID,
+		Email:     au.Email,
+		FirstName: au.FirstName,
+		LastName:  au.LastName,
+	}
+	return &gd, nil
 }

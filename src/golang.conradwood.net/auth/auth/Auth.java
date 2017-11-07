@@ -1564,24 +1564,24 @@ public final class Auth {
         getEmailBytes();
 
     /**
-     * <code>optional string Firstname = 3;</code>
+     * <code>optional string FirstName = 3;</code>
      */
-    java.lang.String getFirstname();
+    java.lang.String getFirstName();
     /**
-     * <code>optional string Firstname = 3;</code>
+     * <code>optional string FirstName = 3;</code>
      */
     com.google.protobuf.ByteString
-        getFirstnameBytes();
+        getFirstNameBytes();
 
     /**
-     * <code>optional string Lastname = 4;</code>
+     * <code>optional string LastName = 4;</code>
      */
-    java.lang.String getLastname();
+    java.lang.String getLastName();
     /**
-     * <code>optional string Lastname = 4;</code>
+     * <code>optional string LastName = 4;</code>
      */
     com.google.protobuf.ByteString
-        getLastnameBytes();
+        getLastNameBytes();
   }
   /**
    * Protobuf type {@code auth.GetDetailResponse}
@@ -1597,8 +1597,8 @@ public final class Auth {
     private GetDetailResponse() {
       userID_ = "";
       email_ = "";
-      firstname_ = "";
-      lastname_ = "";
+      firstName_ = "";
+      lastName_ = "";
     }
 
     @java.lang.Override
@@ -1641,13 +1641,13 @@ public final class Auth {
             case 26: {
               java.lang.String s = input.readStringRequireUtf8();
 
-              firstname_ = s;
+              firstName_ = s;
               break;
             }
             case 34: {
               java.lang.String s = input.readStringRequireUtf8();
 
-              lastname_ = s;
+              lastName_ = s;
               break;
             }
           }
@@ -1742,33 +1742,33 @@ public final class Auth {
     }
 
     public static final int FIRSTNAME_FIELD_NUMBER = 3;
-    private volatile java.lang.Object firstname_;
+    private volatile java.lang.Object firstName_;
     /**
-     * <code>optional string Firstname = 3;</code>
+     * <code>optional string FirstName = 3;</code>
      */
-    public java.lang.String getFirstname() {
-      java.lang.Object ref = firstname_;
+    public java.lang.String getFirstName() {
+      java.lang.Object ref = firstName_;
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
         com.google.protobuf.ByteString bs = 
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
-        firstname_ = s;
+        firstName_ = s;
         return s;
       }
     }
     /**
-     * <code>optional string Firstname = 3;</code>
+     * <code>optional string FirstName = 3;</code>
      */
     public com.google.protobuf.ByteString
-        getFirstnameBytes() {
-      java.lang.Object ref = firstname_;
+        getFirstNameBytes() {
+      java.lang.Object ref = firstName_;
       if (ref instanceof java.lang.String) {
         com.google.protobuf.ByteString b = 
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
-        firstname_ = b;
+        firstName_ = b;
         return b;
       } else {
         return (com.google.protobuf.ByteString) ref;
@@ -1776,33 +1776,33 @@ public final class Auth {
     }
 
     public static final int LASTNAME_FIELD_NUMBER = 4;
-    private volatile java.lang.Object lastname_;
+    private volatile java.lang.Object lastName_;
     /**
-     * <code>optional string Lastname = 4;</code>
+     * <code>optional string LastName = 4;</code>
      */
-    public java.lang.String getLastname() {
-      java.lang.Object ref = lastname_;
+    public java.lang.String getLastName() {
+      java.lang.Object ref = lastName_;
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
         com.google.protobuf.ByteString bs = 
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
-        lastname_ = s;
+        lastName_ = s;
         return s;
       }
     }
     /**
-     * <code>optional string Lastname = 4;</code>
+     * <code>optional string LastName = 4;</code>
      */
     public com.google.protobuf.ByteString
-        getLastnameBytes() {
-      java.lang.Object ref = lastname_;
+        getLastNameBytes() {
+      java.lang.Object ref = lastName_;
       if (ref instanceof java.lang.String) {
         com.google.protobuf.ByteString b = 
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
-        lastname_ = b;
+        lastName_ = b;
         return b;
       } else {
         return (com.google.protobuf.ByteString) ref;
@@ -1827,11 +1827,11 @@ public final class Auth {
       if (!getEmailBytes().isEmpty()) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 2, email_);
       }
-      if (!getFirstnameBytes().isEmpty()) {
-        com.google.protobuf.GeneratedMessageV3.writeString(output, 3, firstname_);
+      if (!getFirstNameBytes().isEmpty()) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 3, firstName_);
       }
-      if (!getLastnameBytes().isEmpty()) {
-        com.google.protobuf.GeneratedMessageV3.writeString(output, 4, lastname_);
+      if (!getLastNameBytes().isEmpty()) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 4, lastName_);
       }
     }
 
@@ -1846,11 +1846,11 @@ public final class Auth {
       if (!getEmailBytes().isEmpty()) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, email_);
       }
-      if (!getFirstnameBytes().isEmpty()) {
-        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(3, firstname_);
+      if (!getFirstNameBytes().isEmpty()) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(3, firstName_);
       }
-      if (!getLastnameBytes().isEmpty()) {
-        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(4, lastname_);
+      if (!getLastNameBytes().isEmpty()) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(4, lastName_);
       }
       memoizedSize = size;
       return size;
@@ -1872,10 +1872,10 @@ public final class Auth {
           .equals(other.getUserID());
       result = result && getEmail()
           .equals(other.getEmail());
-      result = result && getFirstname()
-          .equals(other.getFirstname());
-      result = result && getLastname()
-          .equals(other.getLastname());
+      result = result && getFirstName()
+          .equals(other.getFirstName());
+      result = result && getLastName()
+          .equals(other.getLastName());
       return result;
     }
 
@@ -1891,9 +1891,9 @@ public final class Auth {
       hash = (37 * hash) + EMAIL_FIELD_NUMBER;
       hash = (53 * hash) + getEmail().hashCode();
       hash = (37 * hash) + FIRSTNAME_FIELD_NUMBER;
-      hash = (53 * hash) + getFirstname().hashCode();
+      hash = (53 * hash) + getFirstName().hashCode();
       hash = (37 * hash) + LASTNAME_FIELD_NUMBER;
-      hash = (53 * hash) + getLastname().hashCode();
+      hash = (53 * hash) + getLastName().hashCode();
       hash = (29 * hash) + unknownFields.hashCode();
       memoizedHashCode = hash;
       return hash;
@@ -2016,9 +2016,9 @@ public final class Auth {
 
         email_ = "";
 
-        firstname_ = "";
+        firstName_ = "";
 
-        lastname_ = "";
+        lastName_ = "";
 
         return this;
       }
@@ -2044,8 +2044,8 @@ public final class Auth {
         auth.Auth.GetDetailResponse result = new auth.Auth.GetDetailResponse(this);
         result.userID_ = userID_;
         result.email_ = email_;
-        result.firstname_ = firstname_;
-        result.lastname_ = lastname_;
+        result.firstName_ = firstName_;
+        result.lastName_ = lastName_;
         onBuilt();
         return result;
       }
@@ -2095,12 +2095,12 @@ public final class Auth {
           email_ = other.email_;
           onChanged();
         }
-        if (!other.getFirstname().isEmpty()) {
-          firstname_ = other.firstname_;
+        if (!other.getFirstName().isEmpty()) {
+          firstName_ = other.firstName_;
           onChanged();
         }
-        if (!other.getLastname().isEmpty()) {
-          lastname_ = other.lastname_;
+        if (!other.getLastName().isEmpty()) {
+          lastName_ = other.lastName_;
           onChanged();
         }
         onChanged();
@@ -2267,140 +2267,140 @@ public final class Auth {
         return this;
       }
 
-      private java.lang.Object firstname_ = "";
+      private java.lang.Object firstName_ = "";
       /**
-       * <code>optional string Firstname = 3;</code>
+       * <code>optional string FirstName = 3;</code>
        */
-      public java.lang.String getFirstname() {
-        java.lang.Object ref = firstname_;
+      public java.lang.String getFirstName() {
+        java.lang.Object ref = firstName_;
         if (!(ref instanceof java.lang.String)) {
           com.google.protobuf.ByteString bs =
               (com.google.protobuf.ByteString) ref;
           java.lang.String s = bs.toStringUtf8();
-          firstname_ = s;
+          firstName_ = s;
           return s;
         } else {
           return (java.lang.String) ref;
         }
       }
       /**
-       * <code>optional string Firstname = 3;</code>
+       * <code>optional string FirstName = 3;</code>
        */
       public com.google.protobuf.ByteString
-          getFirstnameBytes() {
-        java.lang.Object ref = firstname_;
+          getFirstNameBytes() {
+        java.lang.Object ref = firstName_;
         if (ref instanceof String) {
           com.google.protobuf.ByteString b = 
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
-          firstname_ = b;
+          firstName_ = b;
           return b;
         } else {
           return (com.google.protobuf.ByteString) ref;
         }
       }
       /**
-       * <code>optional string Firstname = 3;</code>
+       * <code>optional string FirstName = 3;</code>
        */
-      public Builder setFirstname(
+      public Builder setFirstName(
           java.lang.String value) {
         if (value == null) {
     throw new NullPointerException();
   }
   
-        firstname_ = value;
+        firstName_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>optional string Firstname = 3;</code>
+       * <code>optional string FirstName = 3;</code>
        */
-      public Builder clearFirstname() {
+      public Builder clearFirstName() {
         
-        firstname_ = getDefaultInstance().getFirstname();
+        firstName_ = getDefaultInstance().getFirstName();
         onChanged();
         return this;
       }
       /**
-       * <code>optional string Firstname = 3;</code>
+       * <code>optional string FirstName = 3;</code>
        */
-      public Builder setFirstnameBytes(
+      public Builder setFirstNameBytes(
           com.google.protobuf.ByteString value) {
         if (value == null) {
     throw new NullPointerException();
   }
   checkByteStringIsUtf8(value);
         
-        firstname_ = value;
+        firstName_ = value;
         onChanged();
         return this;
       }
 
-      private java.lang.Object lastname_ = "";
+      private java.lang.Object lastName_ = "";
       /**
-       * <code>optional string Lastname = 4;</code>
+       * <code>optional string LastName = 4;</code>
        */
-      public java.lang.String getLastname() {
-        java.lang.Object ref = lastname_;
+      public java.lang.String getLastName() {
+        java.lang.Object ref = lastName_;
         if (!(ref instanceof java.lang.String)) {
           com.google.protobuf.ByteString bs =
               (com.google.protobuf.ByteString) ref;
           java.lang.String s = bs.toStringUtf8();
-          lastname_ = s;
+          lastName_ = s;
           return s;
         } else {
           return (java.lang.String) ref;
         }
       }
       /**
-       * <code>optional string Lastname = 4;</code>
+       * <code>optional string LastName = 4;</code>
        */
       public com.google.protobuf.ByteString
-          getLastnameBytes() {
-        java.lang.Object ref = lastname_;
+          getLastNameBytes() {
+        java.lang.Object ref = lastName_;
         if (ref instanceof String) {
           com.google.protobuf.ByteString b = 
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
-          lastname_ = b;
+          lastName_ = b;
           return b;
         } else {
           return (com.google.protobuf.ByteString) ref;
         }
       }
       /**
-       * <code>optional string Lastname = 4;</code>
+       * <code>optional string LastName = 4;</code>
        */
-      public Builder setLastname(
+      public Builder setLastName(
           java.lang.String value) {
         if (value == null) {
     throw new NullPointerException();
   }
   
-        lastname_ = value;
+        lastName_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>optional string Lastname = 4;</code>
+       * <code>optional string LastName = 4;</code>
        */
-      public Builder clearLastname() {
+      public Builder clearLastName() {
         
-        lastname_ = getDefaultInstance().getLastname();
+        lastName_ = getDefaultInstance().getLastName();
         onChanged();
         return this;
       }
       /**
-       * <code>optional string Lastname = 4;</code>
+       * <code>optional string LastName = 4;</code>
        */
-      public Builder setLastnameBytes(
+      public Builder setLastNameBytes(
           com.google.protobuf.ByteString value) {
         if (value == null) {
     throw new NullPointerException();
   }
   checkByteStringIsUtf8(value);
         
-        lastname_ = value;
+        lastName_ = value;
         onChanged();
         return this;
       }
@@ -2487,7 +2487,7 @@ public final class Auth {
       "\030\001 \001(\t\" \n\016VerifyResponse\022\016\n\006UserID\030\001 \001(\t" +
       "\"\"\n\020GetDetailRequest\022\016\n\006UserID\030\001 \001(\t\"W\n\021" +
       "GetDetailResponse\022\016\n\006UserID\030\001 \001(\t\022\r\n\005Ema" +
-      "il\030\002 \001(\t\022\021\n\tFirstname\030\003 \001(\t\022\020\n\010Lastname\030" +
+      "il\030\002 \001(\t\022\021\n\tFirstName\030\003 \001(\t\022\020\n\010LastName\030" +
       "\004 \001(\t2\233\001\n\025AuthenticationService\022>\n\017Verif" +
       "yUserToken\022\023.auth.VerifyRequest\032\024.auth.V" +
       "erifyResponse\"\000\022B\n\rGetUserDetail\022\026.auth." +
@@ -2530,7 +2530,7 @@ public final class Auth {
     internal_static_auth_GetDetailResponse_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_auth_GetDetailResponse_descriptor,
-        new java.lang.String[] { "UserID", "Email", "Firstname", "Lastname", });
+        new java.lang.String[] { "UserID", "Email", "FirstName", "LastName", });
     com.google.api.AnnotationsProto.getDescriptor();
   }
 
