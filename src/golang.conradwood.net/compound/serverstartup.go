@@ -230,7 +230,7 @@ func startHttpServe(sd ServerDef, grpcServer *grpc.Server) error {
 	return err
 }
 func serveSwagger(mux *http.ServeMux) {
-	fmt.Println("serverSwagger??", mux)
+	//fmt.Println("serverSwagger??", mux)
 }
 func grpcHandlerFunc(grpcServer *grpc.Server, otherHandler http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {

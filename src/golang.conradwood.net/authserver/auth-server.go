@@ -14,13 +14,14 @@ import (
 
 // static variables for flag parser
 var (
-	backend = flag.String("backend", "none", "backend to use: all|none|postgres")
-	port    = flag.Int("port", 10000, "The server port")
-	dbhost  = flag.String("dbhost", "postgres", "hostname of the postgres database rdms")
-	dbdb    = flag.String("database", "rpcusers", "database to use for authentication")
-	dbuser  = flag.String("dbuser", "root", "username for the database to use for authentication")
-	dbpw    = flag.String("dbpw", "pw", "password for the database to use for authentication")
-	authBE  auth.Authenticator
+	backend  = flag.String("backend", "none", "backend to use: all|none|postgres|file")
+	port     = flag.Int("port", 10000, "The server port")
+	dbhost   = flag.String("dbhost", "postgres", "hostname of the postgres database rdms")
+	dbdb     = flag.String("database", "rpcusers", "database to use for authentication")
+	dbuser   = flag.String("dbuser", "root", "username for the database to use for authentication")
+	dbpw     = flag.String("dbpw", "pw", "password for the database to use for authentication")
+	tokendir = flag.String("tokendir", "/srv/picoservices/tokendir", "directory with token<->user files")
+	authBE   auth.Authenticator
 )
 
 func main() {
@@ -44,6 +45,12 @@ func start() error {
 		authBE, err = NewPostgresAuthenticator(*dbhost, *dbuser, *dbpw, *dbdb)
 		if err != nil {
 			fmt.Println("Failed to create postgres authenticator", err)
+			return err
+		}
+	} else if *backend == "file" {
+		authBE, err = NewFileAuthenticator(*tokendir)
+		if err != nil {
+			fmt.Println("Failed to create file authenticator", err)
 			return err
 		}
 	}
@@ -84,7 +91,7 @@ func (s *AuthServer) VerifyUserToken(ctx context.Context, req *pb.VerifyRequest)
 	} else if *backend == "any" {
 		resp.UserID = "backend-any-user"
 		return resp, nil
-	} else if *backend == "postgres" {
+	} else if (*backend == "postgres") || (*backend == "file") {
 		user, err := authBE.Authenticate(req.Token)
 		if err != nil {
 			fmt.Println("Failed to authenticate ", err)
