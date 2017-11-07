@@ -105,6 +105,10 @@ func authenticate(ctx context.Context, meta metadata.MD) (context.Context, error
 	nctx := context.WithValue(ctx, "authinfo", ai)
 	return nctx, nil
 }
+func GetUserID(ctx context.Context) auth.AuthInfo {
+	ai := ctx.Value("authinfo").(auth.AuthInfo)
+	return ai
+}
 func GetAuthClient() (apb.AuthenticationServiceClient, error) {
 	if authconn == nil {
 		fmt.Println("No authenticator available")
