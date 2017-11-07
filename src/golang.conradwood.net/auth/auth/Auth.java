@@ -1036,8 +1036,8 @@ public final class Auth {
 
   }
 
-  public interface GetDetailResponseOrBuilder extends
-      // @@protoc_insertion_point(interface_extends:auth.GetDetailResponse)
+  public interface GetDetailRequestOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:auth.GetDetailRequest)
       com.google.protobuf.MessageOrBuilder {
 
     /**
@@ -1051,17 +1051,17 @@ public final class Auth {
         getUserIDBytes();
   }
   /**
-   * Protobuf type {@code auth.GetDetailResponse}
+   * Protobuf type {@code auth.GetDetailRequest}
    */
-  public  static final class GetDetailResponse extends
+  public  static final class GetDetailRequest extends
       com.google.protobuf.GeneratedMessageV3 implements
-      // @@protoc_insertion_point(message_implements:auth.GetDetailResponse)
-      GetDetailResponseOrBuilder {
-    // Use GetDetailResponse.newBuilder() to construct.
-    private GetDetailResponse(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+      // @@protoc_insertion_point(message_implements:auth.GetDetailRequest)
+      GetDetailRequestOrBuilder {
+    // Use GetDetailRequest.newBuilder() to construct.
+    private GetDetailRequest(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
     }
-    private GetDetailResponse() {
+    private GetDetailRequest() {
       userID_ = "";
     }
 
@@ -1070,7 +1070,7 @@ public final class Auth {
     getUnknownFields() {
       return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
     }
-    private GetDetailResponse(
+    private GetDetailRequest(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
@@ -1109,14 +1109,14 @@ public final class Auth {
     }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return auth.Auth.internal_static_auth_GetDetailResponse_descriptor;
+      return auth.Auth.internal_static_auth_GetDetailRequest_descriptor;
     }
 
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return auth.Auth.internal_static_auth_GetDetailResponse_fieldAccessorTable
+      return auth.Auth.internal_static_auth_GetDetailRequest_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              auth.Auth.GetDetailResponse.class, auth.Auth.GetDetailResponse.Builder.class);
+              auth.Auth.GetDetailRequest.class, auth.Auth.GetDetailRequest.Builder.class);
     }
 
     public static final int USERID_FIELD_NUMBER = 1;
@@ -1188,10 +1188,10 @@ public final class Auth {
       if (obj == this) {
        return true;
       }
-      if (!(obj instanceof auth.Auth.GetDetailResponse)) {
+      if (!(obj instanceof auth.Auth.GetDetailRequest)) {
         return super.equals(obj);
       }
-      auth.Auth.GetDetailResponse other = (auth.Auth.GetDetailResponse) obj;
+      auth.Auth.GetDetailRequest other = (auth.Auth.GetDetailRequest) obj;
 
       boolean result = true;
       result = result && getUserID()
@@ -1213,58 +1213,58 @@ public final class Auth {
       return hash;
     }
 
-    public static auth.Auth.GetDetailResponse parseFrom(
+    public static auth.Auth.GetDetailRequest parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static auth.Auth.GetDetailResponse parseFrom(
+    public static auth.Auth.GetDetailRequest parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static auth.Auth.GetDetailResponse parseFrom(byte[] data)
+    public static auth.Auth.GetDetailRequest parseFrom(byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static auth.Auth.GetDetailResponse parseFrom(
+    public static auth.Auth.GetDetailRequest parseFrom(
         byte[] data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static auth.Auth.GetDetailResponse parseFrom(java.io.InputStream input)
+    public static auth.Auth.GetDetailRequest parseFrom(java.io.InputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input);
     }
-    public static auth.Auth.GetDetailResponse parseFrom(
+    public static auth.Auth.GetDetailRequest parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input, extensionRegistry);
     }
-    public static auth.Auth.GetDetailResponse parseDelimitedFrom(java.io.InputStream input)
+    public static auth.Auth.GetDetailRequest parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseDelimitedWithIOException(PARSER, input);
     }
-    public static auth.Auth.GetDetailResponse parseDelimitedFrom(
+    public static auth.Auth.GetDetailRequest parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
-    public static auth.Auth.GetDetailResponse parseFrom(
+    public static auth.Auth.GetDetailRequest parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input);
     }
-    public static auth.Auth.GetDetailResponse parseFrom(
+    public static auth.Auth.GetDetailRequest parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
@@ -1276,7 +1276,7 @@ public final class Auth {
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
-    public static Builder newBuilder(auth.Auth.GetDetailResponse prototype) {
+    public static Builder newBuilder(auth.Auth.GetDetailRequest prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
     public Builder toBuilder() {
@@ -1291,25 +1291,25 @@ public final class Auth {
       return builder;
     }
     /**
-     * Protobuf type {@code auth.GetDetailResponse}
+     * Protobuf type {@code auth.GetDetailRequest}
      */
     public static final class Builder extends
         com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-        // @@protoc_insertion_point(builder_implements:auth.GetDetailResponse)
-        auth.Auth.GetDetailResponseOrBuilder {
+        // @@protoc_insertion_point(builder_implements:auth.GetDetailRequest)
+        auth.Auth.GetDetailRequestOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
-        return auth.Auth.internal_static_auth_GetDetailResponse_descriptor;
+        return auth.Auth.internal_static_auth_GetDetailRequest_descriptor;
       }
 
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
           internalGetFieldAccessorTable() {
-        return auth.Auth.internal_static_auth_GetDetailResponse_fieldAccessorTable
+        return auth.Auth.internal_static_auth_GetDetailRequest_fieldAccessorTable
             .ensureFieldAccessorsInitialized(
-                auth.Auth.GetDetailResponse.class, auth.Auth.GetDetailResponse.Builder.class);
+                auth.Auth.GetDetailRequest.class, auth.Auth.GetDetailRequest.Builder.class);
       }
 
-      // Construct using auth.Auth.GetDetailResponse.newBuilder()
+      // Construct using auth.Auth.GetDetailRequest.newBuilder()
       private Builder() {
         maybeForceBuilderInitialization();
       }
@@ -1333,23 +1333,23 @@ public final class Auth {
 
       public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
-        return auth.Auth.internal_static_auth_GetDetailResponse_descriptor;
+        return auth.Auth.internal_static_auth_GetDetailRequest_descriptor;
       }
 
-      public auth.Auth.GetDetailResponse getDefaultInstanceForType() {
-        return auth.Auth.GetDetailResponse.getDefaultInstance();
+      public auth.Auth.GetDetailRequest getDefaultInstanceForType() {
+        return auth.Auth.GetDetailRequest.getDefaultInstance();
       }
 
-      public auth.Auth.GetDetailResponse build() {
-        auth.Auth.GetDetailResponse result = buildPartial();
+      public auth.Auth.GetDetailRequest build() {
+        auth.Auth.GetDetailRequest result = buildPartial();
         if (!result.isInitialized()) {
           throw newUninitializedMessageException(result);
         }
         return result;
       }
 
-      public auth.Auth.GetDetailResponse buildPartial() {
-        auth.Auth.GetDetailResponse result = new auth.Auth.GetDetailResponse(this);
+      public auth.Auth.GetDetailRequest buildPartial() {
+        auth.Auth.GetDetailRequest result = new auth.Auth.GetDetailRequest(this);
         result.userID_ = userID_;
         onBuilt();
         return result;
@@ -1382,16 +1382,16 @@ public final class Auth {
         return (Builder) super.addRepeatedField(field, value);
       }
       public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof auth.Auth.GetDetailResponse) {
-          return mergeFrom((auth.Auth.GetDetailResponse)other);
+        if (other instanceof auth.Auth.GetDetailRequest) {
+          return mergeFrom((auth.Auth.GetDetailRequest)other);
         } else {
           super.mergeFrom(other);
           return this;
         }
       }
 
-      public Builder mergeFrom(auth.Auth.GetDetailResponse other) {
-        if (other == auth.Auth.GetDetailResponse.getDefaultInstance()) return this;
+      public Builder mergeFrom(auth.Auth.GetDetailRequest other) {
+        if (other == auth.Auth.GetDetailRequest.getDefaultInstance()) return this;
         if (!other.getUserID().isEmpty()) {
           userID_ = other.userID_;
           onChanged();
@@ -1408,11 +1408,11 @@ public final class Auth {
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        auth.Auth.GetDetailResponse parsedMessage = null;
+        auth.Auth.GetDetailRequest parsedMessage = null;
         try {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (auth.Auth.GetDetailResponse) e.getUnfinishedMessage();
+          parsedMessage = (auth.Auth.GetDetailRequest) e.getUnfinishedMessage();
           throw e.unwrapIOException();
         } finally {
           if (parsedMessage != null) {
@@ -1501,46 +1501,46 @@ public final class Auth {
       }
 
 
-      // @@protoc_insertion_point(builder_scope:auth.GetDetailResponse)
+      // @@protoc_insertion_point(builder_scope:auth.GetDetailRequest)
     }
 
-    // @@protoc_insertion_point(class_scope:auth.GetDetailResponse)
-    private static final auth.Auth.GetDetailResponse DEFAULT_INSTANCE;
+    // @@protoc_insertion_point(class_scope:auth.GetDetailRequest)
+    private static final auth.Auth.GetDetailRequest DEFAULT_INSTANCE;
     static {
-      DEFAULT_INSTANCE = new auth.Auth.GetDetailResponse();
+      DEFAULT_INSTANCE = new auth.Auth.GetDetailRequest();
     }
 
-    public static auth.Auth.GetDetailResponse getDefaultInstance() {
+    public static auth.Auth.GetDetailRequest getDefaultInstance() {
       return DEFAULT_INSTANCE;
     }
 
-    private static final com.google.protobuf.Parser<GetDetailResponse>
-        PARSER = new com.google.protobuf.AbstractParser<GetDetailResponse>() {
-      public GetDetailResponse parsePartialFrom(
+    private static final com.google.protobuf.Parser<GetDetailRequest>
+        PARSER = new com.google.protobuf.AbstractParser<GetDetailRequest>() {
+      public GetDetailRequest parsePartialFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
-          return new GetDetailResponse(input, extensionRegistry);
+          return new GetDetailRequest(input, extensionRegistry);
       }
     };
 
-    public static com.google.protobuf.Parser<GetDetailResponse> parser() {
+    public static com.google.protobuf.Parser<GetDetailRequest> parser() {
       return PARSER;
     }
 
     @java.lang.Override
-    public com.google.protobuf.Parser<GetDetailResponse> getParserForType() {
+    public com.google.protobuf.Parser<GetDetailRequest> getParserForType() {
       return PARSER;
     }
 
-    public auth.Auth.GetDetailResponse getDefaultInstanceForType() {
+    public auth.Auth.GetDetailRequest getDefaultInstanceForType() {
       return DEFAULT_INSTANCE;
     }
 
   }
 
-  public interface GetDetailRequestOrBuilder extends
-      // @@protoc_insertion_point(interface_extends:auth.GetDetailRequest)
+  public interface GetDetailResponseOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:auth.GetDetailResponse)
       com.google.protobuf.MessageOrBuilder {
 
     /**
@@ -1584,17 +1584,17 @@ public final class Auth {
         getLastnameBytes();
   }
   /**
-   * Protobuf type {@code auth.GetDetailRequest}
+   * Protobuf type {@code auth.GetDetailResponse}
    */
-  public  static final class GetDetailRequest extends
+  public  static final class GetDetailResponse extends
       com.google.protobuf.GeneratedMessageV3 implements
-      // @@protoc_insertion_point(message_implements:auth.GetDetailRequest)
-      GetDetailRequestOrBuilder {
-    // Use GetDetailRequest.newBuilder() to construct.
-    private GetDetailRequest(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+      // @@protoc_insertion_point(message_implements:auth.GetDetailResponse)
+      GetDetailResponseOrBuilder {
+    // Use GetDetailResponse.newBuilder() to construct.
+    private GetDetailResponse(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
     }
-    private GetDetailRequest() {
+    private GetDetailResponse() {
       userID_ = "";
       email_ = "";
       firstname_ = "";
@@ -1606,7 +1606,7 @@ public final class Auth {
     getUnknownFields() {
       return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
     }
-    private GetDetailRequest(
+    private GetDetailResponse(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
@@ -1663,14 +1663,14 @@ public final class Auth {
     }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return auth.Auth.internal_static_auth_GetDetailRequest_descriptor;
+      return auth.Auth.internal_static_auth_GetDetailResponse_descriptor;
     }
 
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return auth.Auth.internal_static_auth_GetDetailRequest_fieldAccessorTable
+      return auth.Auth.internal_static_auth_GetDetailResponse_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              auth.Auth.GetDetailRequest.class, auth.Auth.GetDetailRequest.Builder.class);
+              auth.Auth.GetDetailResponse.class, auth.Auth.GetDetailResponse.Builder.class);
     }
 
     public static final int USERID_FIELD_NUMBER = 1;
@@ -1862,10 +1862,10 @@ public final class Auth {
       if (obj == this) {
        return true;
       }
-      if (!(obj instanceof auth.Auth.GetDetailRequest)) {
+      if (!(obj instanceof auth.Auth.GetDetailResponse)) {
         return super.equals(obj);
       }
-      auth.Auth.GetDetailRequest other = (auth.Auth.GetDetailRequest) obj;
+      auth.Auth.GetDetailResponse other = (auth.Auth.GetDetailResponse) obj;
 
       boolean result = true;
       result = result && getUserID()
@@ -1899,58 +1899,58 @@ public final class Auth {
       return hash;
     }
 
-    public static auth.Auth.GetDetailRequest parseFrom(
+    public static auth.Auth.GetDetailResponse parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static auth.Auth.GetDetailRequest parseFrom(
+    public static auth.Auth.GetDetailResponse parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static auth.Auth.GetDetailRequest parseFrom(byte[] data)
+    public static auth.Auth.GetDetailResponse parseFrom(byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static auth.Auth.GetDetailRequest parseFrom(
+    public static auth.Auth.GetDetailResponse parseFrom(
         byte[] data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static auth.Auth.GetDetailRequest parseFrom(java.io.InputStream input)
+    public static auth.Auth.GetDetailResponse parseFrom(java.io.InputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input);
     }
-    public static auth.Auth.GetDetailRequest parseFrom(
+    public static auth.Auth.GetDetailResponse parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input, extensionRegistry);
     }
-    public static auth.Auth.GetDetailRequest parseDelimitedFrom(java.io.InputStream input)
+    public static auth.Auth.GetDetailResponse parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseDelimitedWithIOException(PARSER, input);
     }
-    public static auth.Auth.GetDetailRequest parseDelimitedFrom(
+    public static auth.Auth.GetDetailResponse parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
-    public static auth.Auth.GetDetailRequest parseFrom(
+    public static auth.Auth.GetDetailResponse parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input);
     }
-    public static auth.Auth.GetDetailRequest parseFrom(
+    public static auth.Auth.GetDetailResponse parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
@@ -1962,7 +1962,7 @@ public final class Auth {
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
-    public static Builder newBuilder(auth.Auth.GetDetailRequest prototype) {
+    public static Builder newBuilder(auth.Auth.GetDetailResponse prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
     public Builder toBuilder() {
@@ -1977,25 +1977,25 @@ public final class Auth {
       return builder;
     }
     /**
-     * Protobuf type {@code auth.GetDetailRequest}
+     * Protobuf type {@code auth.GetDetailResponse}
      */
     public static final class Builder extends
         com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-        // @@protoc_insertion_point(builder_implements:auth.GetDetailRequest)
-        auth.Auth.GetDetailRequestOrBuilder {
+        // @@protoc_insertion_point(builder_implements:auth.GetDetailResponse)
+        auth.Auth.GetDetailResponseOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
-        return auth.Auth.internal_static_auth_GetDetailRequest_descriptor;
+        return auth.Auth.internal_static_auth_GetDetailResponse_descriptor;
       }
 
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
           internalGetFieldAccessorTable() {
-        return auth.Auth.internal_static_auth_GetDetailRequest_fieldAccessorTable
+        return auth.Auth.internal_static_auth_GetDetailResponse_fieldAccessorTable
             .ensureFieldAccessorsInitialized(
-                auth.Auth.GetDetailRequest.class, auth.Auth.GetDetailRequest.Builder.class);
+                auth.Auth.GetDetailResponse.class, auth.Auth.GetDetailResponse.Builder.class);
       }
 
-      // Construct using auth.Auth.GetDetailRequest.newBuilder()
+      // Construct using auth.Auth.GetDetailResponse.newBuilder()
       private Builder() {
         maybeForceBuilderInitialization();
       }
@@ -2025,23 +2025,23 @@ public final class Auth {
 
       public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
-        return auth.Auth.internal_static_auth_GetDetailRequest_descriptor;
+        return auth.Auth.internal_static_auth_GetDetailResponse_descriptor;
       }
 
-      public auth.Auth.GetDetailRequest getDefaultInstanceForType() {
-        return auth.Auth.GetDetailRequest.getDefaultInstance();
+      public auth.Auth.GetDetailResponse getDefaultInstanceForType() {
+        return auth.Auth.GetDetailResponse.getDefaultInstance();
       }
 
-      public auth.Auth.GetDetailRequest build() {
-        auth.Auth.GetDetailRequest result = buildPartial();
+      public auth.Auth.GetDetailResponse build() {
+        auth.Auth.GetDetailResponse result = buildPartial();
         if (!result.isInitialized()) {
           throw newUninitializedMessageException(result);
         }
         return result;
       }
 
-      public auth.Auth.GetDetailRequest buildPartial() {
-        auth.Auth.GetDetailRequest result = new auth.Auth.GetDetailRequest(this);
+      public auth.Auth.GetDetailResponse buildPartial() {
+        auth.Auth.GetDetailResponse result = new auth.Auth.GetDetailResponse(this);
         result.userID_ = userID_;
         result.email_ = email_;
         result.firstname_ = firstname_;
@@ -2077,16 +2077,16 @@ public final class Auth {
         return (Builder) super.addRepeatedField(field, value);
       }
       public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof auth.Auth.GetDetailRequest) {
-          return mergeFrom((auth.Auth.GetDetailRequest)other);
+        if (other instanceof auth.Auth.GetDetailResponse) {
+          return mergeFrom((auth.Auth.GetDetailResponse)other);
         } else {
           super.mergeFrom(other);
           return this;
         }
       }
 
-      public Builder mergeFrom(auth.Auth.GetDetailRequest other) {
-        if (other == auth.Auth.GetDetailRequest.getDefaultInstance()) return this;
+      public Builder mergeFrom(auth.Auth.GetDetailResponse other) {
+        if (other == auth.Auth.GetDetailResponse.getDefaultInstance()) return this;
         if (!other.getUserID().isEmpty()) {
           userID_ = other.userID_;
           onChanged();
@@ -2115,11 +2115,11 @@ public final class Auth {
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        auth.Auth.GetDetailRequest parsedMessage = null;
+        auth.Auth.GetDetailResponse parsedMessage = null;
         try {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (auth.Auth.GetDetailRequest) e.getUnfinishedMessage();
+          parsedMessage = (auth.Auth.GetDetailResponse) e.getUnfinishedMessage();
           throw e.unwrapIOException();
         } finally {
           if (parsedMessage != null) {
@@ -2415,39 +2415,39 @@ public final class Auth {
       }
 
 
-      // @@protoc_insertion_point(builder_scope:auth.GetDetailRequest)
+      // @@protoc_insertion_point(builder_scope:auth.GetDetailResponse)
     }
 
-    // @@protoc_insertion_point(class_scope:auth.GetDetailRequest)
-    private static final auth.Auth.GetDetailRequest DEFAULT_INSTANCE;
+    // @@protoc_insertion_point(class_scope:auth.GetDetailResponse)
+    private static final auth.Auth.GetDetailResponse DEFAULT_INSTANCE;
     static {
-      DEFAULT_INSTANCE = new auth.Auth.GetDetailRequest();
+      DEFAULT_INSTANCE = new auth.Auth.GetDetailResponse();
     }
 
-    public static auth.Auth.GetDetailRequest getDefaultInstance() {
+    public static auth.Auth.GetDetailResponse getDefaultInstance() {
       return DEFAULT_INSTANCE;
     }
 
-    private static final com.google.protobuf.Parser<GetDetailRequest>
-        PARSER = new com.google.protobuf.AbstractParser<GetDetailRequest>() {
-      public GetDetailRequest parsePartialFrom(
+    private static final com.google.protobuf.Parser<GetDetailResponse>
+        PARSER = new com.google.protobuf.AbstractParser<GetDetailResponse>() {
+      public GetDetailResponse parsePartialFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
-          return new GetDetailRequest(input, extensionRegistry);
+          return new GetDetailResponse(input, extensionRegistry);
       }
     };
 
-    public static com.google.protobuf.Parser<GetDetailRequest> parser() {
+    public static com.google.protobuf.Parser<GetDetailResponse> parser() {
       return PARSER;
     }
 
     @java.lang.Override
-    public com.google.protobuf.Parser<GetDetailRequest> getParserForType() {
+    public com.google.protobuf.Parser<GetDetailResponse> getParserForType() {
       return PARSER;
     }
 
-    public auth.Auth.GetDetailRequest getDefaultInstanceForType() {
+    public auth.Auth.GetDetailResponse getDefaultInstanceForType() {
       return DEFAULT_INSTANCE;
     }
 
@@ -2464,15 +2464,15 @@ public final class Auth {
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_auth_VerifyResponse_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_auth_GetDetailResponse_descriptor;
-  private static final 
-    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-      internal_static_auth_GetDetailResponse_fieldAccessorTable;
-  private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_auth_GetDetailRequest_descriptor;
   private static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_auth_GetDetailRequest_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_auth_GetDetailResponse_descriptor;
+  private static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_auth_GetDetailResponse_fieldAccessorTable;
 
   public static com.google.protobuf.Descriptors.FileDescriptor
       getDescriptor() {
@@ -2485,8 +2485,8 @@ public final class Auth {
       "\n\020proto/auth.proto\022\004auth\032\034google/api/ann" +
       "otations.proto\"\036\n\rVerifyRequest\022\r\n\005Token" +
       "\030\001 \001(\t\" \n\016VerifyResponse\022\016\n\006UserID\030\001 \001(\t" +
-      "\"#\n\021GetDetailResponse\022\016\n\006UserID\030\001 \001(\t\"V\n" +
-      "\020GetDetailRequest\022\016\n\006UserID\030\001 \001(\t\022\r\n\005Ema" +
+      "\"\"\n\020GetDetailRequest\022\016\n\006UserID\030\001 \001(\t\"W\n\021" +
+      "GetDetailResponse\022\016\n\006UserID\030\001 \001(\t\022\r\n\005Ema" +
       "il\030\002 \001(\t\022\021\n\tFirstname\030\003 \001(\t\022\020\n\010Lastname\030" +
       "\004 \001(\t2\233\001\n\025AuthenticationService\022>\n\017Verif" +
       "yUserToken\022\023.auth.VerifyRequest\032\024.auth.V" +
@@ -2519,17 +2519,17 @@ public final class Auth {
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_auth_VerifyResponse_descriptor,
         new java.lang.String[] { "UserID", });
-    internal_static_auth_GetDetailResponse_descriptor =
-      getDescriptor().getMessageTypes().get(2);
-    internal_static_auth_GetDetailResponse_fieldAccessorTable = new
-      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-        internal_static_auth_GetDetailResponse_descriptor,
-        new java.lang.String[] { "UserID", });
     internal_static_auth_GetDetailRequest_descriptor =
-      getDescriptor().getMessageTypes().get(3);
+      getDescriptor().getMessageTypes().get(2);
     internal_static_auth_GetDetailRequest_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_auth_GetDetailRequest_descriptor,
+        new java.lang.String[] { "UserID", });
+    internal_static_auth_GetDetailResponse_descriptor =
+      getDescriptor().getMessageTypes().get(3);
+    internal_static_auth_GetDetailResponse_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_auth_GetDetailResponse_descriptor,
         new java.lang.String[] { "UserID", "Email", "Firstname", "Lastname", });
     com.google.api.AnnotationsProto.getDescriptor();
   }

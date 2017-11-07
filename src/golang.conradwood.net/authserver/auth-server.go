@@ -97,6 +97,10 @@ func (s *AuthServer) VerifyUserToken(ctx context.Context, req *pb.VerifyRequest)
 			fmt.Println("Failed to authenticate ", err)
 			return nil, err
 		}
+		if user == nil {
+			fmt.Println("Authenticate failed. (no result but no error)")
+			return nil, errors.New("Internal authentication-server error")
+		}
 		resp.UserID = user.ID
 		return resp, nil
 	} else {

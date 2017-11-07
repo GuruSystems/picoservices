@@ -24,6 +24,7 @@ var (
 	crt        = "/etc/cnw/certs/rpc-client/certificate.pem"
 	key        = "/etc/cnw/certs/rpc-client/privatekey.pem"
 	ca         = "/etc/cnw/certs/rpc-client/ca.pem"
+	token      = flag.String("token", "blabla", "user token to authenticate with")
 )
 
 func main() {
@@ -56,7 +57,7 @@ func main() {
 	defer conn.Close()
 	fmt.Println("Creating client...")
 	client := pb.NewAuthenticationServiceClient(conn)
-	req := pb.VerifyRequest{Token: "bla"}
+	req := pb.VerifyRequest{Token: *token}
 	ctx := context.Background()
 
 	// if TLS is f*** we break here:
