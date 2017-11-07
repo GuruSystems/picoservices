@@ -6,7 +6,7 @@ package main
 // [bla].token where [bla] is a valid user token
 //    these files contain a single line with the userid this token belongs to
 // [bla].user where [bla] is a user id
-//    these files contain lines: firstname/lastname/email/userid
+//    these files contain lines: userid/firstname/lastname/email/
 import (
 	"bufio"
 	"errors"
@@ -65,10 +65,10 @@ func (fa *FileAuthenticator) GetUserDetail(userid string) (*auth.User, error) {
 	}
 
 	a := &auth.User{
-		FirstName: read[0],
-		LastName:  read[1],
-		Email:     read[2],
-		ID:        read[3],
+		ID:        read[0],
+		FirstName: read[1],
+		LastName:  read[2],
+		Email:     read[3],
 	}
 	return a, nil
 }
