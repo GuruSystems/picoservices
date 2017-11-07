@@ -19,10 +19,10 @@ message VerifyResponse {
  string UserID = 1;
 }
 
-message GetDetailResponse {
+message GetDetailRequest {
 string UserID = 1;
 }
-message GetDetailRequest {
+message GetDetailResponse {
 string UserID = 1;
 string Email = 2;
 string Firstname = 3;
