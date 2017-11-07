@@ -103,3 +103,7 @@ func (s *AuthServer) VerifyUserToken(ctx context.Context, req *pb.VerifyRequest)
 		return nil, errors.New(fmt.Sprintf("backend \"%s\" is not implemented", *backend))
 	}
 }
+
+func (s *AuthServer) GetUserDetail(ctx context.Context, req *pb.GetDetailRequest) (*pb.GetDetailResponse, error) {
+	return nil, errors.New("Not implemented yet")
+}

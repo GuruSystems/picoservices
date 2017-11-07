@@ -105,6 +105,14 @@ func authenticate(ctx context.Context, meta metadata.MD) (context.Context, error
 	nctx := context.WithValue(ctx, "authinfo", ai)
 	return nctx, nil
 }
+func GetAuthClient() (apb.AuthenticationServiceClient, error) {
+	if authconn == nil {
+		fmt.Println("No authenticator available")
+		return nil, grpc.Errorf(codes.Unauthenticated, "invalid token")
+	}
+	client := apb.NewAuthenticationServiceClient(authconn)
+	return client, nil
+}
 
 // this is our typical gRPC server startup
 // it sets ourselves up with our own certificates

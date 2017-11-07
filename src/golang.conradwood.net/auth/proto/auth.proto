@@ -19,6 +19,18 @@ message VerifyResponse {
  string UserID = 1;
 }
 
+message GetDetailResponse {
+string UserID = 1;
+}
+message GetDetailRequest {
+string UserID = 1;
+string Email = 2;
+string Firstname = 3;
+string Lastname =4;
+}
+
+
 service AuthenticationService {
  rpc VerifyUserToken(VerifyRequest) returns (VerifyResponse){ }
+ rpc GetUserDetail(GetDetailRequest) returns (GetDetailResponse) { }
 }
