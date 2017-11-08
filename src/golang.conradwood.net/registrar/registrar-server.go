@@ -26,7 +26,7 @@ type serviceEntry struct {
 // static variables for flag parser
 var (
 	port      = flag.Int("port", 5000, "The server port")
-	keepAlive = flag.Int("keepalive", 200, "keep alive interval in milliseconds to check each registered service")
+	keepAlive = flag.Int("keepalive", 2, "keep alive interval in seconds to check each registered service")
 	services  *list.List
 )
 
@@ -46,7 +46,7 @@ func main() {
 	s := new(RegistryService)
 	pb.RegisterRegistryServer(grpcServer, s) // created by proto
 
-	ticker := time.NewTicker(time.Duration(*keepAlive) * time.Millisecond)
+	ticker := time.NewTicker(time.Duration(*keepAlive) * time.Second)
 	go func() {
 		for _ = range ticker.C {
 			CheckRegistry()

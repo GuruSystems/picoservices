@@ -6,6 +6,7 @@ import (
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/metadata"
+	"time"
 	//	"github.com/golang/protobuf/proto"
 	"crypto/tls"
 	"crypto/x509"
@@ -24,12 +25,13 @@ import (
 )
 
 var (
-	servercrt     = flag.String("certificate", "/etc/grpc/server/certificate.pem", "filename of the server certificate")
-	servercertkey = flag.String("certkey", "/etc/grpc/server/privatekey.pem", "the key for the server certificate")
-	serverca      = flag.String("ca", "/etc/grpc/server/ca.pem", "filename of the the CA certificate which signed both client and server certificate")
-	Registry      = flag.String("registry", "localhost:5000", "Registrar server address")
-	serveraddr    = flag.String("address", "", "Address (default: derive from connection to registrar. does not work well with localhost)")
-	authconn      *grpc.ClientConn
+	servercrt        = flag.String("certificate", "/etc/grpc/server/certificate.pem", "filename of the server certificate")
+	servercertkey    = flag.String("certkey", "/etc/grpc/server/privatekey.pem", "the key for the server certificate")
+	serverca         = flag.String("ca", "/etc/grpc/server/ca.pem", "filename of the the CA certificate which signed both client and server certificate")
+	Registry         = flag.String("registry", "localhost:5000", "Registrar server address")
+	serveraddr       = flag.String("address", "", "Address (default: derive from connection to registrar. does not work well with localhost)")
+	authconn         *grpc.ClientConn
+	register_refresh = flag.Int("register_refresh", 10, "registration refresh interval in seconds")
 )
 
 type Register func(server *grpc.Server) error
@@ -118,6 +120,18 @@ func GetAuthClient() (apb.AuthenticationServiceClient, error) {
 	return client, nil
 }
 
+func registerMe(def ServerDef) error {
+	for _, name := range def.names {
+		fmt.Println("Registered Server: ", name)
+		err := AddRegistry(name, def.Port)
+		if err != nil {
+			return fmt.Errorf("Failed to register %s with registry server", name, err)
+		}
+	}
+	return nil
+
+}
+
 // this is our typical gRPC server startup
 // it sets ourselves up with our own certificates
 // which is set for THIS SERVER, so installed/maintained
@@ -176,12 +190,16 @@ func ServerStartup(def ServerDef) error {
 	}
 	for name, _ := range grpcServer.GetServiceInfo() {
 		def.names = append(def.names, name)
-		fmt.Println("Registered Server: ", name)
-		err = AddRegistry(name, def.Port)
-		if err != nil {
-			return fmt.Errorf("Failed to register %s with registry server", name, err)
-		}
 	}
+
+	// start period re-registration
+	registerMe(def)
+	ticker := time.NewTicker(time.Duration(*register_refresh) * time.Second)
+	go func() {
+		for _ = range ticker.C {
+			registerMe(def)
+		}
+	}()
 	// something odd?
 	reflection.Register(grpcServer)
 	// Serve and Listen
