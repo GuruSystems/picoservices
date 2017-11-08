@@ -200,14 +200,16 @@ func ServerStartup(def ServerDef) error {
 	return nil
 }
 
+func serveServiceInfo(w http.ResponseWriter, req *http.Request, sd ServerDef) {
+	for _, name := range sd.names {
+		w.Write([]byte(name))
+	}
+}
 func startHttpServe(sd ServerDef, grpcServer *grpc.Server) error {
 	mux := http.NewServeMux()
 	mux.HandleFunc("/service-info/", func(w http.ResponseWriter, req *http.Request) {
-		for _, name := range sd.names {
-			w.Write([]byte(name))
-		}
+		serveServiceInfo(w, req, sd)
 	})
-
 	gwmux := runtime.NewServeMux()
 	mux.Handle("/", gwmux)
 	serveSwagger(mux)
