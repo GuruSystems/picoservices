@@ -126,7 +126,13 @@ func AddService(sd *pb.ServiceDescription, hostname string, port int32) {
 		se := serviceEntry{loc: sl}
 		services.PushFront(se)
 	}
-
+	// check if address sa already in location
+	for _, adr := range sl.Address {
+		if (adr.Host == sa.Host) && (adr.Port == sa.Port) {
+			fmt.Printf("Re-Registered service %s (%s) at %s:%d\n", sd.Name, sd.Type, hostname, port)
+			return
+		}
+	}
 	// append address to service location
 	sa := new(pb.ServiceAddress)
 	sa.Host = hostname
