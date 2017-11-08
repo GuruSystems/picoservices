@@ -301,6 +301,6 @@ func AddRegistry(name string, port int) error {
 		fmt.Println("failed to register services:", err)
 		return err
 	}
-	fmt.Printf("Response to register service: %v\n", resp)
+	//fmt.Printf("Response to register service: %v\n", resp)
 	return nil
 }
