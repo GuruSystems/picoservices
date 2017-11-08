@@ -265,6 +265,8 @@ func startHttpServe(sd ServerDef, grpcServer *grpc.Server) error {
 func serveSwagger(mux *http.ServeMux) {
 	//fmt.Println("serverSwagger??", mux)
 }
+
+// this function is called by http and works out wether it's a grpc or http-serve request
 func grpcHandlerFunc(grpcServer *grpc.Server, otherHandler http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		path := r.URL.Path
