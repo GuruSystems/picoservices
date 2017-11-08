@@ -4,6 +4,7 @@ package main
 
 import (
 	"fmt"
+	"strings"
 	//	"google.golang.org/grpc/metadata"
 
 	"google.golang.org/grpc"
@@ -16,6 +17,7 @@ import (
 	pb "golang.conradwood.net/auth/proto"
 	"google.golang.org/grpc/credentials"
 	"io/ioutil"
+	"os/user"
 )
 
 // static variables for flag parser
@@ -24,7 +26,7 @@ var (
 	crt        = "/etc/cnw/certs/rpc-client/certificate.pem"
 	key        = "/etc/cnw/certs/rpc-client/privatekey.pem"
 	ca         = "/etc/cnw/certs/rpc-client/ca.pem"
-	token      = flag.String("token", "blabla", "user token to authenticate with")
+	token      = flag.String("token", "user_token", "user token to authenticate with")
 )
 
 func main() {
@@ -57,21 +59,41 @@ func main() {
 	defer conn.Close()
 	fmt.Println("Creating client...")
 	client := pb.NewAuthenticationServiceClient(conn)
-	req := pb.VerifyRequest{Token: *token}
+	tok := ResolveAuthToken(*token)
+	req := pb.VerifyRequest{Token: tok}
 	ctx := context.Background()
 
 	// if TLS is f*** we break here:
 	fmt.Println("RPC call to auth server...")
 	resp, err := client.VerifyUserToken(ctx, &req)
 	if err != nil {
-		fmt.Printf("failed to verify user token: %v", err)
+		fmt.Printf("failed to verify user token: %v\n", err)
 		return
 	}
 	fmt.Printf("Response to verify token: %v\n", resp)
 	gdr := pb.GetDetailRequest{UserID: resp.UserID}
 	det, err := client.GetUserDetail(ctx, &gdr)
 	if err != nil {
-		fmt.Printf("failed to retrieve user %i: %s", resp.UserID, err)
+		fmt.Printf("failed to retrieve user %i: %s\n", resp.UserID, err)
 	}
 	fmt.Println("User: ", det)
+}
+
+func ResolveAuthToken(token string) string {
+	var tok string
+	var btok []byte
+	var fname string
+	fname = "n/a"
+	usr, err := user.Current()
+	if err == nil {
+		fname = fmt.Sprintf("%s/.picoservices/tokens/%s", usr.HomeDir, token)
+		btok, _ = ioutil.ReadFile(fname)
+	}
+	if (err != nil) || (len(btok) == 0) {
+		tok = token
+	} else {
+		tok = string(btok)
+		fmt.Printf("Using token from %s\n", fname)
+	}
+	return strings.TrimSpace(tok)
 }

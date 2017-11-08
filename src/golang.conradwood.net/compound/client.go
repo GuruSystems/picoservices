@@ -13,6 +13,7 @@ import (
 	"google.golang.org/grpc/metadata"
 	"io/ioutil"
 	"os/user"
+	"strings"
 )
 
 var (
@@ -97,6 +98,7 @@ func SetAuthToken() context.Context {
 		tok = string(btok)
 		fmt.Printf("Using token from %s\n", fname)
 	}
+	tok = strings.TrimSpace(tok)
 	md := metadata.Pairs("token", tok,
 		"clid", "itsme",
 	)
