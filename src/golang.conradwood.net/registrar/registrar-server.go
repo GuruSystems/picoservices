@@ -128,7 +128,7 @@ func AddService(sd *pb.ServiceDescription, hostname string, port int32) {
 	}
 	// check if address sa already in location
 	for _, adr := range sl.Address {
-		if (adr.Host == sa.Host) && (adr.Port == sa.Port) {
+		if (adr.Host == hostname) && (adr.Port == port) {
 			fmt.Printf("Re-Registered service %s (%s) at %s:%d\n", sd.Name, sd.Type, hostname, port)
 			return
 		}
