@@ -12,6 +12,7 @@ import (
 	"google.golang.org/grpc/credentials"
 	"google.golang.org/grpc/metadata"
 	"io/ioutil"
+	"os/user"
 )
 
 var (
@@ -19,7 +20,7 @@ var (
 	clientcrt = flag.String("clientcert", "/etc/cnw/certs/rfc-client/certificate.pem", "Client certificate")
 	clientkey = flag.String("clientkey", "/etc/cnw/certs/rfc-client/privatekey.pem", "client private key")
 	clientca  = flag.String("clientca", "/etc/cnw/certs/rfc-client/ca.pem", "Certificate Authority")
-	token     = flag.String("token", "user_token", "The authentication token (cookie) to authenticate with. May be name of a file in ~/.picoservices, if so file contents shall be used as cookie")
+	token     = flag.String("token", "user_token", "The authentication token (cookie) to authenticate with. May be name of a file in ~/.picoservices/tokens/, if so file contents shall be used as cookie")
 )
 
 // given a service name we look up its address in the registry
@@ -81,9 +82,25 @@ func DialWrapper(servicename string) (*grpc.ClientConn, error) {
 }
 
 func SetAuthToken() context.Context {
-	md := metadata.Pairs("token", *token,
+	var tok string
+	var btok []byte
+	var fname string
+	fname = "n/a"
+	usr, err := user.Current()
+	if err == nil {
+		fname = fmt.Sprintf("%s/.picoservices/tokens/%s", usr.HomeDir, *token)
+		btok, _ = ioutil.ReadFile(fname)
+	}
+	if (err != nil) || (len(btok) == 0) {
+		tok = *token
+	} else {
+		tok = string(btok)
+		fmt.Printf("Using token from %s\n", fname)
+	}
+	md := metadata.Pairs("token", tok,
 		"clid", "itsme",
 	)
+
 	ctx := metadata.NewOutgoingContext(context.Background(), md)
 	return ctx
 }
