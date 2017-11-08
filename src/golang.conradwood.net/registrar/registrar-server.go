@@ -129,7 +129,7 @@ func AddService(sd *pb.ServiceDescription, hostname string, port int32) {
 	// check if address sa already in location
 	for _, adr := range sl.Address {
 		if (adr.Host == hostname) && (adr.Port == port) {
-			fmt.Printf("Re-Registered service %s (%s) at %s:%d\n", sd.Name, sd.Type, hostname, port)
+			//fmt.Printf("Re-Registered service %s (%s) at %s:%d\n", sd.Name, sd.Type, hostname, port)
 			return
 		}
 	}
@@ -177,11 +177,11 @@ func (s *RegistryService) RegisterService(ctx context.Context, pr *pb.ServiceLoc
 		fmt.Println("Error getting peer ")
 		return nil, errors.New("Error getting peer from context")
 	}
-	peerhost, peerport, err := net.SplitHostPort(peer.Addr.String())
+	peerhost, _, err := net.SplitHostPort(peer.Addr.String())
 	if err != nil {
 		return nil, errors.New("Invalid peer")
 	}
-	fmt.Printf("Connection from host %s on port %s\n", peerhost, peerport)
+	//fmt.Printf("Connection from host %s on port %s\n", peerhost, peerport)
 	if len(pr.Address) == 0 {
 		return nil, errors.New("Missing address!")
 	}
@@ -195,7 +195,7 @@ func (s *RegistryService) RegisterService(ctx context.Context, pr *pb.ServiceLoc
 	rr.Location.Address = []*pb.ServiceAddress{}
 
 	for _, address := range pr.Address {
-		fmt.Printf("  reported: \"%s\" @ \"%s, port %d\"\n", pr.Service.Name, address.Host, address.Port)
+		//fmt.Printf("  reported: \"%s\" @ \"%s, port %d\"\n", pr.Service.Name, address.Host, address.Port)
 		host := address.Host
 		if host == "" {
 			host = peerhost

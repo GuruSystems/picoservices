@@ -25,9 +25,9 @@ import (
 )
 
 var (
-	servercrt        = flag.String("certificate", "/etc/grpc/server/certificate.pem", "filename of the server certificate")
-	servercertkey    = flag.String("certkey", "/etc/grpc/server/privatekey.pem", "the key for the server certificate")
-	serverca         = flag.String("ca", "/etc/grpc/server/ca.pem", "filename of the the CA certificate which signed both client and server certificate")
+	servercrt        = flag.String("rpc_server_certificate", "/etc/grpc/server/certificate.pem", "filename of the server certificate to be used for incoming connections to this rpc server")
+	servercertkey    = flag.String("rpc_server_certkey", "/etc/grpc/server/privatekey.pem", "the key for the server certificate to be used for incoming connections to this rpc server")
+	serverca         = flag.String("rpc_server_ca", "/etc/grpc/server/ca.pem", "filename of the the CA certificate which signed both client and server certificate")
 	Registry         = flag.String("registry", "localhost:5000", "Registrar server address")
 	serveraddr       = flag.String("address", "", "Address (default: derive from connection to registrar. does not work well with localhost)")
 	authconn         *grpc.ClientConn
@@ -122,7 +122,7 @@ func GetAuthClient() (apb.AuthenticationServiceClient, error) {
 
 func registerMe(def ServerDef) error {
 	for _, name := range def.names {
-		fmt.Println("Registered Server: ", name)
+		//fmt.Println("Registered Server: ", name)
 		err := AddRegistry(name, def.Port)
 		if err != nil {
 			return fmt.Errorf("Failed to register %s with registry server", name, err)
@@ -280,7 +280,7 @@ func grpcHandlerFunc(grpcServer *grpc.Server, otherHandler http.Handler) http.Ha
 }
 
 func AddRegistry(name string, port int) error {
-	fmt.Printf("Registering service %s with registry server\n", name)
+	//fmt.Printf("Registering service %s with registry server\n", name)
 	opts := []grpc.DialOption{grpc.WithInsecure()}
 	conn, err := grpc.Dial(*Registry, opts...)
 	if err != nil {
