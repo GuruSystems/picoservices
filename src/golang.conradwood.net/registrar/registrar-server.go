@@ -26,7 +26,7 @@ type serviceEntry struct {
 // static variables for flag parser
 var (
 	port      = flag.Int("port", 5000, "The server port")
-	keepAlive = flag.Int("keepalive", 2, "keep alive interval in seconds to check each registered service")
+	keepAlive = flag.Int("keepalive", 200, "keep alive interval in milliseconds to check each registered service")
 	services  *list.List
 )
 
@@ -46,7 +46,7 @@ func main() {
 	s := new(RegistryService)
 	pb.RegisterRegistryServer(grpcServer, s) // created by proto
 
-	ticker := time.NewTicker(time.Duration(*keepAlive) * time.Second)
+	ticker := time.NewTicker(time.Duration(*keepAlive) * time.Millisecond)
 	go func() {
 		for _ = range ticker.C {
 			CheckRegistry()
@@ -73,12 +73,16 @@ func CheckRegistry() {
 func CheckService(desc *pb.ServiceDescription, addr *pb.ServiceAddress) error {
 	url := fmt.Sprintf("https://%s:%d/service-info/name", addr.Host, addr.Port)
 	//	fmt.Printf("Checking service %s@%s\n", desc.Name, url)
-
+	d := 5 * time.Second
 	tr := &http.Transport{
-		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+		TLSClientConfig:       &tls.Config{InsecureSkipVerify: true},
+		MaxIdleConns:          50,
+		MaxIdleConnsPerHost:   10,
+		IdleConnTimeout:       d,
+		ResponseHeaderTimeout: d,
+		ExpectContinueTimeout: d,
 	}
 	client := &http.Client{Transport: tr}
-
 	resp, err := client.Get(url)
 	if err != nil {
 		return err

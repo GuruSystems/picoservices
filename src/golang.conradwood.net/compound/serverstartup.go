@@ -200,6 +200,7 @@ func ServerStartup(def ServerDef) error {
 	return nil
 }
 
+// this services the /service-info/ url
 func serveServiceInfo(w http.ResponseWriter, req *http.Request, sd ServerDef) {
 	for _, name := range sd.names {
 		w.Write([]byte(name))
