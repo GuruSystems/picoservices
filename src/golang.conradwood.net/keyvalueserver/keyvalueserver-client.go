@@ -24,7 +24,7 @@ func main() {
 		return
 	}
 	defer conn.Close()
-	ctx := compound.SetAuthToken("valid-token")
+	ctx := compound.SetAuthToken()
 
 	client := pb.NewKeyValueServiceClient(conn)
 	if *action == "put" {

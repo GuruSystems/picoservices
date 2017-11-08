@@ -19,6 +19,7 @@ var (
 	clientcrt = flag.String("clientcert", "/etc/cnw/certs/rfc-client/certificate.pem", "Client certificate")
 	clientkey = flag.String("clientkey", "/etc/cnw/certs/rfc-client/privatekey.pem", "client private key")
 	clientca  = flag.String("clientca", "/etc/cnw/certs/rfc-client/ca.pem", "Certificate Authority")
+	token     = flag.String("token", "user_token", "The authentication token (cookie) to authenticate with. May be name of a file in ~/.picoservices, if so file contents shall be used as cookie")
 )
 
 // given a service name we look up its address in the registry
@@ -79,8 +80,8 @@ func DialWrapper(servicename string) (*grpc.ClientConn, error) {
 	return cc, nil
 }
 
-func SetAuthToken(token string) context.Context {
-	md := metadata.Pairs("token", token,
+func SetAuthToken() context.Context {
+	md := metadata.Pairs("token", *token,
 		"clid", "itsme",
 	)
 	ctx := metadata.NewOutgoingContext(context.Background(), md)
