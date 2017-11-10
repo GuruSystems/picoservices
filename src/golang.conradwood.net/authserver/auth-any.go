@@ -10,6 +10,14 @@ type AnyAuthenticator struct {
 	auth.Authenticator
 }
 
+func (pga *AnyAuthenticator) GetUserDetail(user string) (*auth.User, error) {
+	return auth.User{
+		FirstName: "john",
+		LastName:  "doe",
+		Email:     "john.doe@microsoft.com",
+		ID:        "1",
+	}
+}
 func (pga *AnyAuthenticator) Authenticate(token string) (string, error) {
 	return "1", nil
 }
