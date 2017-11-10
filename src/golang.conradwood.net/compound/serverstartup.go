@@ -21,6 +21,7 @@ import (
 	"io/ioutil"
 	"net"
 	"net/http"
+	"os"
 	"strings"
 )
 
@@ -224,10 +225,18 @@ func serveServiceInfo(w http.ResponseWriter, req *http.Request, sd ServerDef) {
 		w.Write([]byte(name))
 	}
 }
+
+// this services the /pleaseshutdown url
+func pleaseShutdown(w http.ResponseWriter, req *http.Request, sd ServerDef) {
+	os.Exit(0)
+}
 func startHttpServe(sd ServerDef, grpcServer *grpc.Server) error {
 	mux := http.NewServeMux()
-	mux.HandleFunc("/service-info/", func(w http.ResponseWriter, req *http.Request) {
+	mux.HandleFunc("/internal/service-info/", func(w http.ResponseWriter, req *http.Request) {
 		serveServiceInfo(w, req, sd)
+	})
+	mux.HandleFunc("/internal/pleaseshutdown", func(w http.ResponseWriter, req *http.Request) {
+		pleaseShutdown(w, req, sd)
 	})
 	gwmux := runtime.NewServeMux()
 	mux.Handle("/", gwmux)
@@ -270,7 +279,7 @@ func serveSwagger(mux *http.ServeMux) {
 func grpcHandlerFunc(grpcServer *grpc.Server, otherHandler http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		path := r.URL.Path
-		if strings.HasPrefix(path, "/service-info") {
+		if strings.HasPrefix(path, "/internal/") {
 			otherHandler.ServeHTTP(w, r)
 		} else {
 			fmt.Println("Req: ", path)

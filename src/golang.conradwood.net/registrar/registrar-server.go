@@ -15,12 +15,19 @@ import (
 	"log"
 	"net"
 	"net/http"
+	"os"
 	"time"
 )
 
 type serviceEntry struct {
-	loc      *pb.ServiceLocation
-	failures int
+	loc       *pb.ServiceDescription
+	instances []*serviceInstance
+}
+type serviceInstance struct {
+	failures        int
+	firstRegistered time.Time
+	lastSuccess     time.Time
+	address         pb.ServiceAddress
 }
 
 // static variables for flag parser
@@ -61,17 +68,20 @@ func main() {
 ***********************************/
 func CheckRegistry() {
 	for e := services.Front(); e != nil; e = e.Next() {
-		sloc := e.Value.(serviceEntry).loc
-		for _, adr := range sloc.Address {
-			err := CheckService(sloc.Service, adr)
+		sloc := e.Value.(*serviceEntry)
+		for _, instance := range sloc.instances {
+			err := CheckService(sloc, instance)
 			if err != nil {
-				fmt.Printf("Service %s@%s failed: %s\n", sloc.Service, adr, err)
+				fmt.Printf("Service %s@%s:%d failed %d times: %s\n", sloc.loc.Name, instance.address.Host, instance.address.Port, instance.failures, err)
+				instance.failures++
+			} else {
+				instance.failures = 0
 			}
 		}
 	}
 }
-func CheckService(desc *pb.ServiceDescription, addr *pb.ServiceAddress) error {
-	url := fmt.Sprintf("https://%s:%d/service-info/name", addr.Host, addr.Port)
+func CheckService(desc *serviceEntry, addr *serviceInstance) error {
+	url := fmt.Sprintf("https://%s:%d/internal/service-info/name", addr.address.Host, addr.address.Port)
 	//	fmt.Printf("Checking service %s@%s\n", desc.Name, url)
 	d := 5 * time.Second
 	tr := &http.Transport{
@@ -93,8 +103,8 @@ func CheckService(desc *pb.ServiceDescription, addr *pb.ServiceAddress) error {
 		return err
 	}
 	sn := string(body)
-	if sn != desc.Name {
-		fmt.Printf("Reported Service: \"%s\", expected: \"%s\"\n", sn, desc.Name)
+	if sn != desc.loc.Name {
+		fmt.Printf("Reported Service: \"%s\", expected: \"%s\"\n", sn, desc.loc.Name)
 		return errors.New("Servicename mismatch")
 	}
 	return nil
@@ -103,11 +113,11 @@ func CheckService(desc *pb.ServiceDescription, addr *pb.ServiceAddress) error {
 /**********************************
 * helpers
 ***********************************/
-func FindService(sd *pb.ServiceDescription) *pb.ServiceLocation {
+func FindService(sd *pb.ServiceDescription) *serviceEntry {
 	for e := services.Front(); e != nil; e = e.Next() {
-		srvloc := e.Value.(serviceEntry).loc
-		if srvloc.Service.Name == sd.Name {
-			return srvloc
+		sl := e.Value.(*serviceEntry)
+		if sl.loc.Name == sd.Name {
+			return sl
 		}
 	}
 	return nil
@@ -120,25 +130,34 @@ func AddService(sd *pb.ServiceDescription, hostname string, port int32) {
 
 	sl := FindService(sd)
 	if sl == nil {
-		sl = new(pb.ServiceLocation)
-		sl.Service = new(pb.ServiceDescription)
-		*sl.Service = *sd
-		se := serviceEntry{loc: sl}
-		services.PushFront(se)
+		fmt.Printf("New service! %s\n", sd)
+		sln := serviceEntry{}
+		sln.loc = sd
+		sl = &sln
+		sl.instances = make([]*serviceInstance, 0)
+		services.PushFront(sl)
 	}
 	// check if address sa already in location
-	for _, adr := range sl.Address {
-		if (adr.Host == hostname) && (adr.Port == port) {
+	for _, instance := range sl.instances {
+		if (instance.address.Host == hostname) && (instance.address.Port == port) {
 			//fmt.Printf("Re-Registered service %s (%s) at %s:%d\n", sd.Name, sd.Type, hostname, port)
 			return
 		}
 	}
-	// append address to service location
-	sa := new(pb.ServiceAddress)
-	sa.Host = hostname
-	sa.Port = port
-	sl.Address = append(sl.Address, sa)
-	fmt.Printf("Registered service %s (%s) at %s:%d\n", sd.Name, sd.Type, hostname, port)
+	// new instance: append it
+	si := new(serviceInstance)
+	si.firstRegistered = time.Now()
+	si.lastSuccess = time.Now()
+	si.address = pb.ServiceAddress{Host: hostname, Port: port}
+	sl.instances = append(sl.instances, si)
+	fmt.Printf("Registered service %s (%s) at %s:%d (%d)\n", sd.Name, sd.Type, hostname, port, len(sl.instances))
+	slx := FindService(sd)
+	if len(slx.instances) == 0 {
+		fmt.Println("Error, did not save new service")
+		os.Exit(10)
+	}
+	fmt.Printf("Service: %s with %d instances \n", sl, len(sl.instances))
+
 }
 
 /**********************************
@@ -165,8 +184,14 @@ func (s *RegistryService) GetServiceAddress(ctx context.Context, gr *pb.GetReque
 		return nil, errors.New("service not registered")
 	}
 	resp := pb.GetResponse{}
-	resp.Service = gr.Service
-	resp.Location = sl
+	resp.Service = sl.loc
+	resp.Location = new(pb.ServiceLocation)
+	resp.Location.Service = sl.loc
+	//var serviceAddresses []pb.ServiceAddress
+	for _, in := range sl.instances {
+		sa := in.address
+		resp.Location.Address = append(resp.Location.Address, &sa)
+	}
 	return &resp, nil
 }
 
@@ -211,13 +236,20 @@ func (s *RegistryService) ListServices(ctx context.Context, pr *pb.ListRequest) 
 	lr.Service = []*pb.GetResponse{}
 	// one GetResponse per element
 	for e := services.Front(); e != nil; e = e.Next() {
-		getr := pb.GetResponse{}
-		lr.Service = append(lr.Service, &getr)
-		sloc := e.Value.(serviceEntry).loc
-		getr.Location = sloc
-		sd := sloc.Service
-		getr.Service = sd
-		fmt.Println("Listing service: ", getr)
+		se := e.Value.(*serviceEntry)
+		fmt.Printf("Service %s has %d instances\n", se.loc.Name, len(se.instances))
+		rr := pb.GetResponse{}
+		lr.Service = append(lr.Service, &rr)
+
+		rr.Service = se.loc
+		rr.Location = new(pb.ServiceLocation)
+		rr.Location.Service = rr.Service
+		rr.Location.Address = []*pb.ServiceAddress{}
+		for _, in := range se.instances {
+			sa := &in.address
+			rr.Location.Address = append(rr.Location.Address, sa)
+			fmt.Printf("Service %s @ %s:%d\n", se.loc.Name, in.address.Host, in.address.Port)
+		}
 	}
 	return lr, nil
 }
