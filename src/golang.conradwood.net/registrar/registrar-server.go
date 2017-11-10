@@ -66,6 +66,7 @@ func main() {
 * check registered servers regularly
 ***********************************/
 func CheckRegistry() {
+	// check instances
 	for e := services.Front(); e != nil; e = e.Next() {
 		sloc := e.Value.(*serviceEntry)
 		for _, instance := range sloc.instances {
@@ -75,9 +76,35 @@ func CheckRegistry() {
 				instance.failures++
 			} else {
 				instance.failures = 0
+				instance.lastSuccess = time.Now()
 			}
 		}
 	}
+
+	// remove failed instances
+	for e := services.Front(); e != nil; e = e.Next() {
+		se := e.Value.(*serviceEntry)
+		for i := 0; i < len(se.instances); i++ {
+			instance := se.instances[i]
+			if !isValid(instance) {
+				se.instances[len(se.instances)-1], se.instances[i] = se.instances[i], se.instances[len(se.instances)-1]
+				se.instances = se.instances[:len(se.instances)-1]
+				name := fmt.Sprintf("%s@%s:%d", se.loc.Name, instance.address.Host,
+					instance.address.Port)
+				fmt.Printf("Instance %s removed due to excessive failures\n", name)
+				break
+			}
+		}
+	}
+}
+func isValid(si *serviceInstance) bool {
+	if si.failures < 10 {
+		return true
+	}
+	if time.Since(si.lastSuccess) < (time.Second * 30) {
+		return true
+	}
+	return false
 }
 func CheckService(desc *serviceEntry, addr *serviceInstance) error {
 	url := fmt.Sprintf("https://%s:%d/internal/service-info/name", addr.address.Host, addr.address.Port)
