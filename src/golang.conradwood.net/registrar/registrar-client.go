@@ -11,6 +11,7 @@ import (
 	//	"net"
 	pb "golang.conradwood.net/registrar/proto"
 	"log"
+	"os"
 )
 
 // static variables for flag parser
@@ -29,6 +30,18 @@ func main() {
 	}
 	defer conn.Close()
 	client := pb.NewRegistryClient(conn)
+	na := flag.NArg()
+	if na > 1 {
+		if flag.Arg(0) == "shutdown" {
+			for i := 1; i < na; i++ {
+				s := flag.Arg(i)
+				fmt.Printf("Shutting down service \"%s\"\n", s)
+				sh := pb.ShutdownRequest{ServiceName: s}
+				client.ShutdownService(context.Background(), &sh)
+			}
+			os.Exit(0)
+		}
+	}
 	req := pb.ListRequest{}
 	resp, err := client.ListServices(context.Background(), &req)
 	if err != nil {

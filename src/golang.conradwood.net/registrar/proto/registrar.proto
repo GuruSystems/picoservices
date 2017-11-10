@@ -39,15 +39,18 @@ message GetResponse {
 ServiceDescription Service=1;
 ServiceLocation Location=2;
 }
-
+message ShutdownRequest {
+string ServiceName=1;
+}
 message ListResponse {
 repeated GetResponse Service = 3;
 }
-
+message EmptyResponse{}
 message ListRequest{}
 
 service Registry {
  rpc RegisterService(ServiceLocation) returns (GetResponse);
  rpc GetServiceAddress(GetRequest) returns (GetResponse);
  rpc ListServices(ListRequest) returns (ListResponse);
+ rpc ShutdownService(ShutdownRequest) returns (EmptyResponse);
 }

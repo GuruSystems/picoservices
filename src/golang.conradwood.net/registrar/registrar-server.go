@@ -59,7 +59,6 @@ func main() {
 			CheckRegistry()
 		}
 	}()
-	fmt.Println("ticker: ", ticker)
 	grpcServer.Serve(lis)
 }
 
@@ -252,4 +251,28 @@ func (s *RegistryService) ListServices(ctx context.Context, pr *pb.ListRequest) 
 		}
 	}
 	return lr, nil
+}
+func (s *RegistryService) ShutdownService(ctx context.Context, pr *pb.ShutdownRequest) (*pb.EmptyResponse, error) {
+
+	sd := pb.ServiceDescription{Name: pr.ServiceName}
+	sl := FindService(&sd)
+	for _, instance := range sl.instances {
+		url := fmt.Sprintf("https://%s:%d/internal/pleaseshutdown",
+			instance.address.Host, instance.address.Port)
+		d := 5 * time.Second
+		tr := &http.Transport{
+			TLSClientConfig:       &tls.Config{InsecureSkipVerify: true},
+			MaxIdleConns:          50,
+			MaxIdleConnsPerHost:   10,
+			IdleConnTimeout:       d,
+			ResponseHeaderTimeout: d,
+			ExpectContinueTimeout: d,
+		}
+		client := &http.Client{Transport: tr}
+		_, err := client.Get(url)
+		if err != nil {
+			fmt.Printf("Failed to shutdown: %s\n", err)
+		}
+	}
+	return &pb.EmptyResponse{}, nil
 }

@@ -4,5 +4,5 @@ if [ ! -x dist/amd64/registrar-server ]; then
 fi
 
 for thi in `ls dist/amd64/*-server`; do
-	$thi &
+       $thi &
 done
