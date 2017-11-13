@@ -8,8 +8,8 @@ import (
 	"flag"
 
 	"golang.conradwood.net/auth"
-	"golang.conradwood.net/compound"
 	pb "golang.conradwood.net/keyvalueserver/proto"
+	"golang.conradwood.net/server"
 	"golang.org/x/net/context"
 	"google.golang.org/grpc/peer"
 )
@@ -36,12 +36,12 @@ func st(server *grpc.Server) error {
 
 func main() {
 	flag.Parse() // parse stuff. see "var" section above
-	sd := compound.ServerDef{
+	sd := server.ServerDef{
 		Port: *port,
 	}
 	objectStore = list.New()
 	sd.Register = st
-	err := compound.ServerStartup(sd)
+	err := server.ServerStartup(sd)
 	if err != nil {
 		fmt.Printf("failed to start server: %s\n", err)
 	}

@@ -5,7 +5,7 @@ package main
 import (
 	"flag"
 	"fmt"
-	"golang.conradwood.net/compound"
+	"golang.conradwood.net/client"
 	pb "golang.conradwood.net/keyvalueserver/proto"
 )
 
@@ -18,13 +18,13 @@ var (
 
 func main() {
 	flag.Parse()
-	conn, err := compound.DialWrapper("keyvalueserver.KeyValueService")
+	conn, err := client.DialWrapper("keyvalueserver.KeyValueService")
 	if err != nil {
 		fmt.Println("failed to dial: %v", err)
 		return
 	}
 	defer conn.Close()
-	ctx := compound.SetAuthToken()
+	ctx := client.SetAuthToken()
 
 	client := pb.NewKeyValueServiceClient(conn)
 	if *action == "put" {

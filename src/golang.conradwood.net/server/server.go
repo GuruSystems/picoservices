@@ -1,4 +1,4 @@
-package compound
+package server
 
 import (
 	"flag"
@@ -10,9 +10,11 @@ import (
 	//	"github.com/golang/protobuf/proto"
 	"crypto/tls"
 	"crypto/x509"
+	"golang.conradwood.net/client"
 	"golang.org/x/net/context"
 	"google.golang.org/grpc/credentials"
 	"google.golang.org/grpc/reflection"
+
 	//	"google.golang.org/grpc/peer"
 	"golang.conradwood.net/auth"
 	apb "golang.conradwood.net/auth/proto"
@@ -178,7 +180,7 @@ func ServerStartup(def ServerDef) error {
 		)
 
 		// set up a connection to our authentication service
-		authconn, err = DialWrapper("auth.AuthenticationService")
+		authconn, err = client.DialWrapper("auth.AuthenticationService")
 		if err != nil {
 			return fmt.Errorf("Failed to connect to authserver")
 		}

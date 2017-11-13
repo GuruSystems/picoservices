@@ -182,7 +182,7 @@ func AddService(sd *pb.ServiceDescription, hostname string, port int32) {
 		fmt.Println("Error, did not save new service")
 		os.Exit(10)
 	}
-	fmt.Printf("Service: %s with %d instances \n", sl, len(sl.instances))
+	//fmt.Printf("Service: %s with %d instances \n", sl, len(sl.instances))
 
 }
 

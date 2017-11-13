@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"golang.conradwood.net/auth"
 	pb "golang.conradwood.net/auth/proto"
-	"golang.conradwood.net/compound"
+	"golang.conradwood.net/server"
 	"golang.org/x/net/context"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/peer"
@@ -16,7 +16,7 @@ import (
 // static variables for flag parser
 var (
 	backend  = flag.String("backend", "none", "backend to use: all|none|postgres|file")
-	port     = flag.Int("port", 10000, "The server port")
+	port     = flag.Int("port", 4998, "The server port")
 	dbhost   = flag.String("dbhost", "postgres", "hostname of the postgres database rdms")
 	dbdb     = flag.String("database", "rpcusers", "database to use for authentication")
 	dbuser   = flag.String("dbuser", "root", "username for the database to use for authentication")
@@ -63,13 +63,13 @@ func start() error {
 		os.Exit(10)
 	}
 
-	sd := compound.ServerDef{
+	sd := server.ServerDef{
 		Port: *port,
 		// we ARE the authentication service so don't insist on authenticated calls
 		NoAuth: true,
 	}
 	sd.Register = st
-	err = compound.ServerStartup(sd)
+	err = server.ServerStartup(sd)
 	if err != nil {
 		fmt.Printf("failed to start server: %s\n", err)
 	}

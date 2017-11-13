@@ -1,4 +1,4 @@
-package compound
+package client
 
 import (
 	"crypto/tls"
@@ -17,7 +17,7 @@ import (
 )
 
 var (
-	//	Registry  = flag.String("registrar", "localhost:5000", "address of the registrar server (for lookups)")
+	Registry  = flag.String("registrar", "localhost:5000", "address of the registrar server (for lookups)")
 	clientcrt = flag.String("clientcert", "/etc/cnw/certs/rfc-client/certificate.pem", "Client certificate")
 	clientkey = flag.String("clientkey", "/etc/cnw/certs/rfc-client/privatekey.pem", "client private key")
 	clientca  = flag.String("clientca", "/etc/cnw/certs/rfc-client/ca.pem", "Certificate Authority")
