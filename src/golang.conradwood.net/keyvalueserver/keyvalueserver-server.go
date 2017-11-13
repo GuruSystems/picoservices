@@ -22,7 +22,7 @@ type ValueEntry struct {
 
 // static variables for flag parser
 var (
-	port        = flag.Int("port", 10000, "The server port")
+	port        = flag.Int("port", 4999, "The server port")
 	objectStore *list.List
 )
 
