@@ -35,7 +35,13 @@ var (
 	serveraddr       = flag.String("address", "", "Address (default: derive from connection to registrar. does not work well with localhost)")
 	authconn         *grpc.ClientConn
 	register_refresh = flag.Int("register_refresh", 10, "registration refresh interval in seconds")
+	usercache        = make(map[string]*UserCache)
 )
+
+type UserCache struct {
+	UserID  string
+	created time.Time
+}
 
 type Register func(server *grpc.Server) error
 
@@ -82,6 +88,23 @@ func UnaryAuthInterceptor(ctx context.Context, req interface{}, info *grpc.Unary
 	return handler(nctx, req)
 }
 
+// return userid
+func getUserFromCache(token string) string {
+	uc := usercache[token]
+	if uc == nil {
+		return ""
+	}
+	if time.Since(uc.created) > (time.Minute * 5) {
+		return ""
+	}
+	return uc.UserID
+
+}
+func addUserToCache(token string, id string) {
+	uc := UserCache{UserID: id, created: time.Now()}
+	usercache[token] = &uc
+}
+
 // we must not return useful errormessages here,
 // so we print them to stdout instead and return a generic message
 func authenticate(ctx context.Context, meta metadata.MD) (context.Context, error) {
@@ -94,6 +117,12 @@ func authenticate(ctx context.Context, meta metadata.MD) (context.Context, error
 		fmt.Println("No authenticator available")
 		return nil, grpc.Errorf(codes.Unauthenticated, "invalid token")
 	}
+	uc := getUserFromCache(token)
+	if uc != "" {
+		ai := auth.AuthInfo{UserID: uc}
+		nctx := context.WithValue(ctx, "authinfo", ai)
+		return nctx, nil
+	}
 	client := apb.NewAuthenticationServiceClient(authconn)
 	req := &apb.VerifyRequest{Token: token}
 	resp, err := client.VerifyUserToken(ctx, req)
@@ -105,6 +134,7 @@ func authenticate(ctx context.Context, meta metadata.MD) (context.Context, error
 		fmt.Println("BUG: a user was authenticated but no userid returned!")
 		return nil, grpc.Errorf(codes.Unauthenticated, "invalid token")
 	}
+	addUserToCache(token, resp.UserID)
 	ai := auth.AuthInfo{UserID: resp.UserID}
 	fmt.Printf("Authenticated user \"%s\".\n", resp.UserID)
 	nctx := context.WithValue(ctx, "authinfo", ai)

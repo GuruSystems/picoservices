@@ -16,6 +16,7 @@ import (
 	"net"
 	"net/http"
 	"os"
+	"strings"
 	"time"
 )
 
@@ -251,12 +252,47 @@ func (s *RegistryService) RegisterService(ctx context.Context, pr *pb.ServiceLoc
 		if host == "" {
 			host = peerhost
 		}
+		if host == "127.0.0.1" {
+			host = GetLocalIP()
+			if host == "" {
+				return nil, errors.New("Not registering at localhost")
+			}
+		}
 		AddService(pr.Service, host, address.Port)
 		rr.Location.Address = append(rr.Location.Address, &pb.ServiceAddress{Host: host, Port: address.Port})
 	}
 	return rr, nil
 }
-
+func GetLocalIP() string {
+	ifaces, err := net.Interfaces()
+	if err != nil {
+		fmt.Println("Failed to get interfaces: ", err)
+		return ""
+	}
+	for _, i := range ifaces {
+		addrs, err := i.Addrs()
+		// handle err
+		if err != nil {
+			fmt.Println("Failed to get address: ", err)
+			return ""
+		}
+		for _, addr := range addrs {
+			var ip net.IP
+			switch v := addr.(type) {
+			case *net.IPNet:
+				ip = v.IP
+			case *net.IPAddr:
+				ip = v.IP
+			}
+			// process IP address
+			s := ip.String()
+			if (s != "127.0.0.1") && (!strings.Contains(s, ":")) {
+				return s
+			}
+		}
+	}
+	return ""
+}
 func (s *RegistryService) ListServices(ctx context.Context, pr *pb.ListRequest) (*pb.ListResponse, error) {
 	lr := new(pb.ListResponse)
 	lr.Service = []*pb.GetResponse{}
