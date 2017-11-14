@@ -314,7 +314,7 @@ func grpcHandlerFunc(grpcServer *grpc.Server, otherHandler http.Handler) http.Ha
 		if strings.HasPrefix(path, "/internal/") {
 			otherHandler.ServeHTTP(w, r)
 		} else {
-			fmt.Println("Req: ", path)
+			//fmt.Println("Req: ", path)
 			grpcServer.ServeHTTP(w, r)
 		}
 	})
