@@ -27,6 +27,10 @@ export GOBIN=`pwd`/dist/amd64
 export GOOS=linux
 export GOARCH=amd64
 buildall
+export GOBIN=`pwd`/dist/darwin
+export GOOS=darwin
+export GOARCH=386
+buildall
 
 env
 
