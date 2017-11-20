@@ -32,6 +32,7 @@ export GOOS=darwin
 export GOARCH=386
 buildall
 
+
 env
 
 build-repo-client -branch=${GIT_BRANCH} -build=${BUILD_NUMBER} -commitid=${COMMIT_ID} -commitmsg="commit msg unknown" -repository=${PROJECT_NAME} -server_addr=buildrepo:5004 
