@@ -36,6 +36,7 @@ var (
 	authconn         *grpc.ClientConn
 	register_refresh = flag.Int("register_refresh", 10, "registration refresh interval in seconds")
 	usercache        = make(map[string]*UserCache)
+	ctrmetrics       = make(map[string]*uint64)
 )
 
 type UserCache struct {
@@ -253,8 +254,23 @@ func ServerStartup(def ServerDef) error {
 
 // this services the /service-info/ url
 func serveServiceInfo(w http.ResponseWriter, req *http.Request, sd ServerDef) {
-	for _, name := range sd.names {
-		w.Write([]byte(name))
+	p := req.URL.Path
+	fmt.Printf("Request path: \"%s\"\n", p)
+	if strings.HasPrefix(p, "/internal/service-info/name") {
+		for _, name := range sd.names {
+			w.Write([]byte(name))
+		}
+	} else if strings.HasPrefix(p, "/internal/service-info/metrics") {
+		m := strings.TrimPrefix(p, "/internal/service-info/metrics")
+		m = strings.TrimLeft(m, "/")
+		up := ctrmetrics[m]
+		if up == nil {
+			fmt.Printf("Metric request for unknown metric: \"%s\"\n", m)
+			return
+		}
+		fmt.Fprintf(w, "%d", *up)
+	} else {
+		fmt.Printf("Invalid path: \"%s\"\n")
 	}
 }
 
@@ -346,5 +362,11 @@ func AddRegistry(name string, port int) error {
 		fmt.Println("Registration failed with no error provided.")
 	}
 	//fmt.Printf("Response to register service: %v\n", resp)
+	return nil
+}
+
+// expose an ever-increasing counter with the given metric
+func ExposeMetricCounter(name string, value *uint64) error {
+	ctrmetrics[name] = value
 	return nil
 }
