@@ -233,13 +233,15 @@ func (s *RegistryService) RegisterService(ctx context.Context, pr *pb.ServiceLoc
 	if err != nil {
 		return nil, errors.New("Invalid peer")
 	}
-	//fmt.Printf("Connection from host %s on port %s\n", peerhost, peerport)
 	if len(pr.Address) == 0 {
+		fmt.Printf("Invalid request (missing address) from peer %s\n", peer)
 		return nil, errors.New("Missing address!")
 	}
 	if pr.Service.Name == "" {
+		fmt.Printf("Invalid request (missing servicename) from peer %s\n", peer)
 		return nil, errors.New("Missing servicename!")
 	}
+	fmt.Printf("Register service request for service %s from peer %s\n", pr.Service.Name, peer)
 	rr := new(pb.GetResponse)
 	rr.Service = pr.Service
 	rr.Location = new(pb.ServiceLocation)
