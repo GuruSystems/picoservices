@@ -1,0 +1,13 @@
+[Unit]
+After=local-fs.target
+
+[Service]
+Type=simple
+ExecStart=/srv/build-repository/artefacts/picoservices/master/latest/dist/amd64//registrar-server --port=5000 -keepalive 10
+RemainAfterExit=no
+User=registrar
+RestartSec=10s
+Restart=always
+
+[Install]
+WantedBy=default.target 

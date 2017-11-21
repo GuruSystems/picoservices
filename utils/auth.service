@@ -1,0 +1,13 @@
+[Unit]
+After=local-fs.target
+
+[Service]
+Type=simple
+ExecStart=/srv/build-repository/artefacts/picoservices/master/latest/dist/amd64//auth-server --port=5001 --registry=10.211.243.235:5000 --address=10.211.243.235 -backend=file 
+RemainAfterExit=no
+User=registrar
+RestartSec=10s
+Restart=always
+
+[Install]
+WantedBy=default.target 
