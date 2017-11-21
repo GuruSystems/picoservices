@@ -255,12 +255,12 @@ func ServerStartup(def ServerDef) error {
 // this services the /service-info/ url
 func serveServiceInfo(w http.ResponseWriter, req *http.Request, sd ServerDef) {
 	p := req.URL.Path
-	fmt.Printf("Request path: \"%s\"\n", p)
 	if strings.HasPrefix(p, "/internal/service-info/name") {
 		for _, name := range sd.names {
 			w.Write([]byte(name))
 		}
 	} else if strings.HasPrefix(p, "/internal/service-info/metrics") {
+		fmt.Printf("Request path: \"%s\"\n", p)
 		m := strings.TrimPrefix(p, "/internal/service-info/metrics")
 		m = strings.TrimLeft(m, "/")
 		up := ctrmetrics[m]
