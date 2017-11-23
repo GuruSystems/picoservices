@@ -24,7 +24,7 @@ import (
 
 // static variables for flag parser
 var (
-	serverAddr = flag.String("server_addr", "127.0.0.1:10000", "The server address in the format of host:port")
+	serverAddr = flag.String("server_addr", "127.0.0.1:4998", "The server address in the format of host:port")
 	crt        = "/etc/cnw/certs/rpc-client/certificate.pem"
 	key        = "/etc/cnw/certs/rpc-client/privatekey.pem"
 	ca         = "/etc/cnw/certs/rpc-client/ca.pem"
@@ -43,7 +43,7 @@ func bail(err error, msg string) {
 	if err == nil {
 		return
 	}
-	fmt.Printf("%s: %s", msg, err)
+	fmt.Printf("%s: %s\n", msg, err)
 	os.Exit(10)
 }
 
@@ -78,7 +78,7 @@ func main() {
 	fmt.Println("Creating client...")
 	client := pb.NewAuthenticationServiceClient(conn)
 	tok := ResolveAuthToken(*token)
-	req := pb.VerifyRequest{Token: tok}
+
 	ctx := context.Background()
 
 	// if TLS is f*** we break at the first RPC call
@@ -87,20 +87,13 @@ func main() {
 		user := readLine("Username: ")
 		pw := readLine("Password: ")
 		fmt.Printf("Attempting to authenticate %s with %s...\n", user, pw)
-		cr, err := client.GetAuthChallenge(ctx, &pb.ChallengeRequest{Email: user})
+		cr, err := client.AuthenticatePassword(ctx, &pb.AuthenticatePasswordRequest{Email: user, Password: pw})
 		bail(err, "Failed to get auth challenge")
-		fmt.Printf("Challenge: %v\n", cr)
-		x, err := PWCrypt(cr.Challenge, pw)
-		bail(err, "Failed to encrypt challenge")
-		fmt.Printf("Stuff: %s\n", x)
-		at, err := client.GetUserToken(ctx, &pb.AuthTokenRequest{
-			Email:     user,
-			Challenge: cr.Challenge,
-			Hash:      x})
-		bail(err, "Failed to authenticate")
-		fmt.Printf("Result: %v\n", at)
+		fmt.Printf("Result: %v\n", cr)
+		tok = cr.Token
 	}
 
+	req := pb.VerifyRequest{Token: tok}
 	fmt.Println("RPC call to auth server...")
 	resp, err := client.VerifyUserToken(ctx, &req)
 	if err != nil {

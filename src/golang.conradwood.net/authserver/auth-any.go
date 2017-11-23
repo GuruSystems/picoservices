@@ -7,7 +7,6 @@ import (
 )
 
 type AnyAuthenticator struct {
-	auth.Authenticator
 }
 
 func CreateVerifiedToken(email string, challenge string, hmac string) string {
@@ -29,4 +28,8 @@ func (pga *AnyAuthenticator) GetUserDetail(user string) (*auth.User, error) {
 }
 func (pga *AnyAuthenticator) Authenticate(token string) (string, error) {
 	return "1", nil
+}
+
+func (pga *AnyAuthenticator) CreateVerifiedToken(email string, pw string) string {
+	return "generated_token"
 }

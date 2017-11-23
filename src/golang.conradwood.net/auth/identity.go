@@ -20,7 +20,6 @@ type Authenticator interface {
 	// give token -> return userid
 	Authenticate(token string) (string, error)
 	GetUserDetail(userid string) (*User, error)
-	GetChallenge(email string) (string, error)
 	// given a previous challenge and an email, will return a token if challenge and password stuff matches
-	CreateVerifiedToken(email string, challenge string, hmac string) string
+	CreateVerifiedToken(email string, password string) string
 }

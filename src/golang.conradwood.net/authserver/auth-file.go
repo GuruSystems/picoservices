@@ -12,13 +12,48 @@ import (
 	"errors"
 	"fmt"
 	"golang.conradwood.net/auth"
+	"io/ioutil"
 	"os"
 	"strings"
 )
 
 type FileAuthenticator struct {
 	dir string
-	auth.Authenticator
+}
+
+type userFile struct {
+	a  *auth.User
+	pw string
+}
+
+/**************************************************
+* helpers
+***************************************************/
+//https://stackoverflow.com/questions/22892120/how-to-generate-a-random-string-of-a-fixed-length-in-golang
+func RandomString(n int) string {
+	const letterBytes = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+	const (
+		letterIdxBits = 6                    // 6 bits to represent a letter index
+		letterIdxMask = 1<<letterIdxBits - 1 // All 1-bits, as many as letterIdxBits
+		letterIdxMax  = 63 / letterIdxBits   // # of letter indices fitting in 63 bits
+
+	)
+
+	b := make([]byte, n)
+	// A src.Int63() generates 63 random bits, enough for letterIdxMax characters!
+	for i, cache, remain := n-1, src.Int63(), letterIdxMax; i >= 0; {
+		if remain == 0 {
+			cache, remain = src.Int63(), letterIdxMax
+		}
+		if idx := int(cache & letterIdxMask); idx < len(letterBytes) {
+			b[i] = letterBytes[idx]
+			i--
+		}
+		cache >>= letterIdxBits
+		remain--
+	}
+
+	return string(b)
 }
 
 // given a token will look for a file called "bla.token"
@@ -46,6 +81,13 @@ func (fa *FileAuthenticator) Authenticate(token string) (string, error) {
 	return userid, nil
 }
 func (fa *FileAuthenticator) GetUserDetail(userid string) (*auth.User, error) {
+	u, err := fa.readUid(userid)
+	if err != nil {
+		return nil, err
+	}
+	return u.a, nil
+}
+func (fa *FileAuthenticator) readUid(userid string) (*userFile, error) {
 	var read []string
 	if (strings.Contains(userid, "/")) || (strings.Contains(userid, "~")) {
 		return nil, errors.New("invalid userid")
@@ -63,12 +105,17 @@ func (fa *FileAuthenticator) GetUserDetail(userid string) (*auth.User, error) {
 	for fileScanner.Scan() {
 		read = append(read, fileScanner.Text())
 	}
-
-	a := &auth.User{
-		ID:        read[0],
-		FirstName: read[1],
-		LastName:  read[2],
-		Email:     read[3],
+	if len(read) < 5 {
+		return nil, errors.New("Invalid user file - does not contain enough lines")
+	}
+	a := &userFile{
+		a: &auth.User{
+			ID:        read[0],
+			FirstName: read[1],
+			LastName:  read[2],
+			Email:     read[3],
+		},
+		pw: read[4],
 	}
 	return a, nil
 }
@@ -86,4 +133,56 @@ func NewFileAuthenticator(tokendir string) (auth.Authenticator, error) {
 
 	fd := FileAuthenticator{dir: tokendir}
 	return &fd, nil
+}
+
+func (pga *FileAuthenticator) CreateVerifiedToken(email string, pw string) string {
+	df, err := ioutil.ReadDir(pga.dir)
+	if err != nil {
+		fmt.Printf("Failed to read directory \"%s\": %s\n,", pga.dir, err)
+		return ""
+	}
+	for _, file := range df {
+		if !strings.HasSuffix(file.Name(), ".user") {
+			continue
+		}
+		uid := strings.TrimSuffix(file.Name(), ".user")
+		au, err := pga.readUid(uid)
+		if err != nil {
+			fmt.Println("Error: ", err)
+			return ""
+		}
+		if au.a.Email == email {
+			if au.pw == "" {
+				fmt.Println("user has no password set")
+				return ""
+			}
+			if pw != au.pw {
+				fmt.Println("Found user but password mismatch")
+				return ""
+			}
+			// got match - yeah
+			fmt.Printf("Creating Token for user %v\n", au.a)
+			return pga.createToken(au)
+
+		}
+		fmt.Printf("File: %s, uid=%s\n", file.Name(), uid)
+	}
+	return ""
+}
+
+func (pga *FileAuthenticator) createToken(au *userFile) string {
+	tk := RandomString(30)
+	err := os.Chdir(pga.dir)
+	if err != nil {
+		fmt.Printf("Failed to chdir to %s: %s\n", pga.dir, err)
+		return ""
+	}
+	s1 := fmt.Sprintf("%s.token", tk)
+	s2 := fmt.Sprintf("%s.user", au.a.ID)
+	os.Symlink(s2, s1)
+	if err != nil {
+		fmt.Printf("Failed to symlink to %s: %s\n", s1, s2)
+		return ""
+	}
+	return tk
 }

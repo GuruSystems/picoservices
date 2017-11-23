@@ -28,36 +28,6 @@ var (
 	src      = rand.NewSource(time.Now().UnixNano())
 )
 
-/**************************************************
-* helpers
-***************************************************/
-//https://stackoverflow.com/questions/22892120/how-to-generate-a-random-string-of-a-fixed-length-in-golang
-func RandomString(n int) string {
-	const letterBytes = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
-	const (
-		letterIdxBits = 6                    // 6 bits to represent a letter index
-		letterIdxMask = 1<<letterIdxBits - 1 // All 1-bits, as many as letterIdxBits
-		letterIdxMax  = 63 / letterIdxBits   // # of letter indices fitting in 63 bits
-
-	)
-
-	b := make([]byte, n)
-	// A src.Int63() generates 63 random bits, enough for letterIdxMax characters!
-	for i, cache, remain := n-1, src.Int63(), letterIdxMax; i >= 0; {
-		if remain == 0 {
-			cache, remain = src.Int63(), letterIdxMax
-		}
-		if idx := int(cache & letterIdxMask); idx < len(letterBytes) {
-			b[i] = letterBytes[idx]
-			i--
-		}
-		cache >>= letterIdxBits
-		remain--
-	}
-
-	return string(b)
-}
-
 // main
 
 func main() {
@@ -152,6 +122,9 @@ func (s *AuthServer) VerifyUserToken(ctx context.Context, req *pb.VerifyRequest)
 		fmt.Println("Error getting peer ")
 	}
 	fmt.Printf("backend \"%s\" has been asked by \"%s\" to verify token: \"%s\"\n", *backend, peer.Addr, req.Token)
+	if req.Token == "" {
+		return nil, errors.New("Missing token")
+	}
 	au, err := getUserFromToken(req.Token)
 	fmt.Printf("Verified as user: %v (%s)\n", au, err)
 	if err != nil {
@@ -181,19 +154,21 @@ func (s *AuthServer) GetUserDetail(ctx context.Context, req *pb.GetDetailRequest
 	return &gd, nil
 }
 
-func (*AuthServer) GetAuthChallenge(ctx context.Context, in *pb.ChallengeRequest) (*pb.ChallengeResponse, error) {
-	c, err := authBE.GetChallenge(in.Email)
+func (s *AuthServer) AuthenticatePassword(ctx context.Context, in *pb.AuthenticatePasswordRequest) (*pb.VerifyPasswordResponse, error) {
+	tk := authBE.CreateVerifiedToken(in.Email, in.Password)
+	if tk == "" {
+		return nil, errors.New("Access Denied")
+	}
+	au, err := getUserFromToken(tk)
+	fmt.Printf("Verified as user: %v (%s)\n", au, err)
 	if err != nil {
 		return nil, err
 	}
-
-	res := &pb.ChallengeResponse{
-		Email:     in.Email,
-		Challenge: c,
+	gd := pb.GetDetailResponse{UserID: au.ID,
+		Email:     au.Email,
+		FirstName: au.FirstName,
+		LastName:  au.LastName,
 	}
-	return res, nil
-}
-func (*AuthServer) GetUserToken(ctx context.Context, in *pb.AuthTokenRequest) (*pb.AuthTokenResponse, error) {
-	t = CreateVerifiedToken(in.Email,in.Challenge, in.
-	return nil, nil
+	r := pb.VerifyPasswordResponse{User: &gd, Token: tk}
+	return &r, nil
 }
