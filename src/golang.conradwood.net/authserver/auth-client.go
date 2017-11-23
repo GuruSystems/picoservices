@@ -12,11 +12,13 @@ import (
 	"flag"
 	"golang.org/x/net/context"
 	//	"net"
+	"bufio"
 	"crypto/tls"
 	"crypto/x509"
 	pb "golang.conradwood.net/auth/proto"
 	"google.golang.org/grpc/credentials"
 	"io/ioutil"
+	"os"
 	"os/user"
 )
 
@@ -26,8 +28,24 @@ var (
 	crt        = "/etc/cnw/certs/rpc-client/certificate.pem"
 	key        = "/etc/cnw/certs/rpc-client/privatekey.pem"
 	ca         = "/etc/cnw/certs/rpc-client/ca.pem"
-	token      = flag.String("token", "user_token", "user token to authenticate with")
+	token      = flag.String("token", "", "user token to authenticate with")
 )
+
+func readLine(prompt string) string {
+	reader := bufio.NewReader(os.Stdin)
+	fmt.Print(prompt)
+	text, _ := reader.ReadString('\n')
+	name := strings.TrimSpace(text)
+	return name
+}
+
+func bail(err error, msg string) {
+	if err == nil {
+		return
+	}
+	fmt.Printf("%s: %s", msg, err)
+	os.Exit(10)
+}
 
 func main() {
 	flag.Parse()
@@ -63,7 +81,26 @@ func main() {
 	req := pb.VerifyRequest{Token: tok}
 	ctx := context.Background()
 
-	// if TLS is f*** we break here:
+	// if TLS is f*** we break at the first RPC call
+
+	if *token == "" {
+		user := readLine("Username: ")
+		pw := readLine("Password: ")
+		fmt.Printf("Attempting to authenticate %s with %s...\n", user, pw)
+		cr, err := client.GetAuthChallenge(ctx, &pb.ChallengeRequest{Email: user})
+		bail(err, "Failed to get auth challenge")
+		fmt.Printf("Challenge: %v\n", cr)
+		x, err := PWCrypt(cr.Challenge, pw)
+		bail(err, "Failed to encrypt challenge")
+		fmt.Printf("Stuff: %s\n", x)
+		at, err := client.GetUserToken(ctx, &pb.AuthTokenRequest{
+			Email:     user,
+			Challenge: cr.Challenge,
+			Hash:      x})
+		bail(err, "Failed to authenticate")
+		fmt.Printf("Result: %v\n", at)
+	}
+
 	fmt.Println("RPC call to auth server...")
 	resp, err := client.VerifyUserToken(ctx, &req)
 	if err != nil {

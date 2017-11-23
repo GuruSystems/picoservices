@@ -17,11 +17,12 @@ import (
 )
 
 var (
-	Registry  = flag.String("registrar", "localhost:5000", "address of the registrar server (for lookups)")
-	clientcrt = flag.String("clientcert", "/etc/cnw/certs/rfc-client/certificate.pem", "Client certificate")
-	clientkey = flag.String("clientkey", "/etc/cnw/certs/rfc-client/privatekey.pem", "client private key")
-	clientca  = flag.String("clientca", "/etc/cnw/certs/rfc-client/ca.pem", "Certificate Authority")
-	token     = flag.String("token", "user_token", "The authentication token (cookie) to authenticate with. May be name of a file in ~/.picoservices/tokens/, if so file contents shall be used as cookie")
+	displayedTokenInfo = false
+	Registry           = flag.String("registrar", "localhost:5000", "address of the registrar server (for lookups)")
+	clientcrt          = flag.String("clientcert", "/etc/cnw/certs/rfc-client/certificate.pem", "Client certificate")
+	clientkey          = flag.String("clientkey", "/etc/cnw/certs/rfc-client/privatekey.pem", "client private key")
+	clientca           = flag.String("clientca", "/etc/cnw/certs/rfc-client/ca.pem", "Certificate Authority")
+	token              = flag.String("token", "user_token", "The authentication token (cookie) to authenticate with. May be name of a file in ~/.picoservices/tokens/, if so file contents shall be used as cookie")
 )
 
 // given a service name we look up its address in the registry
@@ -96,7 +97,10 @@ func SetAuthToken() context.Context {
 		tok = *token
 	} else {
 		tok = string(btok)
-		fmt.Printf("Using token from %s\n", fname)
+		if displayedTokenInfo {
+			fmt.Printf("Using token from %s\n", fname)
+			displayedTokenInfo = true
+		}
 	}
 	tok = strings.TrimSpace(tok)
 	md := metadata.Pairs("token", tok,

@@ -8,9 +8,9 @@ PROTOCINC += -I${GOPATH}/src/github.com/grpc-ecosystem/grpc-gateway/third_party/
 PKG=auth
 
 server:
-	go install ${PKG}-server.go auth-postgres.go auth-file.go auth-any.go auth-nil.go
+	go install ${PKG}-server.go pwhash.go auth-postgres.go auth-file.go auth-any.go auth-nil.go 
 client:
-	go install ${PKG}-client.go
+	go install ${PKG}-client.go pwhash.go
 
 proto:
 	@echo no proto for server

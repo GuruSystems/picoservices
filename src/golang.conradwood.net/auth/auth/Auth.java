@@ -2453,6 +2453,2623 @@ public final class Auth {
 
   }
 
+  public interface ChallengeRequestOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:auth.ChallengeRequest)
+      com.google.protobuf.MessageOrBuilder {
+
+    /**
+     * <code>optional string Email = 1;</code>
+     */
+    java.lang.String getEmail();
+    /**
+     * <code>optional string Email = 1;</code>
+     */
+    com.google.protobuf.ByteString
+        getEmailBytes();
+  }
+  /**
+   * Protobuf type {@code auth.ChallengeRequest}
+   */
+  public  static final class ChallengeRequest extends
+      com.google.protobuf.GeneratedMessageV3 implements
+      // @@protoc_insertion_point(message_implements:auth.ChallengeRequest)
+      ChallengeRequestOrBuilder {
+    // Use ChallengeRequest.newBuilder() to construct.
+    private ChallengeRequest(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+      super(builder);
+    }
+    private ChallengeRequest() {
+      email_ = "";
+    }
+
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
+    }
+    private ChallengeRequest(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      this();
+      int mutable_bitField0_ = 0;
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            default: {
+              if (!input.skipField(tag)) {
+                done = true;
+              }
+              break;
+            }
+            case 10: {
+              java.lang.String s = input.readStringRequireUtf8();
+
+              email_ = s;
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e).setUnfinishedMessage(this);
+      } finally {
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return auth.Auth.internal_static_auth_ChallengeRequest_descriptor;
+    }
+
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return auth.Auth.internal_static_auth_ChallengeRequest_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              auth.Auth.ChallengeRequest.class, auth.Auth.ChallengeRequest.Builder.class);
+    }
+
+    public static final int EMAIL_FIELD_NUMBER = 1;
+    private volatile java.lang.Object email_;
+    /**
+     * <code>optional string Email = 1;</code>
+     */
+    public java.lang.String getEmail() {
+      java.lang.Object ref = email_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        email_ = s;
+        return s;
+      }
+    }
+    /**
+     * <code>optional string Email = 1;</code>
+     */
+    public com.google.protobuf.ByteString
+        getEmailBytes() {
+      java.lang.Object ref = email_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        email_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    private byte memoizedIsInitialized = -1;
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
+
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      if (!getEmailBytes().isEmpty()) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 1, email_);
+      }
+    }
+
+    public int getSerializedSize() {
+      int size = memoizedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (!getEmailBytes().isEmpty()) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, email_);
+      }
+      memoizedSize = size;
+      return size;
+    }
+
+    private static final long serialVersionUID = 0L;
+    @java.lang.Override
+    public boolean equals(final java.lang.Object obj) {
+      if (obj == this) {
+       return true;
+      }
+      if (!(obj instanceof auth.Auth.ChallengeRequest)) {
+        return super.equals(obj);
+      }
+      auth.Auth.ChallengeRequest other = (auth.Auth.ChallengeRequest) obj;
+
+      boolean result = true;
+      result = result && getEmail()
+          .equals(other.getEmail());
+      return result;
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+      if (memoizedHashCode != 0) {
+        return memoizedHashCode;
+      }
+      int hash = 41;
+      hash = (19 * hash) + getDescriptorForType().hashCode();
+      hash = (37 * hash) + EMAIL_FIELD_NUMBER;
+      hash = (53 * hash) + getEmail().hashCode();
+      hash = (29 * hash) + unknownFields.hashCode();
+      memoizedHashCode = hash;
+      return hash;
+    }
+
+    public static auth.Auth.ChallengeRequest parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static auth.Auth.ChallengeRequest parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static auth.Auth.ChallengeRequest parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static auth.Auth.ChallengeRequest parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static auth.Auth.ChallengeRequest parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static auth.Auth.ChallengeRequest parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static auth.Auth.ChallengeRequest parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input);
+    }
+    public static auth.Auth.ChallengeRequest parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static auth.Auth.ChallengeRequest parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static auth.Auth.ChallengeRequest parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder() {
+      return DEFAULT_INSTANCE.toBuilder();
+    }
+    public static Builder newBuilder(auth.Auth.ChallengeRequest prototype) {
+      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+    }
+    public Builder toBuilder() {
+      return this == DEFAULT_INSTANCE
+          ? new Builder() : new Builder().mergeFrom(this);
+    }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code auth.ChallengeRequest}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:auth.ChallengeRequest)
+        auth.Auth.ChallengeRequestOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return auth.Auth.internal_static_auth_ChallengeRequest_descriptor;
+      }
+
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return auth.Auth.internal_static_auth_ChallengeRequest_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                auth.Auth.ChallengeRequest.class, auth.Auth.ChallengeRequest.Builder.class);
+      }
+
+      // Construct using auth.Auth.ChallengeRequest.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessageV3
+                .alwaysUseFieldBuilders) {
+        }
+      }
+      public Builder clear() {
+        super.clear();
+        email_ = "";
+
+        return this;
+      }
+
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return auth.Auth.internal_static_auth_ChallengeRequest_descriptor;
+      }
+
+      public auth.Auth.ChallengeRequest getDefaultInstanceForType() {
+        return auth.Auth.ChallengeRequest.getDefaultInstance();
+      }
+
+      public auth.Auth.ChallengeRequest build() {
+        auth.Auth.ChallengeRequest result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      public auth.Auth.ChallengeRequest buildPartial() {
+        auth.Auth.ChallengeRequest result = new auth.Auth.ChallengeRequest(this);
+        result.email_ = email_;
+        onBuilt();
+        return result;
+      }
+
+      public Builder clone() {
+        return (Builder) super.clone();
+      }
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          Object value) {
+        return (Builder) super.setField(field, value);
+      }
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return (Builder) super.clearField(field);
+      }
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return (Builder) super.clearOneof(oneof);
+      }
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, Object value) {
+        return (Builder) super.setRepeatedField(field, index, value);
+      }
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          Object value) {
+        return (Builder) super.addRepeatedField(field, value);
+      }
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof auth.Auth.ChallengeRequest) {
+          return mergeFrom((auth.Auth.ChallengeRequest)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(auth.Auth.ChallengeRequest other) {
+        if (other == auth.Auth.ChallengeRequest.getDefaultInstance()) return this;
+        if (!other.getEmail().isEmpty()) {
+          email_ = other.email_;
+          onChanged();
+        }
+        onChanged();
+        return this;
+      }
+
+      public final boolean isInitialized() {
+        return true;
+      }
+
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        auth.Auth.ChallengeRequest parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (auth.Auth.ChallengeRequest) e.getUnfinishedMessage();
+          throw e.unwrapIOException();
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+
+      private java.lang.Object email_ = "";
+      /**
+       * <code>optional string Email = 1;</code>
+       */
+      public java.lang.String getEmail() {
+        java.lang.Object ref = email_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          email_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>optional string Email = 1;</code>
+       */
+      public com.google.protobuf.ByteString
+          getEmailBytes() {
+        java.lang.Object ref = email_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          email_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>optional string Email = 1;</code>
+       */
+      public Builder setEmail(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  
+        email_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string Email = 1;</code>
+       */
+      public Builder clearEmail() {
+        
+        email_ = getDefaultInstance().getEmail();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string Email = 1;</code>
+       */
+      public Builder setEmailBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+        
+        email_ = value;
+        onChanged();
+        return this;
+      }
+      public final Builder setUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return this;
+      }
+
+      public final Builder mergeUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return this;
+      }
+
+
+      // @@protoc_insertion_point(builder_scope:auth.ChallengeRequest)
+    }
+
+    // @@protoc_insertion_point(class_scope:auth.ChallengeRequest)
+    private static final auth.Auth.ChallengeRequest DEFAULT_INSTANCE;
+    static {
+      DEFAULT_INSTANCE = new auth.Auth.ChallengeRequest();
+    }
+
+    public static auth.Auth.ChallengeRequest getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static final com.google.protobuf.Parser<ChallengeRequest>
+        PARSER = new com.google.protobuf.AbstractParser<ChallengeRequest>() {
+      public ChallengeRequest parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+          return new ChallengeRequest(input, extensionRegistry);
+      }
+    };
+
+    public static com.google.protobuf.Parser<ChallengeRequest> parser() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<ChallengeRequest> getParserForType() {
+      return PARSER;
+    }
+
+    public auth.Auth.ChallengeRequest getDefaultInstanceForType() {
+      return DEFAULT_INSTANCE;
+    }
+
+  }
+
+  public interface ChallengeResponseOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:auth.ChallengeResponse)
+      com.google.protobuf.MessageOrBuilder {
+
+    /**
+     * <code>optional string Email = 1;</code>
+     */
+    java.lang.String getEmail();
+    /**
+     * <code>optional string Email = 1;</code>
+     */
+    com.google.protobuf.ByteString
+        getEmailBytes();
+
+    /**
+     * <code>optional string Challenge = 2;</code>
+     */
+    java.lang.String getChallenge();
+    /**
+     * <code>optional string Challenge = 2;</code>
+     */
+    com.google.protobuf.ByteString
+        getChallengeBytes();
+  }
+  /**
+   * Protobuf type {@code auth.ChallengeResponse}
+   */
+  public  static final class ChallengeResponse extends
+      com.google.protobuf.GeneratedMessageV3 implements
+      // @@protoc_insertion_point(message_implements:auth.ChallengeResponse)
+      ChallengeResponseOrBuilder {
+    // Use ChallengeResponse.newBuilder() to construct.
+    private ChallengeResponse(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+      super(builder);
+    }
+    private ChallengeResponse() {
+      email_ = "";
+      challenge_ = "";
+    }
+
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
+    }
+    private ChallengeResponse(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      this();
+      int mutable_bitField0_ = 0;
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            default: {
+              if (!input.skipField(tag)) {
+                done = true;
+              }
+              break;
+            }
+            case 10: {
+              java.lang.String s = input.readStringRequireUtf8();
+
+              email_ = s;
+              break;
+            }
+            case 18: {
+              java.lang.String s = input.readStringRequireUtf8();
+
+              challenge_ = s;
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e).setUnfinishedMessage(this);
+      } finally {
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return auth.Auth.internal_static_auth_ChallengeResponse_descriptor;
+    }
+
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return auth.Auth.internal_static_auth_ChallengeResponse_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              auth.Auth.ChallengeResponse.class, auth.Auth.ChallengeResponse.Builder.class);
+    }
+
+    public static final int EMAIL_FIELD_NUMBER = 1;
+    private volatile java.lang.Object email_;
+    /**
+     * <code>optional string Email = 1;</code>
+     */
+    public java.lang.String getEmail() {
+      java.lang.Object ref = email_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        email_ = s;
+        return s;
+      }
+    }
+    /**
+     * <code>optional string Email = 1;</code>
+     */
+    public com.google.protobuf.ByteString
+        getEmailBytes() {
+      java.lang.Object ref = email_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        email_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    public static final int CHALLENGE_FIELD_NUMBER = 2;
+    private volatile java.lang.Object challenge_;
+    /**
+     * <code>optional string Challenge = 2;</code>
+     */
+    public java.lang.String getChallenge() {
+      java.lang.Object ref = challenge_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        challenge_ = s;
+        return s;
+      }
+    }
+    /**
+     * <code>optional string Challenge = 2;</code>
+     */
+    public com.google.protobuf.ByteString
+        getChallengeBytes() {
+      java.lang.Object ref = challenge_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        challenge_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    private byte memoizedIsInitialized = -1;
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
+
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      if (!getEmailBytes().isEmpty()) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 1, email_);
+      }
+      if (!getChallengeBytes().isEmpty()) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 2, challenge_);
+      }
+    }
+
+    public int getSerializedSize() {
+      int size = memoizedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (!getEmailBytes().isEmpty()) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, email_);
+      }
+      if (!getChallengeBytes().isEmpty()) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, challenge_);
+      }
+      memoizedSize = size;
+      return size;
+    }
+
+    private static final long serialVersionUID = 0L;
+    @java.lang.Override
+    public boolean equals(final java.lang.Object obj) {
+      if (obj == this) {
+       return true;
+      }
+      if (!(obj instanceof auth.Auth.ChallengeResponse)) {
+        return super.equals(obj);
+      }
+      auth.Auth.ChallengeResponse other = (auth.Auth.ChallengeResponse) obj;
+
+      boolean result = true;
+      result = result && getEmail()
+          .equals(other.getEmail());
+      result = result && getChallenge()
+          .equals(other.getChallenge());
+      return result;
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+      if (memoizedHashCode != 0) {
+        return memoizedHashCode;
+      }
+      int hash = 41;
+      hash = (19 * hash) + getDescriptorForType().hashCode();
+      hash = (37 * hash) + EMAIL_FIELD_NUMBER;
+      hash = (53 * hash) + getEmail().hashCode();
+      hash = (37 * hash) + CHALLENGE_FIELD_NUMBER;
+      hash = (53 * hash) + getChallenge().hashCode();
+      hash = (29 * hash) + unknownFields.hashCode();
+      memoizedHashCode = hash;
+      return hash;
+    }
+
+    public static auth.Auth.ChallengeResponse parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static auth.Auth.ChallengeResponse parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static auth.Auth.ChallengeResponse parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static auth.Auth.ChallengeResponse parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static auth.Auth.ChallengeResponse parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static auth.Auth.ChallengeResponse parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static auth.Auth.ChallengeResponse parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input);
+    }
+    public static auth.Auth.ChallengeResponse parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static auth.Auth.ChallengeResponse parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static auth.Auth.ChallengeResponse parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder() {
+      return DEFAULT_INSTANCE.toBuilder();
+    }
+    public static Builder newBuilder(auth.Auth.ChallengeResponse prototype) {
+      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+    }
+    public Builder toBuilder() {
+      return this == DEFAULT_INSTANCE
+          ? new Builder() : new Builder().mergeFrom(this);
+    }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code auth.ChallengeResponse}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:auth.ChallengeResponse)
+        auth.Auth.ChallengeResponseOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return auth.Auth.internal_static_auth_ChallengeResponse_descriptor;
+      }
+
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return auth.Auth.internal_static_auth_ChallengeResponse_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                auth.Auth.ChallengeResponse.class, auth.Auth.ChallengeResponse.Builder.class);
+      }
+
+      // Construct using auth.Auth.ChallengeResponse.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessageV3
+                .alwaysUseFieldBuilders) {
+        }
+      }
+      public Builder clear() {
+        super.clear();
+        email_ = "";
+
+        challenge_ = "";
+
+        return this;
+      }
+
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return auth.Auth.internal_static_auth_ChallengeResponse_descriptor;
+      }
+
+      public auth.Auth.ChallengeResponse getDefaultInstanceForType() {
+        return auth.Auth.ChallengeResponse.getDefaultInstance();
+      }
+
+      public auth.Auth.ChallengeResponse build() {
+        auth.Auth.ChallengeResponse result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      public auth.Auth.ChallengeResponse buildPartial() {
+        auth.Auth.ChallengeResponse result = new auth.Auth.ChallengeResponse(this);
+        result.email_ = email_;
+        result.challenge_ = challenge_;
+        onBuilt();
+        return result;
+      }
+
+      public Builder clone() {
+        return (Builder) super.clone();
+      }
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          Object value) {
+        return (Builder) super.setField(field, value);
+      }
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return (Builder) super.clearField(field);
+      }
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return (Builder) super.clearOneof(oneof);
+      }
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, Object value) {
+        return (Builder) super.setRepeatedField(field, index, value);
+      }
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          Object value) {
+        return (Builder) super.addRepeatedField(field, value);
+      }
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof auth.Auth.ChallengeResponse) {
+          return mergeFrom((auth.Auth.ChallengeResponse)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(auth.Auth.ChallengeResponse other) {
+        if (other == auth.Auth.ChallengeResponse.getDefaultInstance()) return this;
+        if (!other.getEmail().isEmpty()) {
+          email_ = other.email_;
+          onChanged();
+        }
+        if (!other.getChallenge().isEmpty()) {
+          challenge_ = other.challenge_;
+          onChanged();
+        }
+        onChanged();
+        return this;
+      }
+
+      public final boolean isInitialized() {
+        return true;
+      }
+
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        auth.Auth.ChallengeResponse parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (auth.Auth.ChallengeResponse) e.getUnfinishedMessage();
+          throw e.unwrapIOException();
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+
+      private java.lang.Object email_ = "";
+      /**
+       * <code>optional string Email = 1;</code>
+       */
+      public java.lang.String getEmail() {
+        java.lang.Object ref = email_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          email_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>optional string Email = 1;</code>
+       */
+      public com.google.protobuf.ByteString
+          getEmailBytes() {
+        java.lang.Object ref = email_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          email_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>optional string Email = 1;</code>
+       */
+      public Builder setEmail(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  
+        email_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string Email = 1;</code>
+       */
+      public Builder clearEmail() {
+        
+        email_ = getDefaultInstance().getEmail();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string Email = 1;</code>
+       */
+      public Builder setEmailBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+        
+        email_ = value;
+        onChanged();
+        return this;
+      }
+
+      private java.lang.Object challenge_ = "";
+      /**
+       * <code>optional string Challenge = 2;</code>
+       */
+      public java.lang.String getChallenge() {
+        java.lang.Object ref = challenge_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          challenge_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>optional string Challenge = 2;</code>
+       */
+      public com.google.protobuf.ByteString
+          getChallengeBytes() {
+        java.lang.Object ref = challenge_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          challenge_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>optional string Challenge = 2;</code>
+       */
+      public Builder setChallenge(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  
+        challenge_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string Challenge = 2;</code>
+       */
+      public Builder clearChallenge() {
+        
+        challenge_ = getDefaultInstance().getChallenge();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string Challenge = 2;</code>
+       */
+      public Builder setChallengeBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+        
+        challenge_ = value;
+        onChanged();
+        return this;
+      }
+      public final Builder setUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return this;
+      }
+
+      public final Builder mergeUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return this;
+      }
+
+
+      // @@protoc_insertion_point(builder_scope:auth.ChallengeResponse)
+    }
+
+    // @@protoc_insertion_point(class_scope:auth.ChallengeResponse)
+    private static final auth.Auth.ChallengeResponse DEFAULT_INSTANCE;
+    static {
+      DEFAULT_INSTANCE = new auth.Auth.ChallengeResponse();
+    }
+
+    public static auth.Auth.ChallengeResponse getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static final com.google.protobuf.Parser<ChallengeResponse>
+        PARSER = new com.google.protobuf.AbstractParser<ChallengeResponse>() {
+      public ChallengeResponse parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+          return new ChallengeResponse(input, extensionRegistry);
+      }
+    };
+
+    public static com.google.protobuf.Parser<ChallengeResponse> parser() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<ChallengeResponse> getParserForType() {
+      return PARSER;
+    }
+
+    public auth.Auth.ChallengeResponse getDefaultInstanceForType() {
+      return DEFAULT_INSTANCE;
+    }
+
+  }
+
+  public interface AuthTokenRequestOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:auth.AuthTokenRequest)
+      com.google.protobuf.MessageOrBuilder {
+
+    /**
+     * <code>optional string Email = 1;</code>
+     */
+    java.lang.String getEmail();
+    /**
+     * <code>optional string Email = 1;</code>
+     */
+    com.google.protobuf.ByteString
+        getEmailBytes();
+
+    /**
+     * <code>optional string Challenge = 2;</code>
+     */
+    java.lang.String getChallenge();
+    /**
+     * <code>optional string Challenge = 2;</code>
+     */
+    com.google.protobuf.ByteString
+        getChallengeBytes();
+
+    /**
+     * <code>optional string Hash = 3;</code>
+     */
+    java.lang.String getHash();
+    /**
+     * <code>optional string Hash = 3;</code>
+     */
+    com.google.protobuf.ByteString
+        getHashBytes();
+  }
+  /**
+   * Protobuf type {@code auth.AuthTokenRequest}
+   */
+  public  static final class AuthTokenRequest extends
+      com.google.protobuf.GeneratedMessageV3 implements
+      // @@protoc_insertion_point(message_implements:auth.AuthTokenRequest)
+      AuthTokenRequestOrBuilder {
+    // Use AuthTokenRequest.newBuilder() to construct.
+    private AuthTokenRequest(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+      super(builder);
+    }
+    private AuthTokenRequest() {
+      email_ = "";
+      challenge_ = "";
+      hash_ = "";
+    }
+
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
+    }
+    private AuthTokenRequest(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      this();
+      int mutable_bitField0_ = 0;
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            default: {
+              if (!input.skipField(tag)) {
+                done = true;
+              }
+              break;
+            }
+            case 10: {
+              java.lang.String s = input.readStringRequireUtf8();
+
+              email_ = s;
+              break;
+            }
+            case 18: {
+              java.lang.String s = input.readStringRequireUtf8();
+
+              challenge_ = s;
+              break;
+            }
+            case 26: {
+              java.lang.String s = input.readStringRequireUtf8();
+
+              hash_ = s;
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e).setUnfinishedMessage(this);
+      } finally {
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return auth.Auth.internal_static_auth_AuthTokenRequest_descriptor;
+    }
+
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return auth.Auth.internal_static_auth_AuthTokenRequest_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              auth.Auth.AuthTokenRequest.class, auth.Auth.AuthTokenRequest.Builder.class);
+    }
+
+    public static final int EMAIL_FIELD_NUMBER = 1;
+    private volatile java.lang.Object email_;
+    /**
+     * <code>optional string Email = 1;</code>
+     */
+    public java.lang.String getEmail() {
+      java.lang.Object ref = email_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        email_ = s;
+        return s;
+      }
+    }
+    /**
+     * <code>optional string Email = 1;</code>
+     */
+    public com.google.protobuf.ByteString
+        getEmailBytes() {
+      java.lang.Object ref = email_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        email_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    public static final int CHALLENGE_FIELD_NUMBER = 2;
+    private volatile java.lang.Object challenge_;
+    /**
+     * <code>optional string Challenge = 2;</code>
+     */
+    public java.lang.String getChallenge() {
+      java.lang.Object ref = challenge_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        challenge_ = s;
+        return s;
+      }
+    }
+    /**
+     * <code>optional string Challenge = 2;</code>
+     */
+    public com.google.protobuf.ByteString
+        getChallengeBytes() {
+      java.lang.Object ref = challenge_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        challenge_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    public static final int HASH_FIELD_NUMBER = 3;
+    private volatile java.lang.Object hash_;
+    /**
+     * <code>optional string Hash = 3;</code>
+     */
+    public java.lang.String getHash() {
+      java.lang.Object ref = hash_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        hash_ = s;
+        return s;
+      }
+    }
+    /**
+     * <code>optional string Hash = 3;</code>
+     */
+    public com.google.protobuf.ByteString
+        getHashBytes() {
+      java.lang.Object ref = hash_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        hash_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    private byte memoizedIsInitialized = -1;
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
+
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      if (!getEmailBytes().isEmpty()) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 1, email_);
+      }
+      if (!getChallengeBytes().isEmpty()) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 2, challenge_);
+      }
+      if (!getHashBytes().isEmpty()) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 3, hash_);
+      }
+    }
+
+    public int getSerializedSize() {
+      int size = memoizedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (!getEmailBytes().isEmpty()) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, email_);
+      }
+      if (!getChallengeBytes().isEmpty()) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, challenge_);
+      }
+      if (!getHashBytes().isEmpty()) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(3, hash_);
+      }
+      memoizedSize = size;
+      return size;
+    }
+
+    private static final long serialVersionUID = 0L;
+    @java.lang.Override
+    public boolean equals(final java.lang.Object obj) {
+      if (obj == this) {
+       return true;
+      }
+      if (!(obj instanceof auth.Auth.AuthTokenRequest)) {
+        return super.equals(obj);
+      }
+      auth.Auth.AuthTokenRequest other = (auth.Auth.AuthTokenRequest) obj;
+
+      boolean result = true;
+      result = result && getEmail()
+          .equals(other.getEmail());
+      result = result && getChallenge()
+          .equals(other.getChallenge());
+      result = result && getHash()
+          .equals(other.getHash());
+      return result;
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+      if (memoizedHashCode != 0) {
+        return memoizedHashCode;
+      }
+      int hash = 41;
+      hash = (19 * hash) + getDescriptorForType().hashCode();
+      hash = (37 * hash) + EMAIL_FIELD_NUMBER;
+      hash = (53 * hash) + getEmail().hashCode();
+      hash = (37 * hash) + CHALLENGE_FIELD_NUMBER;
+      hash = (53 * hash) + getChallenge().hashCode();
+      hash = (37 * hash) + HASH_FIELD_NUMBER;
+      hash = (53 * hash) + getHash().hashCode();
+      hash = (29 * hash) + unknownFields.hashCode();
+      memoizedHashCode = hash;
+      return hash;
+    }
+
+    public static auth.Auth.AuthTokenRequest parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static auth.Auth.AuthTokenRequest parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static auth.Auth.AuthTokenRequest parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static auth.Auth.AuthTokenRequest parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static auth.Auth.AuthTokenRequest parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static auth.Auth.AuthTokenRequest parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static auth.Auth.AuthTokenRequest parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input);
+    }
+    public static auth.Auth.AuthTokenRequest parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static auth.Auth.AuthTokenRequest parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static auth.Auth.AuthTokenRequest parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder() {
+      return DEFAULT_INSTANCE.toBuilder();
+    }
+    public static Builder newBuilder(auth.Auth.AuthTokenRequest prototype) {
+      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+    }
+    public Builder toBuilder() {
+      return this == DEFAULT_INSTANCE
+          ? new Builder() : new Builder().mergeFrom(this);
+    }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code auth.AuthTokenRequest}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:auth.AuthTokenRequest)
+        auth.Auth.AuthTokenRequestOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return auth.Auth.internal_static_auth_AuthTokenRequest_descriptor;
+      }
+
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return auth.Auth.internal_static_auth_AuthTokenRequest_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                auth.Auth.AuthTokenRequest.class, auth.Auth.AuthTokenRequest.Builder.class);
+      }
+
+      // Construct using auth.Auth.AuthTokenRequest.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessageV3
+                .alwaysUseFieldBuilders) {
+        }
+      }
+      public Builder clear() {
+        super.clear();
+        email_ = "";
+
+        challenge_ = "";
+
+        hash_ = "";
+
+        return this;
+      }
+
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return auth.Auth.internal_static_auth_AuthTokenRequest_descriptor;
+      }
+
+      public auth.Auth.AuthTokenRequest getDefaultInstanceForType() {
+        return auth.Auth.AuthTokenRequest.getDefaultInstance();
+      }
+
+      public auth.Auth.AuthTokenRequest build() {
+        auth.Auth.AuthTokenRequest result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      public auth.Auth.AuthTokenRequest buildPartial() {
+        auth.Auth.AuthTokenRequest result = new auth.Auth.AuthTokenRequest(this);
+        result.email_ = email_;
+        result.challenge_ = challenge_;
+        result.hash_ = hash_;
+        onBuilt();
+        return result;
+      }
+
+      public Builder clone() {
+        return (Builder) super.clone();
+      }
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          Object value) {
+        return (Builder) super.setField(field, value);
+      }
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return (Builder) super.clearField(field);
+      }
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return (Builder) super.clearOneof(oneof);
+      }
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, Object value) {
+        return (Builder) super.setRepeatedField(field, index, value);
+      }
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          Object value) {
+        return (Builder) super.addRepeatedField(field, value);
+      }
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof auth.Auth.AuthTokenRequest) {
+          return mergeFrom((auth.Auth.AuthTokenRequest)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(auth.Auth.AuthTokenRequest other) {
+        if (other == auth.Auth.AuthTokenRequest.getDefaultInstance()) return this;
+        if (!other.getEmail().isEmpty()) {
+          email_ = other.email_;
+          onChanged();
+        }
+        if (!other.getChallenge().isEmpty()) {
+          challenge_ = other.challenge_;
+          onChanged();
+        }
+        if (!other.getHash().isEmpty()) {
+          hash_ = other.hash_;
+          onChanged();
+        }
+        onChanged();
+        return this;
+      }
+
+      public final boolean isInitialized() {
+        return true;
+      }
+
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        auth.Auth.AuthTokenRequest parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (auth.Auth.AuthTokenRequest) e.getUnfinishedMessage();
+          throw e.unwrapIOException();
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+
+      private java.lang.Object email_ = "";
+      /**
+       * <code>optional string Email = 1;</code>
+       */
+      public java.lang.String getEmail() {
+        java.lang.Object ref = email_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          email_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>optional string Email = 1;</code>
+       */
+      public com.google.protobuf.ByteString
+          getEmailBytes() {
+        java.lang.Object ref = email_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          email_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>optional string Email = 1;</code>
+       */
+      public Builder setEmail(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  
+        email_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string Email = 1;</code>
+       */
+      public Builder clearEmail() {
+        
+        email_ = getDefaultInstance().getEmail();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string Email = 1;</code>
+       */
+      public Builder setEmailBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+        
+        email_ = value;
+        onChanged();
+        return this;
+      }
+
+      private java.lang.Object challenge_ = "";
+      /**
+       * <code>optional string Challenge = 2;</code>
+       */
+      public java.lang.String getChallenge() {
+        java.lang.Object ref = challenge_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          challenge_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>optional string Challenge = 2;</code>
+       */
+      public com.google.protobuf.ByteString
+          getChallengeBytes() {
+        java.lang.Object ref = challenge_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          challenge_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>optional string Challenge = 2;</code>
+       */
+      public Builder setChallenge(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  
+        challenge_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string Challenge = 2;</code>
+       */
+      public Builder clearChallenge() {
+        
+        challenge_ = getDefaultInstance().getChallenge();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string Challenge = 2;</code>
+       */
+      public Builder setChallengeBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+        
+        challenge_ = value;
+        onChanged();
+        return this;
+      }
+
+      private java.lang.Object hash_ = "";
+      /**
+       * <code>optional string Hash = 3;</code>
+       */
+      public java.lang.String getHash() {
+        java.lang.Object ref = hash_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          hash_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>optional string Hash = 3;</code>
+       */
+      public com.google.protobuf.ByteString
+          getHashBytes() {
+        java.lang.Object ref = hash_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          hash_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>optional string Hash = 3;</code>
+       */
+      public Builder setHash(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  
+        hash_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string Hash = 3;</code>
+       */
+      public Builder clearHash() {
+        
+        hash_ = getDefaultInstance().getHash();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string Hash = 3;</code>
+       */
+      public Builder setHashBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+        
+        hash_ = value;
+        onChanged();
+        return this;
+      }
+      public final Builder setUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return this;
+      }
+
+      public final Builder mergeUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return this;
+      }
+
+
+      // @@protoc_insertion_point(builder_scope:auth.AuthTokenRequest)
+    }
+
+    // @@protoc_insertion_point(class_scope:auth.AuthTokenRequest)
+    private static final auth.Auth.AuthTokenRequest DEFAULT_INSTANCE;
+    static {
+      DEFAULT_INSTANCE = new auth.Auth.AuthTokenRequest();
+    }
+
+    public static auth.Auth.AuthTokenRequest getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static final com.google.protobuf.Parser<AuthTokenRequest>
+        PARSER = new com.google.protobuf.AbstractParser<AuthTokenRequest>() {
+      public AuthTokenRequest parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+          return new AuthTokenRequest(input, extensionRegistry);
+      }
+    };
+
+    public static com.google.protobuf.Parser<AuthTokenRequest> parser() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<AuthTokenRequest> getParserForType() {
+      return PARSER;
+    }
+
+    public auth.Auth.AuthTokenRequest getDefaultInstanceForType() {
+      return DEFAULT_INSTANCE;
+    }
+
+  }
+
+  public interface AuthTokenResponseOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:auth.AuthTokenResponse)
+      com.google.protobuf.MessageOrBuilder {
+
+    /**
+     * <code>optional .auth.GetDetailResponse User = 1;</code>
+     */
+    boolean hasUser();
+    /**
+     * <code>optional .auth.GetDetailResponse User = 1;</code>
+     */
+    auth.Auth.GetDetailResponse getUser();
+    /**
+     * <code>optional .auth.GetDetailResponse User = 1;</code>
+     */
+    auth.Auth.GetDetailResponseOrBuilder getUserOrBuilder();
+
+    /**
+     * <code>optional string Token = 2;</code>
+     */
+    java.lang.String getToken();
+    /**
+     * <code>optional string Token = 2;</code>
+     */
+    com.google.protobuf.ByteString
+        getTokenBytes();
+  }
+  /**
+   * Protobuf type {@code auth.AuthTokenResponse}
+   */
+  public  static final class AuthTokenResponse extends
+      com.google.protobuf.GeneratedMessageV3 implements
+      // @@protoc_insertion_point(message_implements:auth.AuthTokenResponse)
+      AuthTokenResponseOrBuilder {
+    // Use AuthTokenResponse.newBuilder() to construct.
+    private AuthTokenResponse(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+      super(builder);
+    }
+    private AuthTokenResponse() {
+      token_ = "";
+    }
+
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
+    }
+    private AuthTokenResponse(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      this();
+      int mutable_bitField0_ = 0;
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            default: {
+              if (!input.skipField(tag)) {
+                done = true;
+              }
+              break;
+            }
+            case 10: {
+              auth.Auth.GetDetailResponse.Builder subBuilder = null;
+              if (user_ != null) {
+                subBuilder = user_.toBuilder();
+              }
+              user_ = input.readMessage(auth.Auth.GetDetailResponse.parser(), extensionRegistry);
+              if (subBuilder != null) {
+                subBuilder.mergeFrom(user_);
+                user_ = subBuilder.buildPartial();
+              }
+
+              break;
+            }
+            case 18: {
+              java.lang.String s = input.readStringRequireUtf8();
+
+              token_ = s;
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e).setUnfinishedMessage(this);
+      } finally {
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return auth.Auth.internal_static_auth_AuthTokenResponse_descriptor;
+    }
+
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return auth.Auth.internal_static_auth_AuthTokenResponse_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              auth.Auth.AuthTokenResponse.class, auth.Auth.AuthTokenResponse.Builder.class);
+    }
+
+    public static final int USER_FIELD_NUMBER = 1;
+    private auth.Auth.GetDetailResponse user_;
+    /**
+     * <code>optional .auth.GetDetailResponse User = 1;</code>
+     */
+    public boolean hasUser() {
+      return user_ != null;
+    }
+    /**
+     * <code>optional .auth.GetDetailResponse User = 1;</code>
+     */
+    public auth.Auth.GetDetailResponse getUser() {
+      return user_ == null ? auth.Auth.GetDetailResponse.getDefaultInstance() : user_;
+    }
+    /**
+     * <code>optional .auth.GetDetailResponse User = 1;</code>
+     */
+    public auth.Auth.GetDetailResponseOrBuilder getUserOrBuilder() {
+      return getUser();
+    }
+
+    public static final int TOKEN_FIELD_NUMBER = 2;
+    private volatile java.lang.Object token_;
+    /**
+     * <code>optional string Token = 2;</code>
+     */
+    public java.lang.String getToken() {
+      java.lang.Object ref = token_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        token_ = s;
+        return s;
+      }
+    }
+    /**
+     * <code>optional string Token = 2;</code>
+     */
+    public com.google.protobuf.ByteString
+        getTokenBytes() {
+      java.lang.Object ref = token_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        token_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    private byte memoizedIsInitialized = -1;
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
+
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      if (user_ != null) {
+        output.writeMessage(1, getUser());
+      }
+      if (!getTokenBytes().isEmpty()) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 2, token_);
+      }
+    }
+
+    public int getSerializedSize() {
+      int size = memoizedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (user_ != null) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(1, getUser());
+      }
+      if (!getTokenBytes().isEmpty()) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, token_);
+      }
+      memoizedSize = size;
+      return size;
+    }
+
+    private static final long serialVersionUID = 0L;
+    @java.lang.Override
+    public boolean equals(final java.lang.Object obj) {
+      if (obj == this) {
+       return true;
+      }
+      if (!(obj instanceof auth.Auth.AuthTokenResponse)) {
+        return super.equals(obj);
+      }
+      auth.Auth.AuthTokenResponse other = (auth.Auth.AuthTokenResponse) obj;
+
+      boolean result = true;
+      result = result && (hasUser() == other.hasUser());
+      if (hasUser()) {
+        result = result && getUser()
+            .equals(other.getUser());
+      }
+      result = result && getToken()
+          .equals(other.getToken());
+      return result;
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+      if (memoizedHashCode != 0) {
+        return memoizedHashCode;
+      }
+      int hash = 41;
+      hash = (19 * hash) + getDescriptorForType().hashCode();
+      if (hasUser()) {
+        hash = (37 * hash) + USER_FIELD_NUMBER;
+        hash = (53 * hash) + getUser().hashCode();
+      }
+      hash = (37 * hash) + TOKEN_FIELD_NUMBER;
+      hash = (53 * hash) + getToken().hashCode();
+      hash = (29 * hash) + unknownFields.hashCode();
+      memoizedHashCode = hash;
+      return hash;
+    }
+
+    public static auth.Auth.AuthTokenResponse parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static auth.Auth.AuthTokenResponse parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static auth.Auth.AuthTokenResponse parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static auth.Auth.AuthTokenResponse parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static auth.Auth.AuthTokenResponse parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static auth.Auth.AuthTokenResponse parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static auth.Auth.AuthTokenResponse parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input);
+    }
+    public static auth.Auth.AuthTokenResponse parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static auth.Auth.AuthTokenResponse parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static auth.Auth.AuthTokenResponse parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder() {
+      return DEFAULT_INSTANCE.toBuilder();
+    }
+    public static Builder newBuilder(auth.Auth.AuthTokenResponse prototype) {
+      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+    }
+    public Builder toBuilder() {
+      return this == DEFAULT_INSTANCE
+          ? new Builder() : new Builder().mergeFrom(this);
+    }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code auth.AuthTokenResponse}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:auth.AuthTokenResponse)
+        auth.Auth.AuthTokenResponseOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return auth.Auth.internal_static_auth_AuthTokenResponse_descriptor;
+      }
+
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return auth.Auth.internal_static_auth_AuthTokenResponse_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                auth.Auth.AuthTokenResponse.class, auth.Auth.AuthTokenResponse.Builder.class);
+      }
+
+      // Construct using auth.Auth.AuthTokenResponse.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessageV3
+                .alwaysUseFieldBuilders) {
+        }
+      }
+      public Builder clear() {
+        super.clear();
+        if (userBuilder_ == null) {
+          user_ = null;
+        } else {
+          user_ = null;
+          userBuilder_ = null;
+        }
+        token_ = "";
+
+        return this;
+      }
+
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return auth.Auth.internal_static_auth_AuthTokenResponse_descriptor;
+      }
+
+      public auth.Auth.AuthTokenResponse getDefaultInstanceForType() {
+        return auth.Auth.AuthTokenResponse.getDefaultInstance();
+      }
+
+      public auth.Auth.AuthTokenResponse build() {
+        auth.Auth.AuthTokenResponse result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      public auth.Auth.AuthTokenResponse buildPartial() {
+        auth.Auth.AuthTokenResponse result = new auth.Auth.AuthTokenResponse(this);
+        if (userBuilder_ == null) {
+          result.user_ = user_;
+        } else {
+          result.user_ = userBuilder_.build();
+        }
+        result.token_ = token_;
+        onBuilt();
+        return result;
+      }
+
+      public Builder clone() {
+        return (Builder) super.clone();
+      }
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          Object value) {
+        return (Builder) super.setField(field, value);
+      }
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return (Builder) super.clearField(field);
+      }
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return (Builder) super.clearOneof(oneof);
+      }
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, Object value) {
+        return (Builder) super.setRepeatedField(field, index, value);
+      }
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          Object value) {
+        return (Builder) super.addRepeatedField(field, value);
+      }
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof auth.Auth.AuthTokenResponse) {
+          return mergeFrom((auth.Auth.AuthTokenResponse)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(auth.Auth.AuthTokenResponse other) {
+        if (other == auth.Auth.AuthTokenResponse.getDefaultInstance()) return this;
+        if (other.hasUser()) {
+          mergeUser(other.getUser());
+        }
+        if (!other.getToken().isEmpty()) {
+          token_ = other.token_;
+          onChanged();
+        }
+        onChanged();
+        return this;
+      }
+
+      public final boolean isInitialized() {
+        return true;
+      }
+
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        auth.Auth.AuthTokenResponse parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (auth.Auth.AuthTokenResponse) e.getUnfinishedMessage();
+          throw e.unwrapIOException();
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+
+      private auth.Auth.GetDetailResponse user_ = null;
+      private com.google.protobuf.SingleFieldBuilderV3<
+          auth.Auth.GetDetailResponse, auth.Auth.GetDetailResponse.Builder, auth.Auth.GetDetailResponseOrBuilder> userBuilder_;
+      /**
+       * <code>optional .auth.GetDetailResponse User = 1;</code>
+       */
+      public boolean hasUser() {
+        return userBuilder_ != null || user_ != null;
+      }
+      /**
+       * <code>optional .auth.GetDetailResponse User = 1;</code>
+       */
+      public auth.Auth.GetDetailResponse getUser() {
+        if (userBuilder_ == null) {
+          return user_ == null ? auth.Auth.GetDetailResponse.getDefaultInstance() : user_;
+        } else {
+          return userBuilder_.getMessage();
+        }
+      }
+      /**
+       * <code>optional .auth.GetDetailResponse User = 1;</code>
+       */
+      public Builder setUser(auth.Auth.GetDetailResponse value) {
+        if (userBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          user_ = value;
+          onChanged();
+        } else {
+          userBuilder_.setMessage(value);
+        }
+
+        return this;
+      }
+      /**
+       * <code>optional .auth.GetDetailResponse User = 1;</code>
+       */
+      public Builder setUser(
+          auth.Auth.GetDetailResponse.Builder builderForValue) {
+        if (userBuilder_ == null) {
+          user_ = builderForValue.build();
+          onChanged();
+        } else {
+          userBuilder_.setMessage(builderForValue.build());
+        }
+
+        return this;
+      }
+      /**
+       * <code>optional .auth.GetDetailResponse User = 1;</code>
+       */
+      public Builder mergeUser(auth.Auth.GetDetailResponse value) {
+        if (userBuilder_ == null) {
+          if (user_ != null) {
+            user_ =
+              auth.Auth.GetDetailResponse.newBuilder(user_).mergeFrom(value).buildPartial();
+          } else {
+            user_ = value;
+          }
+          onChanged();
+        } else {
+          userBuilder_.mergeFrom(value);
+        }
+
+        return this;
+      }
+      /**
+       * <code>optional .auth.GetDetailResponse User = 1;</code>
+       */
+      public Builder clearUser() {
+        if (userBuilder_ == null) {
+          user_ = null;
+          onChanged();
+        } else {
+          user_ = null;
+          userBuilder_ = null;
+        }
+
+        return this;
+      }
+      /**
+       * <code>optional .auth.GetDetailResponse User = 1;</code>
+       */
+      public auth.Auth.GetDetailResponse.Builder getUserBuilder() {
+        
+        onChanged();
+        return getUserFieldBuilder().getBuilder();
+      }
+      /**
+       * <code>optional .auth.GetDetailResponse User = 1;</code>
+       */
+      public auth.Auth.GetDetailResponseOrBuilder getUserOrBuilder() {
+        if (userBuilder_ != null) {
+          return userBuilder_.getMessageOrBuilder();
+        } else {
+          return user_ == null ?
+              auth.Auth.GetDetailResponse.getDefaultInstance() : user_;
+        }
+      }
+      /**
+       * <code>optional .auth.GetDetailResponse User = 1;</code>
+       */
+      private com.google.protobuf.SingleFieldBuilderV3<
+          auth.Auth.GetDetailResponse, auth.Auth.GetDetailResponse.Builder, auth.Auth.GetDetailResponseOrBuilder> 
+          getUserFieldBuilder() {
+        if (userBuilder_ == null) {
+          userBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
+              auth.Auth.GetDetailResponse, auth.Auth.GetDetailResponse.Builder, auth.Auth.GetDetailResponseOrBuilder>(
+                  getUser(),
+                  getParentForChildren(),
+                  isClean());
+          user_ = null;
+        }
+        return userBuilder_;
+      }
+
+      private java.lang.Object token_ = "";
+      /**
+       * <code>optional string Token = 2;</code>
+       */
+      public java.lang.String getToken() {
+        java.lang.Object ref = token_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          token_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>optional string Token = 2;</code>
+       */
+      public com.google.protobuf.ByteString
+          getTokenBytes() {
+        java.lang.Object ref = token_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          token_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>optional string Token = 2;</code>
+       */
+      public Builder setToken(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  
+        token_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string Token = 2;</code>
+       */
+      public Builder clearToken() {
+        
+        token_ = getDefaultInstance().getToken();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string Token = 2;</code>
+       */
+      public Builder setTokenBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+        
+        token_ = value;
+        onChanged();
+        return this;
+      }
+      public final Builder setUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return this;
+      }
+
+      public final Builder mergeUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return this;
+      }
+
+
+      // @@protoc_insertion_point(builder_scope:auth.AuthTokenResponse)
+    }
+
+    // @@protoc_insertion_point(class_scope:auth.AuthTokenResponse)
+    private static final auth.Auth.AuthTokenResponse DEFAULT_INSTANCE;
+    static {
+      DEFAULT_INSTANCE = new auth.Auth.AuthTokenResponse();
+    }
+
+    public static auth.Auth.AuthTokenResponse getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static final com.google.protobuf.Parser<AuthTokenResponse>
+        PARSER = new com.google.protobuf.AbstractParser<AuthTokenResponse>() {
+      public AuthTokenResponse parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+          return new AuthTokenResponse(input, extensionRegistry);
+      }
+    };
+
+    public static com.google.protobuf.Parser<AuthTokenResponse> parser() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<AuthTokenResponse> getParserForType() {
+      return PARSER;
+    }
+
+    public auth.Auth.AuthTokenResponse getDefaultInstanceForType() {
+      return DEFAULT_INSTANCE;
+    }
+
+  }
+
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_auth_VerifyRequest_descriptor;
   private static final 
@@ -2473,6 +5090,26 @@ public final class Auth {
   private static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_auth_GetDetailResponse_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_auth_ChallengeRequest_descriptor;
+  private static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_auth_ChallengeRequest_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_auth_ChallengeResponse_descriptor;
+  private static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_auth_ChallengeResponse_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_auth_AuthTokenRequest_descriptor;
+  private static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_auth_AuthTokenRequest_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_auth_AuthTokenResponse_descriptor;
+  private static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_auth_AuthTokenResponse_fieldAccessorTable;
 
   public static com.google.protobuf.Descriptors.FileDescriptor
       getDescriptor() {
@@ -2488,11 +5125,20 @@ public final class Auth {
       "\"\"\n\020GetDetailRequest\022\016\n\006UserID\030\001 \001(\t\"W\n\021" +
       "GetDetailResponse\022\016\n\006UserID\030\001 \001(\t\022\r\n\005Ema" +
       "il\030\002 \001(\t\022\021\n\tFirstName\030\003 \001(\t\022\020\n\010LastName\030" +
-      "\004 \001(\t2\233\001\n\025AuthenticationService\022>\n\017Verif" +
-      "yUserToken\022\023.auth.VerifyRequest\032\024.auth.V" +
-      "erifyResponse\"\000\022B\n\rGetUserDetail\022\026.auth." +
-      "GetDetailRequest\032\027.auth.GetDetailRespons",
-      "e\"\000b\006proto3"
+      "\004 \001(\t\"!\n\020ChallengeRequest\022\r\n\005Email\030\001 \001(\t" +
+      "\"5\n\021ChallengeResponse\022\r\n\005Email\030\001 \001(\t\022\021\n\t" +
+      "Challenge\030\002 \001(\t\"B\n\020AuthTokenRequest\022\r\n\005E" +
+      "mail\030\001 \001(\t\022\021\n\tChallenge\030\002 \001(\t\022\014\n\004Hash\030\003 ",
+      "\001(\t\"I\n\021AuthTokenResponse\022%\n\004User\030\001 \001(\0132\027" +
+      ".auth.GetDetailResponse\022\r\n\005Token\030\002 \001(\t2\245" +
+      "\002\n\025AuthenticationService\022E\n\020GetAuthChall" +
+      "enge\022\026.auth.ChallengeRequest\032\027.auth.Chal" +
+      "lengeResponse\"\000\022A\n\014GetUserToken\022\026.auth.A" +
+      "uthTokenRequest\032\027.auth.AuthTokenResponse" +
+      "\"\000\022>\n\017VerifyUserToken\022\023.auth.VerifyReque" +
+      "st\032\024.auth.VerifyResponse\"\000\022B\n\rGetUserDet" +
+      "ail\022\026.auth.GetDetailRequest\032\027.auth.GetDe" +
+      "tailResponse\"\000b\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -2531,6 +5177,30 @@ public final class Auth {
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_auth_GetDetailResponse_descriptor,
         new java.lang.String[] { "UserID", "Email", "FirstName", "LastName", });
+    internal_static_auth_ChallengeRequest_descriptor =
+      getDescriptor().getMessageTypes().get(4);
+    internal_static_auth_ChallengeRequest_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_auth_ChallengeRequest_descriptor,
+        new java.lang.String[] { "Email", });
+    internal_static_auth_ChallengeResponse_descriptor =
+      getDescriptor().getMessageTypes().get(5);
+    internal_static_auth_ChallengeResponse_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_auth_ChallengeResponse_descriptor,
+        new java.lang.String[] { "Email", "Challenge", });
+    internal_static_auth_AuthTokenRequest_descriptor =
+      getDescriptor().getMessageTypes().get(6);
+    internal_static_auth_AuthTokenRequest_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_auth_AuthTokenRequest_descriptor,
+        new java.lang.String[] { "Email", "Challenge", "Hash", });
+    internal_static_auth_AuthTokenResponse_descriptor =
+      getDescriptor().getMessageTypes().get(7);
+    internal_static_auth_AuthTokenResponse_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_auth_AuthTokenResponse_descriptor,
+        new java.lang.String[] { "User", "Token", });
     com.google.api.AnnotationsProto.getDescriptor();
   }
 

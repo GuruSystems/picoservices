@@ -10,7 +10,9 @@ import (
 	"golang.org/x/net/context"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/peer"
+	"math/rand"
 	"os"
+	"time"
 )
 
 // static variables for flag parser
@@ -23,7 +25,40 @@ var (
 	dbpw     = flag.String("dbpw", "pw", "password for the database to use for authentication")
 	tokendir = flag.String("tokendir", "/srv/picoservices/tokendir", "directory with token<->user files")
 	authBE   auth.Authenticator
+	src      = rand.NewSource(time.Now().UnixNano())
 )
+
+/**************************************************
+* helpers
+***************************************************/
+//https://stackoverflow.com/questions/22892120/how-to-generate-a-random-string-of-a-fixed-length-in-golang
+func RandomString(n int) string {
+	const letterBytes = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+	const (
+		letterIdxBits = 6                    // 6 bits to represent a letter index
+		letterIdxMask = 1<<letterIdxBits - 1 // All 1-bits, as many as letterIdxBits
+		letterIdxMax  = 63 / letterIdxBits   // # of letter indices fitting in 63 bits
+
+	)
+
+	b := make([]byte, n)
+	// A src.Int63() generates 63 random bits, enough for letterIdxMax characters!
+	for i, cache, remain := n-1, src.Int63(), letterIdxMax; i >= 0; {
+		if remain == 0 {
+			cache, remain = src.Int63(), letterIdxMax
+		}
+		if idx := int(cache & letterIdxMask); idx < len(letterBytes) {
+			b[i] = letterBytes[idx]
+			i--
+		}
+		cache >>= letterIdxBits
+		remain--
+	}
+
+	return string(b)
+}
+
+// main
 
 func main() {
 	flag.Parse() // parse stuff. see "var" section above
@@ -144,4 +179,21 @@ func (s *AuthServer) GetUserDetail(ctx context.Context, req *pb.GetDetailRequest
 		LastName:  au.LastName,
 	}
 	return &gd, nil
+}
+
+func (*AuthServer) GetAuthChallenge(ctx context.Context, in *pb.ChallengeRequest) (*pb.ChallengeResponse, error) {
+	c, err := authBE.GetChallenge(in.Email)
+	if err != nil {
+		return nil, err
+	}
+
+	res := &pb.ChallengeResponse{
+		Email:     in.Email,
+		Challenge: c,
+	}
+	return res, nil
+}
+func (*AuthServer) GetUserToken(ctx context.Context, in *pb.AuthTokenRequest) (*pb.AuthTokenResponse, error) {
+	t = CreateVerifiedToken(in.Email,in.Challenge, in.
+	return nil, nil
 }

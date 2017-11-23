@@ -10,6 +10,14 @@ type AnyAuthenticator struct {
 	auth.Authenticator
 }
 
+func CreateVerifiedToken(email string, challenge string, hmac string) string {
+	return RandomString(64)
+}
+
+func (pga *AnyAuthenticator) GetChallenge(email string) (string, error) {
+	return RandomString(64), nil
+}
+
 func (pga *AnyAuthenticator) GetUserDetail(user string) (*auth.User, error) {
 	au := auth.User{
 		FirstName: "john",

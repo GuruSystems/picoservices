@@ -29,8 +29,30 @@ string FirstName = 3;
 string LastName =4;
 }
 
+message ChallengeRequest {
+string Email=1;
+}
+message ChallengeResponse {
+string Email=1;
+string Challenge=2;
+}
+
+message AuthTokenRequest {
+string Email=1;
+string Challenge=2;
+string Hash=3;
+}
+message AuthTokenResponse {
+GetDetailResponse User = 1;
+string Token = 2;
+}
 
 service AuthenticationService {
+// authenticate a user by username/password
+ rpc GetAuthChallenge(ChallengeRequest) returns (ChallengeResponse) {}
+ rpc GetUserToken(AuthTokenRequest) returns (AuthTokenResponse) {}
+
+// verify a user by token
  rpc VerifyUserToken(VerifyRequest) returns (VerifyResponse){ }
  rpc GetUserDetail(GetDetailRequest) returns (GetDetailResponse) { }
 }
