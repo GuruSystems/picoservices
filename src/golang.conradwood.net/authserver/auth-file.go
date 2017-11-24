@@ -26,36 +26,6 @@ type userFile struct {
 	pw string
 }
 
-/**************************************************
-* helpers
-***************************************************/
-//https://stackoverflow.com/questions/22892120/how-to-generate-a-random-string-of-a-fixed-length-in-golang
-func RandomString(n int) string {
-	const letterBytes = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
-	const (
-		letterIdxBits = 6                    // 6 bits to represent a letter index
-		letterIdxMask = 1<<letterIdxBits - 1 // All 1-bits, as many as letterIdxBits
-		letterIdxMax  = 63 / letterIdxBits   // # of letter indices fitting in 63 bits
-
-	)
-
-	b := make([]byte, n)
-	// A src.Int63() generates 63 random bits, enough for letterIdxMax characters!
-	for i, cache, remain := n-1, src.Int63(), letterIdxMax; i >= 0; {
-		if remain == 0 {
-			cache, remain = src.Int63(), letterIdxMax
-		}
-		if idx := int(cache & letterIdxMask); idx < len(letterBytes) {
-			b[i] = letterBytes[idx]
-			i--
-		}
-		cache >>= letterIdxBits
-		remain--
-	}
-
-	return string(b)
-}
-
 // given a token will look for a file called "bla.token"
 // reads it and parses it -> returns userid
 func (fa *FileAuthenticator) Authenticate(token string) (string, error) {
@@ -162,7 +132,7 @@ func (pga *FileAuthenticator) CreateVerifiedToken(email string, pw string) strin
 			}
 			// got match - yeah
 			fmt.Printf("Creating Token for user %v\n", au.a)
-			return pga.createToken(au)
+			return CreateTokenInFileSystem(pga.dir, au.a)
 
 		}
 		fmt.Printf("File: %s, uid=%s\n", file.Name(), uid)
@@ -170,15 +140,15 @@ func (pga *FileAuthenticator) CreateVerifiedToken(email string, pw string) strin
 	return ""
 }
 
-func (pga *FileAuthenticator) createToken(au *userFile) string {
+func CreateTokenInFileSystem(dir string, au *auth.User) string {
 	tk := RandomString(30)
-	err := os.Chdir(pga.dir)
+	err := os.Chdir(dir)
 	if err != nil {
-		fmt.Printf("Failed to chdir to %s: %s\n", pga.dir, err)
+		fmt.Printf("Failed to chdir to %s: %s\n", dir, err)
 		return ""
 	}
 	s1 := fmt.Sprintf("%s.token", tk)
-	s2 := fmt.Sprintf("%s.user", au.a.ID)
+	s2 := fmt.Sprintf("%s.user", au.ID)
 	os.Symlink(s2, s1)
 	if err != nil {
 		fmt.Printf("Failed to symlink to %s: %s\n", s1, s2)

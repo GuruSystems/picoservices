@@ -23,10 +23,40 @@ var (
 	dbdb     = flag.String("database", "rpcusers", "database to use for authentication")
 	dbuser   = flag.String("dbuser", "root", "username for the database to use for authentication")
 	dbpw     = flag.String("dbpw", "pw", "password for the database to use for authentication")
-	tokendir = flag.String("tokendir", "/srv/picoservices/tokendir", "directory with token<->user files")
+	Tokendir = flag.String("tokendir", "/srv/picoservices/tokendir", "directory with token<->user files")
 	authBE   auth.Authenticator
 	src      = rand.NewSource(time.Now().UnixNano())
 )
+
+/**************************************************
+* helpers
+***************************************************/
+//https://stackoverflow.com/questions/22892120/how-to-generate-a-random-string-of-a-fixed-length-in-golang
+func RandomString(n int) string {
+	const letterBytes = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+	const (
+		letterIdxBits = 6                    // 6 bits to represent a letter index
+		letterIdxMask = 1<<letterIdxBits - 1 // All 1-bits, as many as letterIdxBits
+		letterIdxMax  = 63 / letterIdxBits   // # of letter indices fitting in 63 bits
+
+	)
+
+	b := make([]byte, n)
+	// A src.Int63() generates 63 random bits, enough for letterIdxMax characters!
+	for i, cache, remain := n-1, src.Int63(), letterIdxMax; i >= 0; {
+		if remain == 0 {
+			cache, remain = src.Int63(), letterIdxMax
+		}
+		if idx := int(cache & letterIdxMask); idx < len(letterBytes) {
+			b[i] = letterBytes[idx]
+			i--
+		}
+		cache >>= letterIdxBits
+		remain--
+	}
+
+	return string(b)
+}
 
 // main
 
@@ -54,7 +84,7 @@ func start() error {
 			return err
 		}
 	} else if *backend == "file" {
-		authBE, err = NewFileAuthenticator(*tokendir)
+		authBE, err = NewFileAuthenticator(*Tokendir)
 		if err != nil {
 			fmt.Println("Failed to create file authenticator", err)
 			return err
@@ -63,8 +93,10 @@ func start() error {
 		authBE = &NilAuthenticator{}
 	} else if *backend == "any" {
 		authBE = &AnyAuthenticator{}
+	} else if *backend == "ldap" {
+		authBE = &LdapAuthenticator{}
 	} else {
-		fmt.Sprintf("Invalid backend \"%s\"\n", *backend)
+		fmt.Printf("Invalid backend \"%s\"\n", *backend)
 		os.Exit(10)
 	}
 
