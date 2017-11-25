@@ -69,7 +69,8 @@ func NewLdapPsqlAuthenticator() (auth.Authenticator, error) {
 }
 
 // we authenticate a user by email & password.
-// we lookup email in postgres. if there's an ldapcn we authenticate against ldap, otherwise fail
+// we lookup email in postgres. if none we look up email as ldapcn.
+// if there's neither we fail. Otherwise we use ldap to authenticate against ldap, otherwise fail
 func (pga *PsqlLdapAuthenticator) CreateVerifiedToken(email string, pw string) string {
 	uid := pga.getUserIDfromEmail(email)
 	if uid == "" {
@@ -109,7 +110,7 @@ func (pga *PsqlLdapAuthenticator) GetUserDetail(userid string) (*auth.User, erro
 
 func (pga *PsqlLdapAuthenticator) getUserIDfromEmail(email string) string {
 	var userid int
-	rows, err := pga.dbcon.Query("SELECT id FROM usertable where email = $1", email)
+	rows, err := pga.dbcon.Query("SELECT id FROM usertable where email = $1 or ldapcn = $1", email)
 	if err != nil {
 		fmt.Printf("Error quering database: %s\n", err)
 		return ""
