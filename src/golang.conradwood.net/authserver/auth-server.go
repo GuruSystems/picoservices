@@ -19,10 +19,6 @@ import (
 var (
 	backend  = flag.String("backend", "none", "backend to use: all|none|postgres|file")
 	port     = flag.Int("port", 4998, "The server port")
-	dbhost   = flag.String("dbhost", "postgres", "hostname of the postgres database rdms")
-	dbdb     = flag.String("database", "rpcusers", "database to use for authentication")
-	dbuser   = flag.String("dbuser", "root", "username for the database to use for authentication")
-	dbpw     = flag.String("dbpw", "pw", "password for the database to use for authentication")
 	Tokendir = flag.String("tokendir", "/srv/picoservices/tokendir", "directory with token<->user files")
 	authBE   auth.Authenticator
 	src      = rand.NewSource(time.Now().UnixNano())
@@ -78,7 +74,7 @@ func st(server *grpc.Server) error {
 func start() error {
 	var err error
 	if *backend == "postgres" {
-		authBE, err = NewPostgresAuthenticator(*dbhost, *dbuser, *dbpw, *dbdb)
+		authBE, err = NewPostgresAuthenticator()
 		if err != nil {
 			fmt.Println("Failed to create postgres authenticator", err)
 			return err
@@ -95,6 +91,8 @@ func start() error {
 		authBE = &AnyAuthenticator{}
 	} else if *backend == "ldap" {
 		authBE = &LdapAuthenticator{}
+	} else if *backend == "psql-ldap" {
+		authBE, err = NewLdapPsqlAuthenticator()
 	} else {
 		fmt.Printf("Invalid backend \"%s\"\n", *backend)
 		os.Exit(10)

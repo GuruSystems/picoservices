@@ -1,4 +1,4 @@
 1: CREATE SEQUENCE usertoken_serial
 2: CREATE SEQUENCE usertable_serial
-3: CREATE TABLE usertable ( id integer PRIMARY KEY DEFAULT nextval('usertable_serial'), firstname varchar(100), lastname varchar(100), email varchar(100) UNIQUE)
+3: CREATE TABLE usertable ( id integer PRIMARY KEY DEFAULT nextval('usertable_serial'), firstname varchar(100), lastname varchar(100), email varchar(100) UNIQUE, ldapcn varchar(64) UNIQUE )
 4: CREATE TABLE usertoken ( id integer PRIMARY KEY DEFAULT nextval('usertoken_serial'), token varchar(256) NOT NULL, userid integer NOT NULL REFERENCES usertable(id))

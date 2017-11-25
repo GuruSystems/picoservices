@@ -28,13 +28,13 @@ import (
 )
 
 var (
-	servercrt        = flag.String("rpc_server_certificate", "/etc/grpc/server/certificate.pem", "filename of the server certificate to be used for incoming connections to this rpc server")
-	servercertkey    = flag.String("rpc_server_certkey", "/etc/grpc/server/privatekey.pem", "the key for the server certificate to be used for incoming connections to this rpc server")
-	serverca         = flag.String("rpc_server_ca", "/etc/grpc/server/ca.pem", "filename of the the CA certificate which signed both client and server certificate")
+	servercrt        = flag.String("rpc_server_certificate", "/etc/grpc/server/certificate.pem", "`filename` of the server certificate to be used for incoming connections to this rpc server")
+	servercertkey    = flag.String("rpc_server_certkey", "/etc/grpc/server/privatekey.pem", "`filename` of the key for the server certificate to be used for incoming connections to this rpc server")
+	serverca         = flag.String("rpc_server_ca", "/etc/grpc/server/ca.pem", "`filename` of the the CA certificate which signed both client and server certificate")
 	Registry         = flag.String("registry", "localhost:5000", "Registrar server address (to register with)")
 	serveraddr       = flag.String("address", "", "Address (default: derive from connection to registrar. does not work well with localhost)")
 	authconn         *grpc.ClientConn
-	register_refresh = flag.Int("register_refresh", 10, "registration refresh interval in seconds")
+	register_refresh = flag.Int("register_refresh", 10, "registration refresh interval in `seconds`")
 	usercache        = make(map[string]*UserCache)
 	ctrmetrics       = make(map[string]*uint64)
 )
@@ -276,6 +276,7 @@ func serveServiceInfo(w http.ResponseWriter, req *http.Request, sd ServerDef) {
 
 // this services the /pleaseshutdown url
 func pleaseShutdown(w http.ResponseWriter, req *http.Request, sd ServerDef) {
+	fmt.Fprintf(w, "OK\n")
 	os.Exit(0)
 }
 func startHttpServe(sd ServerDef, grpcServer *grpc.Server) error {

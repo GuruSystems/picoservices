@@ -1,7 +1,9 @@
 package main
 
-// TODO: authenticates against an ldap backend. Saves tokens in the ldap backend
+// TODO: authenticates against an ldap backend.
 // docs: https://godoc.org/gopkg.in/ldap.v2
+
+// this also needs a secondary store because our ldap schema doesn't store all the stuff we need
 
 import (
 	"crypto/tls"
@@ -36,8 +38,10 @@ func (pga *LdapAuthenticator) Authenticate(token string) (string, error) {
 }
 
 func (pga *LdapAuthenticator) CreateVerifiedToken(email string, pw string) string {
+	return CheckLdapPassword(email, pw)
+}
+func CheckLdapPassword(username string, pw string) string {
 	// The username and password we want to check
-	username := email
 	password := pw
 
 	l, err := ldap.Dial("tcp", fmt.Sprintf("%s:%d", *ldaphost, *ldapport))
@@ -104,10 +108,9 @@ func (pga *LdapAuthenticator) CreateVerifiedToken(email string, pw string) strin
 		fmt.Printf("Failed to create user from ldap entry.\n")
 		return ""
 	}
-	tk := CreateTokenInFileSystem(*Tokendir, au)
-	// yep user authenticated.
-	// we use filebased token stuff because I do not know which attribute to save tokens in in ldap
 
+	tk := RandomString(64)
+	fmt.Printf("WARNING: ldap support incomplete. Token created but not stored permanently!!\n")
 	// Rebind as the read only user for any further queries
 	err = l.Bind(*bindusername, *bindpw)
 	if err != nil {
