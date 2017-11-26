@@ -23,7 +23,9 @@ import (
 	"net"
 	"net/http"
 	"os"
+	"os/signal"
 	"strings"
+	"syscall"
 )
 
 var (
@@ -38,7 +40,8 @@ var (
 	register_refresh = flag.Int("register_refresh", 10, "registration refresh interval in `seconds`")
 	usercache        = make(map[string]*UserCache)
 	ctrmetrics       = make(map[string]*uint64)
-	registered       = make(map[string]bool)
+	registered       = make(map[string]string)
+	stopped          bool
 )
 
 type UserCache struct {
@@ -158,17 +161,41 @@ func GetAuthClient() (apb.AuthenticationServiceClient, error) {
 
 func registerMe(def ServerDef) error {
 	for _, name := range def.names {
-		if registered[name] == false {
+		if registered[name] == "" {
 			fmt.Printf("Registering Service: \"%s\"\n", name)
 		}
-		err := AddRegistry(name, def.Port)
+		id, err := AddRegistry(name, def.Port)
 		if err != nil {
 			return fmt.Errorf("Failed to register %s with registry server", name, err)
 		}
-		registered[name] = true
+		registered[name] = id
 	}
 	return nil
 
+}
+
+func stopping() {
+	if stopped {
+		return
+	}
+	fmt.Printf("Server shutdown - deregistering services\n")
+	opts := []grpc.DialOption{grpc.WithInsecure()}
+	rconn, err := grpc.Dial(*Registry, opts...)
+	if err != nil {
+		fmt.Printf("failed to dial registry server: %v", err)
+		return
+	}
+	defer rconn.Close()
+	c := pb.NewRegistryClient(rconn)
+
+	for key, value := range registered {
+		fmt.Printf("Deregistering Service \"%s\" => %s\n", key, value)
+		_, err := c.DeregisterService(context.Background(), &pb.DeregisterRequest{ServiceID: value})
+		if err != nil {
+			fmt.Printf("Failed to deregister Service \"%s\" => %s: %s\n", key, value, err)
+		}
+	}
+	stopped = true
 }
 
 // this is our typical gRPC server startup
@@ -178,6 +205,15 @@ func registerMe(def ServerDef) error {
 // it also configures the rpc server to expect a token to identify
 // the user in the rpc metadata call
 func ServerStartup(def ServerDef) error {
+	c := make(chan os.Signal, 2)
+	signal.Notify(c, os.Interrupt, syscall.SIGTERM)
+	go func() {
+		<-c
+		stopping()
+		os.Exit(0)
+	}()
+	stopped = false
+	defer stopping()
 	def.init()
 	listenAddr := fmt.Sprintf(":%d", def.Port)
 	fmt.Println("Starting server on ", listenAddr)
@@ -271,6 +307,7 @@ func serveServiceInfo(w http.ResponseWriter, req *http.Request, sd ServerDef) {
 
 // this services the /pleaseshutdown url
 func pleaseShutdown(w http.ResponseWriter, req *http.Request, sd ServerDef) {
+	stopping()
 	fmt.Fprintf(w, "OK\n")
 	os.Exit(0)
 }
@@ -326,13 +363,13 @@ func grpcHandlerFunc(grpcServer *grpc.Server, otherHandler http.Handler) http.Ha
 	})
 }
 
-func AddRegistry(name string, port int) error {
+func AddRegistry(name string, port int) (string, error) {
 	//fmt.Printf("Registering service %s with registry server\n", name)
 	opts := []grpc.DialOption{grpc.WithInsecure()}
 	conn, err := grpc.Dial(*Registry, opts...)
 	if err != nil {
 		fmt.Println("failed to dial registry server: %v", err)
-		return err
+		return "", err
 	}
 	defer conn.Close()
 	client := pb.NewRegistryClient(conn)
@@ -348,13 +385,13 @@ func AddRegistry(name string, port int) error {
 		fmt.Printf("RegisterService(%s) failed: %s\n", req.Service.Name, err)
 		fmt.Printf("  Published address: \"%s\"\n", req.Address[0].Host)
 		fmt.Printf("  Registry:   %s\n", *Registry)
-		return err
+		return "", err
 	}
 	if resp == nil {
 		fmt.Println("Registration failed with no error provided.")
 	}
 	//fmt.Printf("Response to register service: %v\n", resp)
-	return nil
+	return resp.ServiceID, nil
 }
 
 // expose an ever-increasing counter with the given metric

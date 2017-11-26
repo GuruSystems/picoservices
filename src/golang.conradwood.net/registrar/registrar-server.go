@@ -98,7 +98,7 @@ func removeInvalidInstances() {
 				se.instances = se.instances[:len(se.instances)-1]
 				name := fmt.Sprintf("%s@%s:%d", se.loc.Name, instance.address.Host,
 					instance.address.Port)
-				fmt.Printf("Instance %s removed due to excessive failures\n", name)
+				fmt.Printf("Instance %s removed due to excessive failures (or disabled)\n", name)
 				break
 			}
 		}
@@ -106,7 +106,7 @@ func removeInvalidInstances() {
 }
 func isValid(si *serviceInstance) bool {
 	if si.disabled {
-		return true
+		return false
 	}
 	if si.failures < 10 {
 		return true
@@ -195,6 +195,7 @@ func AddService(sd *pb.ServiceDescription, hostname string, port int32) *service
 	}
 	// new instance: append it
 	si := new(serviceInstance)
+	si.disabled = false
 	idCtr++
 	si.serviceID = idCtr
 	si.firstRegistered = time.Now()
