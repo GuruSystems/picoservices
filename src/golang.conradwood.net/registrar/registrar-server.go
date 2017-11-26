@@ -16,6 +16,7 @@ import (
 	"net"
 	"net/http"
 	"os"
+	"strconv"
 	"strings"
 	"time"
 )
@@ -25,7 +26,9 @@ type serviceEntry struct {
 	instances []*serviceInstance
 }
 type serviceInstance struct {
+	serviceID       int
 	failures        int
+	disabled        bool
 	firstRegistered time.Time
 	lastSuccess     time.Time
 	address         pb.ServiceAddress
@@ -36,6 +39,7 @@ var (
 	port      = flag.Int("port", 5000, "The server port")
 	keepAlive = flag.Int("keepalive", 2, "keep alive interval in seconds to check each registered service")
 	services  *list.List
+	idCtr     = 0
 )
 
 func main() {
@@ -81,7 +85,9 @@ func CheckRegistry() {
 			}
 		}
 	}
-
+	removeInvalidInstances()
+}
+func removeInvalidInstances() {
 	// remove failed instances
 	for e := services.Front(); e != nil; e = e.Next() {
 		se := e.Value.(*serviceEntry)
@@ -99,6 +105,9 @@ func CheckRegistry() {
 	}
 }
 func isValid(si *serviceInstance) bool {
+	if si.disabled {
+		return true
+	}
 	if si.failures < 10 {
 		return true
 	}
@@ -140,6 +149,18 @@ func CheckService(desc *serviceEntry, addr *serviceInstance) error {
 /**********************************
 * helpers
 ***********************************/
+func FindInstanceById(id int) *serviceInstance {
+	for e := services.Front(); e != nil; e = e.Next() {
+		sl := e.Value.(*serviceEntry)
+		for _, si := range sl.instances {
+			if si.serviceID == id {
+				return si
+			}
+		}
+	}
+	return nil
+}
+
 func FindService(sd *pb.ServiceDescription) *serviceEntry {
 	for e := services.Front(); e != nil; e = e.Next() {
 		sl := e.Value.(*serviceEntry)
@@ -149,10 +170,11 @@ func FindService(sd *pb.ServiceDescription) *serviceEntry {
 	}
 	return nil
 }
-func AddService(sd *pb.ServiceDescription, hostname string, port int32) {
+
+func AddService(sd *pb.ServiceDescription, hostname string, port int32) *serviceInstance {
 	if sd.Name == "" {
 		fmt.Printf("NO NAME: %v\n", sd)
-		return
+		return nil
 	}
 
 	sl := FindService(sd)
@@ -168,11 +190,13 @@ func AddService(sd *pb.ServiceDescription, hostname string, port int32) {
 	for _, instance := range sl.instances {
 		if (instance.address.Host == hostname) && (instance.address.Port == port) {
 			//fmt.Printf("Re-Registered service %s (%s) at %s:%d\n", sd.Name, sd.Type, hostname, port)
-			return
+			return instance
 		}
 	}
 	// new instance: append it
 	si := new(serviceInstance)
+	idCtr++
+	si.serviceID = idCtr
 	si.firstRegistered = time.Now()
 	si.lastSuccess = time.Now()
 	si.address = pb.ServiceAddress{Host: hostname, Port: port}
@@ -184,6 +208,7 @@ func AddService(sd *pb.ServiceDescription, hostname string, port int32) {
 		os.Exit(10)
 	}
 	//fmt.Printf("Service: %s with %d instances \n", sl, len(sl.instances))
+	return si
 
 }
 
@@ -221,7 +246,17 @@ func (s *RegistryService) GetServiceAddress(ctx context.Context, gr *pb.GetReque
 	}
 	return &resp, nil
 }
-
+func (s *RegistryService) DeregisterService(ctx context.Context, pr *pb.DeregisterRequest) (*pb.EmptyResponse, error) {
+	sid, _ := strconv.Atoi(pr.ServiceID)
+	si := FindInstanceById(sid)
+	if si == nil {
+		return nil, errors.New("No such service to deregister")
+	}
+	si.disabled = true
+	removeInvalidInstances()
+	fmt.Printf("Deregistered Service %v\n", si)
+	return &pb.EmptyResponse{}, nil
+}
 func (s *RegistryService) RegisterService(ctx context.Context, pr *pb.ServiceLocation) (*pb.GetResponse, error) {
 
 	peer, ok := peer.FromContext(ctx)
@@ -260,7 +295,8 @@ func (s *RegistryService) RegisterService(ctx context.Context, pr *pb.ServiceLoc
 				return nil, errors.New("Not registering at localhost")
 			}
 		}
-		AddService(pr.Service, host, address.Port)
+		si := AddService(pr.Service, host, address.Port)
+		rr.ServiceID = fmt.Sprintf("%d", si.serviceID)
 		rr.Location.Address = append(rr.Location.Address, &pb.ServiceAddress{Host: host, Port: address.Port})
 	}
 	return rr, nil

@@ -2858,6 +2858,16 @@ public final class Registrar {
      * <code>optional .registrar.ServiceLocation Location = 2;</code>
      */
     registrar.Registrar.ServiceLocationOrBuilder getLocationOrBuilder();
+
+    /**
+     * <code>optional string ServiceID = 3;</code>
+     */
+    java.lang.String getServiceID();
+    /**
+     * <code>optional string ServiceID = 3;</code>
+     */
+    com.google.protobuf.ByteString
+        getServiceIDBytes();
   }
   /**
    * Protobuf type {@code registrar.GetResponse}
@@ -2871,6 +2881,7 @@ public final class Registrar {
       super(builder);
     }
     private GetResponse() {
+      serviceID_ = "";
     }
 
     @java.lang.Override
@@ -2922,6 +2933,12 @@ public final class Registrar {
                 location_ = subBuilder.buildPartial();
               }
 
+              break;
+            }
+            case 26: {
+              java.lang.String s = input.readStringRequireUtf8();
+
+              serviceID_ = s;
               break;
             }
           }
@@ -2989,6 +3006,40 @@ public final class Registrar {
       return getLocation();
     }
 
+    public static final int SERVICEID_FIELD_NUMBER = 3;
+    private volatile java.lang.Object serviceID_;
+    /**
+     * <code>optional string ServiceID = 3;</code>
+     */
+    public java.lang.String getServiceID() {
+      java.lang.Object ref = serviceID_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        serviceID_ = s;
+        return s;
+      }
+    }
+    /**
+     * <code>optional string ServiceID = 3;</code>
+     */
+    public com.google.protobuf.ByteString
+        getServiceIDBytes() {
+      java.lang.Object ref = serviceID_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        serviceID_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
@@ -3007,6 +3058,9 @@ public final class Registrar {
       if (location_ != null) {
         output.writeMessage(2, getLocation());
       }
+      if (!getServiceIDBytes().isEmpty()) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 3, serviceID_);
+      }
     }
 
     public int getSerializedSize() {
@@ -3021,6 +3075,9 @@ public final class Registrar {
       if (location_ != null) {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(2, getLocation());
+      }
+      if (!getServiceIDBytes().isEmpty()) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(3, serviceID_);
       }
       memoizedSize = size;
       return size;
@@ -3048,6 +3105,8 @@ public final class Registrar {
         result = result && getLocation()
             .equals(other.getLocation());
       }
+      result = result && getServiceID()
+          .equals(other.getServiceID());
       return result;
     }
 
@@ -3066,6 +3125,8 @@ public final class Registrar {
         hash = (37 * hash) + LOCATION_FIELD_NUMBER;
         hash = (53 * hash) + getLocation().hashCode();
       }
+      hash = (37 * hash) + SERVICEID_FIELD_NUMBER;
+      hash = (53 * hash) + getServiceID().hashCode();
       hash = (29 * hash) + unknownFields.hashCode();
       memoizedHashCode = hash;
       return hash;
@@ -3196,6 +3257,8 @@ public final class Registrar {
           location_ = null;
           locationBuilder_ = null;
         }
+        serviceID_ = "";
+
         return this;
       }
 
@@ -3228,6 +3291,7 @@ public final class Registrar {
         } else {
           result.location_ = locationBuilder_.build();
         }
+        result.serviceID_ = serviceID_;
         onBuilt();
         return result;
       }
@@ -3274,6 +3338,10 @@ public final class Registrar {
         }
         if (other.hasLocation()) {
           mergeLocation(other.getLocation());
+        }
+        if (!other.getServiceID().isEmpty()) {
+          serviceID_ = other.serviceID_;
+          onChanged();
         }
         onChanged();
         return this;
@@ -3533,6 +3601,75 @@ public final class Registrar {
           location_ = null;
         }
         return locationBuilder_;
+      }
+
+      private java.lang.Object serviceID_ = "";
+      /**
+       * <code>optional string ServiceID = 3;</code>
+       */
+      public java.lang.String getServiceID() {
+        java.lang.Object ref = serviceID_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          serviceID_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>optional string ServiceID = 3;</code>
+       */
+      public com.google.protobuf.ByteString
+          getServiceIDBytes() {
+        java.lang.Object ref = serviceID_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          serviceID_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>optional string ServiceID = 3;</code>
+       */
+      public Builder setServiceID(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  
+        serviceID_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string ServiceID = 3;</code>
+       */
+      public Builder clearServiceID() {
+        
+        serviceID_ = getDefaultInstance().getServiceID();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string ServiceID = 3;</code>
+       */
+      public Builder setServiceIDBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+        
+        serviceID_ = value;
+        onChanged();
+        return this;
       }
       public final Builder setUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
@@ -5551,6 +5688,509 @@ public final class Registrar {
 
   }
 
+  public interface DeregisterRequestOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:registrar.DeregisterRequest)
+      com.google.protobuf.MessageOrBuilder {
+
+    /**
+     * <code>optional string ServiceID = 1;</code>
+     */
+    java.lang.String getServiceID();
+    /**
+     * <code>optional string ServiceID = 1;</code>
+     */
+    com.google.protobuf.ByteString
+        getServiceIDBytes();
+  }
+  /**
+   * Protobuf type {@code registrar.DeregisterRequest}
+   */
+  public  static final class DeregisterRequest extends
+      com.google.protobuf.GeneratedMessageV3 implements
+      // @@protoc_insertion_point(message_implements:registrar.DeregisterRequest)
+      DeregisterRequestOrBuilder {
+    // Use DeregisterRequest.newBuilder() to construct.
+    private DeregisterRequest(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+      super(builder);
+    }
+    private DeregisterRequest() {
+      serviceID_ = "";
+    }
+
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
+    }
+    private DeregisterRequest(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      this();
+      int mutable_bitField0_ = 0;
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            default: {
+              if (!input.skipField(tag)) {
+                done = true;
+              }
+              break;
+            }
+            case 10: {
+              java.lang.String s = input.readStringRequireUtf8();
+
+              serviceID_ = s;
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e).setUnfinishedMessage(this);
+      } finally {
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return registrar.Registrar.internal_static_registrar_DeregisterRequest_descriptor;
+    }
+
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return registrar.Registrar.internal_static_registrar_DeregisterRequest_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              registrar.Registrar.DeregisterRequest.class, registrar.Registrar.DeregisterRequest.Builder.class);
+    }
+
+    public static final int SERVICEID_FIELD_NUMBER = 1;
+    private volatile java.lang.Object serviceID_;
+    /**
+     * <code>optional string ServiceID = 1;</code>
+     */
+    public java.lang.String getServiceID() {
+      java.lang.Object ref = serviceID_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        serviceID_ = s;
+        return s;
+      }
+    }
+    /**
+     * <code>optional string ServiceID = 1;</code>
+     */
+    public com.google.protobuf.ByteString
+        getServiceIDBytes() {
+      java.lang.Object ref = serviceID_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        serviceID_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    private byte memoizedIsInitialized = -1;
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
+
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      if (!getServiceIDBytes().isEmpty()) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 1, serviceID_);
+      }
+    }
+
+    public int getSerializedSize() {
+      int size = memoizedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (!getServiceIDBytes().isEmpty()) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, serviceID_);
+      }
+      memoizedSize = size;
+      return size;
+    }
+
+    private static final long serialVersionUID = 0L;
+    @java.lang.Override
+    public boolean equals(final java.lang.Object obj) {
+      if (obj == this) {
+       return true;
+      }
+      if (!(obj instanceof registrar.Registrar.DeregisterRequest)) {
+        return super.equals(obj);
+      }
+      registrar.Registrar.DeregisterRequest other = (registrar.Registrar.DeregisterRequest) obj;
+
+      boolean result = true;
+      result = result && getServiceID()
+          .equals(other.getServiceID());
+      return result;
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+      if (memoizedHashCode != 0) {
+        return memoizedHashCode;
+      }
+      int hash = 41;
+      hash = (19 * hash) + getDescriptorForType().hashCode();
+      hash = (37 * hash) + SERVICEID_FIELD_NUMBER;
+      hash = (53 * hash) + getServiceID().hashCode();
+      hash = (29 * hash) + unknownFields.hashCode();
+      memoizedHashCode = hash;
+      return hash;
+    }
+
+    public static registrar.Registrar.DeregisterRequest parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static registrar.Registrar.DeregisterRequest parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static registrar.Registrar.DeregisterRequest parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static registrar.Registrar.DeregisterRequest parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static registrar.Registrar.DeregisterRequest parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static registrar.Registrar.DeregisterRequest parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static registrar.Registrar.DeregisterRequest parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input);
+    }
+    public static registrar.Registrar.DeregisterRequest parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static registrar.Registrar.DeregisterRequest parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static registrar.Registrar.DeregisterRequest parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder() {
+      return DEFAULT_INSTANCE.toBuilder();
+    }
+    public static Builder newBuilder(registrar.Registrar.DeregisterRequest prototype) {
+      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+    }
+    public Builder toBuilder() {
+      return this == DEFAULT_INSTANCE
+          ? new Builder() : new Builder().mergeFrom(this);
+    }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code registrar.DeregisterRequest}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:registrar.DeregisterRequest)
+        registrar.Registrar.DeregisterRequestOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return registrar.Registrar.internal_static_registrar_DeregisterRequest_descriptor;
+      }
+
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return registrar.Registrar.internal_static_registrar_DeregisterRequest_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                registrar.Registrar.DeregisterRequest.class, registrar.Registrar.DeregisterRequest.Builder.class);
+      }
+
+      // Construct using registrar.Registrar.DeregisterRequest.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessageV3
+                .alwaysUseFieldBuilders) {
+        }
+      }
+      public Builder clear() {
+        super.clear();
+        serviceID_ = "";
+
+        return this;
+      }
+
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return registrar.Registrar.internal_static_registrar_DeregisterRequest_descriptor;
+      }
+
+      public registrar.Registrar.DeregisterRequest getDefaultInstanceForType() {
+        return registrar.Registrar.DeregisterRequest.getDefaultInstance();
+      }
+
+      public registrar.Registrar.DeregisterRequest build() {
+        registrar.Registrar.DeregisterRequest result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      public registrar.Registrar.DeregisterRequest buildPartial() {
+        registrar.Registrar.DeregisterRequest result = new registrar.Registrar.DeregisterRequest(this);
+        result.serviceID_ = serviceID_;
+        onBuilt();
+        return result;
+      }
+
+      public Builder clone() {
+        return (Builder) super.clone();
+      }
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          Object value) {
+        return (Builder) super.setField(field, value);
+      }
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return (Builder) super.clearField(field);
+      }
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return (Builder) super.clearOneof(oneof);
+      }
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, Object value) {
+        return (Builder) super.setRepeatedField(field, index, value);
+      }
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          Object value) {
+        return (Builder) super.addRepeatedField(field, value);
+      }
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof registrar.Registrar.DeregisterRequest) {
+          return mergeFrom((registrar.Registrar.DeregisterRequest)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(registrar.Registrar.DeregisterRequest other) {
+        if (other == registrar.Registrar.DeregisterRequest.getDefaultInstance()) return this;
+        if (!other.getServiceID().isEmpty()) {
+          serviceID_ = other.serviceID_;
+          onChanged();
+        }
+        onChanged();
+        return this;
+      }
+
+      public final boolean isInitialized() {
+        return true;
+      }
+
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        registrar.Registrar.DeregisterRequest parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (registrar.Registrar.DeregisterRequest) e.getUnfinishedMessage();
+          throw e.unwrapIOException();
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+
+      private java.lang.Object serviceID_ = "";
+      /**
+       * <code>optional string ServiceID = 1;</code>
+       */
+      public java.lang.String getServiceID() {
+        java.lang.Object ref = serviceID_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          serviceID_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>optional string ServiceID = 1;</code>
+       */
+      public com.google.protobuf.ByteString
+          getServiceIDBytes() {
+        java.lang.Object ref = serviceID_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          serviceID_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>optional string ServiceID = 1;</code>
+       */
+      public Builder setServiceID(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  
+        serviceID_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string ServiceID = 1;</code>
+       */
+      public Builder clearServiceID() {
+        
+        serviceID_ = getDefaultInstance().getServiceID();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string ServiceID = 1;</code>
+       */
+      public Builder setServiceIDBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+        
+        serviceID_ = value;
+        onChanged();
+        return this;
+      }
+      public final Builder setUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return this;
+      }
+
+      public final Builder mergeUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return this;
+      }
+
+
+      // @@protoc_insertion_point(builder_scope:registrar.DeregisterRequest)
+    }
+
+    // @@protoc_insertion_point(class_scope:registrar.DeregisterRequest)
+    private static final registrar.Registrar.DeregisterRequest DEFAULT_INSTANCE;
+    static {
+      DEFAULT_INSTANCE = new registrar.Registrar.DeregisterRequest();
+    }
+
+    public static registrar.Registrar.DeregisterRequest getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static final com.google.protobuf.Parser<DeregisterRequest>
+        PARSER = new com.google.protobuf.AbstractParser<DeregisterRequest>() {
+      public DeregisterRequest parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+          return new DeregisterRequest(input, extensionRegistry);
+      }
+    };
+
+    public static com.google.protobuf.Parser<DeregisterRequest> parser() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<DeregisterRequest> getParserForType() {
+      return PARSER;
+    }
+
+    public registrar.Registrar.DeregisterRequest getDefaultInstanceForType() {
+      return DEFAULT_INSTANCE;
+    }
+
+  }
+
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_registrar_ServiceDescription_descriptor;
   private static final 
@@ -5596,6 +6236,11 @@ public final class Registrar {
   private static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_registrar_ListRequest_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_registrar_DeregisterRequest_descriptor;
+  private static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_registrar_DeregisterRequest_fieldAccessorTable;
 
   public static com.google.protobuf.Descriptors.FileDescriptor
       getDescriptor() {
@@ -5615,21 +6260,24 @@ public final class Registrar {
       "vice\030\001 \001(\0132\035.registrar.ServiceDescriptio" +
       "n\022*\n\007Address\030\002 \003(\0132\031.registrar.ServiceAd" +
       "dress\"<\n\nGetRequest\022.\n\007Service\030\001 \001(\0132\035.r",
-      "egistrar.ServiceDescription\"k\n\013GetRespon" +
+      "egistrar.ServiceDescription\"~\n\013GetRespon" +
       "se\022.\n\007Service\030\001 \001(\0132\035.registrar.ServiceD" +
       "escription\022,\n\010Location\030\002 \001(\0132\032.registrar" +
-      ".ServiceLocation\"&\n\017ShutdownRequest\022\023\n\013S" +
-      "erviceName\030\001 \001(\t\"7\n\014ListResponse\022\'\n\007Serv" +
-      "ice\030\003 \003(\0132\026.registrar.GetResponse\"\017\n\rEmp" +
-      "tyResponse\"\r\n\013ListRequest2\237\002\n\010Registry\022E" +
-      "\n\017RegisterService\022\032.registrar.ServiceLoc" +
-      "ation\032\026.registrar.GetResponse\022B\n\021GetServ" +
-      "iceAddress\022\025.registrar.GetRequest\032\026.regi",
-      "strar.GetResponse\022?\n\014ListServices\022\026.regi" +
-      "strar.ListRequest\032\027.registrar.ListRespon" +
-      "se\022G\n\017ShutdownService\022\032.registrar.Shutdo" +
-      "wnRequest\032\030.registrar.EmptyResponseb\006pro" +
-      "to3"
+      ".ServiceLocation\022\021\n\tServiceID\030\003 \001(\t\"&\n\017S" +
+      "hutdownRequest\022\023\n\013ServiceName\030\001 \001(\t\"7\n\014L" +
+      "istResponse\022\'\n\007Service\030\003 \003(\0132\026.registrar" +
+      ".GetResponse\"\017\n\rEmptyResponse\"\r\n\013ListReq" +
+      "uest\"&\n\021DeregisterRequest\022\021\n\tServiceID\030\001" +
+      " \001(\t2\354\002\n\010Registry\022K\n\021DeregisterService\022\034" +
+      ".registrar.DeregisterRequest\032\030.registrar",
+      ".EmptyResponse\022E\n\017RegisterService\022\032.regi" +
+      "strar.ServiceLocation\032\026.registrar.GetRes" +
+      "ponse\022B\n\021GetServiceAddress\022\025.registrar.G" +
+      "etRequest\032\026.registrar.GetResponse\022?\n\014Lis" +
+      "tServices\022\026.registrar.ListRequest\032\027.regi" +
+      "strar.ListResponse\022G\n\017ShutdownService\022\032." +
+      "registrar.ShutdownRequest\032\030.registrar.Em" +
+      "ptyResponseb\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -5673,7 +6321,7 @@ public final class Registrar {
     internal_static_registrar_GetResponse_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_registrar_GetResponse_descriptor,
-        new java.lang.String[] { "Service", "Location", });
+        new java.lang.String[] { "Service", "Location", "ServiceID", });
     internal_static_registrar_ShutdownRequest_descriptor =
       getDescriptor().getMessageTypes().get(5);
     internal_static_registrar_ShutdownRequest_fieldAccessorTable = new
@@ -5698,6 +6346,12 @@ public final class Registrar {
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_registrar_ListRequest_descriptor,
         new java.lang.String[] { });
+    internal_static_registrar_DeregisterRequest_descriptor =
+      getDescriptor().getMessageTypes().get(9);
+    internal_static_registrar_DeregisterRequest_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_registrar_DeregisterRequest_descriptor,
+        new java.lang.String[] { "ServiceID", });
     com.google.api.AnnotationsProto.getDescriptor();
   }
 

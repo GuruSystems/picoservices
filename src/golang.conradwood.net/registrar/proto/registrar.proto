@@ -4,13 +4,6 @@ syntax = "proto3";
 package registrar;
 
 import "google/api/annotations.proto";
-/*
-import "google/protobuf/empty.proto";
-import "google/protobuf/duration.proto";
-import "examples/sub/message.proto";
-import "examples/sub2/message.proto";
-import "google/protobuf/timestamp.proto";
-*/
 
 message ServiceDescription {
 string Name = 1;
@@ -38,6 +31,7 @@ ServiceDescription Service=1;
 message GetResponse {
 ServiceDescription Service=1;
 ServiceLocation Location=2;
+string ServiceID=3;
 }
 message ShutdownRequest {
 string ServiceName=1;
@@ -48,7 +42,11 @@ repeated GetResponse Service = 3;
 message EmptyResponse{}
 message ListRequest{}
 
+message DeregisterRequest {
+string ServiceID=1;
+}
 service Registry {
+ rpc DeregisterService(DeregisterRequest) returns (EmptyResponse);
  rpc RegisterService(ServiceLocation) returns (GetResponse);
  rpc GetServiceAddress(GetRequest) returns (GetResponse);
  rpc ListServices(ListRequest) returns (ListResponse);
