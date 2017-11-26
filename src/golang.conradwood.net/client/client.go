@@ -82,6 +82,7 @@ func GetClientCreds() credentials.TransportCredentials {
 	//	cert, err := tls.LoadX509KeyPair(*clientcrt, *clientkey)
 	if err != nil {
 		fmt.Printf("Failed to create client certificates: %s\n", err)
+		fmt.Printf("key:\n%s\n", string(Privatekey))
 		return nil
 	}
 	// we don't verify the hostname because we use a dynamic registry thingie
