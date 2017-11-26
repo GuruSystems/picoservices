@@ -110,7 +110,7 @@ func CheckLdapPassword(username string, pw string) string {
 	}
 
 	tk := RandomString(64)
-	fmt.Printf("WARNING: ldap support incomplete. Token created but not stored permanently!!\n")
+
 	// Rebind as the read only user for any further queries
 	err = l.Bind(*bindusername, *bindpw)
 	if err != nil {
