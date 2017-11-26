@@ -50,11 +50,14 @@ func bail(err error, msg string) {
 func main() {
 	flag.Parse()
 	roots := x509.NewCertPool()
-	FrontendKey, _ := ioutil.ReadFile(key)
+	FrontendKey, err := ioutil.ReadFile(key)
+	bail(err, "Failed to load key")
 
-	FrontendCert, _ := ioutil.ReadFile(crt)
+	FrontendCert, err := ioutil.ReadFile(crt)
+	bail(err, "Failed to load cert")
 	roots.AppendCertsFromPEM(FrontendCert)
-	ImCert, _ := ioutil.ReadFile(ca)
+	ImCert, err := ioutil.ReadFile(ca)
+	bail(err, "Failed to load ca")
 	roots.AppendCertsFromPEM(ImCert)
 
 	// Create credentials
