@@ -20,7 +20,6 @@ import (
 	apb "golang.conradwood.net/auth/proto"
 	pb "golang.conradwood.net/registrar/proto"
 	"google.golang.org/grpc/codes"
-	"io/ioutil"
 	"net"
 	"net/http"
 	"os"
@@ -28,9 +27,11 @@ import (
 )
 
 var (
-	servercrt        = flag.String("rpc_server_certificate", "/etc/grpc/server/certificate.pem", "`filename` of the server certificate to be used for incoming connections to this rpc server")
-	servercertkey    = flag.String("rpc_server_certkey", "/etc/grpc/server/privatekey.pem", "`filename` of the key for the server certificate to be used for incoming connections to this rpc server")
-	serverca         = flag.String("rpc_server_ca", "/etc/grpc/server/ca.pem", "`filename` of the the CA certificate which signed both client and server certificate")
+	/*
+		servercrt        = flag.String("rpc_server_certificate", "/etc/grpc/server/certificate.pem", "`filename` of the server certificate to be used for incoming connections to this rpc server")
+		servercertkey    = flag.String("rpc_server_certkey", "/etc/grpc/server/privatekey.pem", "`filename` of the key for the server certificate to be used for incoming connections to this rpc server")
+		serverca         = flag.String("rpc_server_ca", "/etc/grpc/server/ca.pem", "`filename` of the the CA certificate which signed both client and server certificate")
+	*/
 	Registry         = flag.String("registry", "localhost:5000", "Registrar server address (to register with)")
 	serveraddr       = flag.String("address", "", "Address (default: derive from connection to registrar. does not work well with localhost)")
 	authconn         *grpc.ClientConn
@@ -49,9 +50,9 @@ type Register func(server *grpc.Server) error
 
 type ServerDef struct {
 	Port        int
-	Certificate string
-	Key         string
-	CA          string
+	Certificate []byte
+	Key         []byte
+	CA          []byte
 	Register    Register
 	// set to true if this server does NOT require authentication (default: it does need authentication)
 	NoAuth bool
@@ -63,14 +64,14 @@ func CheckCookie(cookie string) bool {
 }
 
 func (s *ServerDef) init() {
-	if s.Certificate == "" {
-		s.Certificate = *servercrt
+	if len(s.Certificate) == 0 {
+		s.Certificate = Certificate
 	}
-	if s.Key == "" {
-		s.Key = *servercertkey
+	if len(s.Key) == 0 {
+		s.Key = Privatekey
 	}
-	if s.CA == "" {
-		s.CA = *serverca
+	if len(s.CA) == 0 {
+		s.CA = Ca
 	}
 }
 func StreamAuthInterceptor(srv interface{}, ss grpc.ServerStream, info *grpc.StreamServerInfo, handler grpc.StreamHandler) error {
@@ -181,25 +182,15 @@ func ServerStartup(def ServerDef) error {
 	listenAddr := fmt.Sprintf(":%d", def.Port)
 	fmt.Println("Starting server on ", listenAddr)
 
-	BackendCert, err := ioutil.ReadFile(def.Certificate)
-	if err != nil {
-		return fmt.Errorf("Failed to read certificate from file \"%s\": %s", def.Certificate, err)
-	}
-	BackendKey, err := ioutil.ReadFile(def.Key)
-	if err != nil {
-		return fmt.Errorf("Failed to read key from file \"%s\": %s", def.Key, err)
-	}
-	ImCert, err := ioutil.ReadFile(def.CA)
-	if err != nil {
-		return fmt.Errorf("Failed to read CA certificate from file \"%s\": %s", def.CA, err)
-	}
-
+	BackendCert := Certificate
+	BackendKey := Privatekey
+	ImCert := Ca
 	cert, err := tls.X509KeyPair(BackendCert, BackendKey)
 	if err != nil {
 		return fmt.Errorf("failed to parse certificate: %v\n", err)
 	}
 	roots := x509.NewCertPool()
-	FrontendCert, _ := ioutil.ReadFile(def.Certificate)
+	FrontendCert := Certificate
 	roots.AppendCertsFromPEM(FrontendCert)
 	roots.AppendCertsFromPEM(ImCert)
 
@@ -300,14 +291,8 @@ func startHttpServe(sd ServerDef, grpcServer *grpc.Server) error {
 		panic(err)
 	}
 
-	BackendCert, err := ioutil.ReadFile(sd.Certificate)
-	if err != nil {
-		return fmt.Errorf("Failed to read certificate from file \"%s\": %s", sd.Certificate, err)
-	}
-	BackendKey, err := ioutil.ReadFile(sd.Key)
-	if err != nil {
-		return fmt.Errorf("Failed to read key from file \"%s\": %s", sd.Key, err)
-	}
+	BackendCert := Certificate
+	BackendKey := Privatekey
 	cert, err := tls.X509KeyPair(BackendCert, BackendKey)
 
 	srv := &http.Server{
