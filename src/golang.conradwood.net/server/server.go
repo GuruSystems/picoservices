@@ -37,6 +37,7 @@ var (
 	register_refresh = flag.Int("register_refresh", 10, "registration refresh interval in `seconds`")
 	usercache        = make(map[string]*UserCache)
 	ctrmetrics       = make(map[string]*uint64)
+	registered       = make(map[string]bool)
 )
 
 type UserCache struct {
@@ -110,12 +111,12 @@ func addUserToCache(token string, id string) {
 // so we print them to stdout instead and return a generic message
 func authenticate(ctx context.Context, meta metadata.MD) (context.Context, error) {
 	if len(meta["token"]) != 1 {
-		fmt.Println("Invalid number of tokens: ", len(meta["token"]))
+		fmt.Println("RPCServer: Invalid number of tokens: ", len(meta["token"]))
 		return nil, grpc.Errorf(codes.Unauthenticated, "invalid token")
 	}
 	token := meta["token"][0]
 	if authconn == nil {
-		fmt.Println("No authenticator available")
+		fmt.Println("RPCServer: No authenticator available")
 		return nil, grpc.Errorf(codes.Unauthenticated, "invalid token")
 	}
 	uc := getUserFromCache(token)
@@ -132,12 +133,12 @@ func authenticate(ctx context.Context, meta metadata.MD) (context.Context, error
 	}
 	// should never happen - but it's auth, so extra check doesn't hurt
 	if resp.UserID == "" {
-		fmt.Println("BUG: a user was authenticated but no userid returned!")
+		fmt.Println("RPCServer: BUG: a user was authenticated but no userid returned!")
 		return nil, grpc.Errorf(codes.Unauthenticated, "invalid token")
 	}
 	addUserToCache(token, resp.UserID)
 	ai := auth.AuthInfo{UserID: resp.UserID}
-	fmt.Printf("Authenticated user \"%s\".\n", resp.UserID)
+	fmt.Printf("RPCServer: Authenticated user \"%s\".\n", resp.UserID)
 	nctx := context.WithValue(ctx, "authinfo", ai)
 	return nctx, nil
 }
@@ -156,11 +157,14 @@ func GetAuthClient() (apb.AuthenticationServiceClient, error) {
 
 func registerMe(def ServerDef) error {
 	for _, name := range def.names {
-		fmt.Printf("Registered Service: \"%s\"\n", name)
+		if registered[name] == false {
+			fmt.Printf("Registering Service: \"%s\"\n", name)
+		}
 		err := AddRegistry(name, def.Port)
 		if err != nil {
 			return fmt.Errorf("Failed to register %s with registry server", name, err)
 		}
+		registered[name] = true
 	}
 	return nil
 
