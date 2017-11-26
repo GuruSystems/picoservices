@@ -156,7 +156,7 @@ func GetAuthClient() (apb.AuthenticationServiceClient, error) {
 
 func registerMe(def ServerDef) error {
 	for _, name := range def.names {
-		//fmt.Println("Registered Server: ", name)
+		fmt.Printf("Registered Service: \"%s\"\n", name)
 		err := AddRegistry(name, def.Port)
 		if err != nil {
 			return fmt.Errorf("Failed to register %s with registry server", name, err)
