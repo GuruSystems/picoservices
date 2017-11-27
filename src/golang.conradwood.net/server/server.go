@@ -114,6 +114,7 @@ func addUserToCache(token string, id string) {
 // we must not return useful errormessages here,
 // so we print them to stdout instead and return a generic message
 func authenticate(ctx context.Context, meta metadata.MD) (context.Context, error) {
+	var err error
 	if len(meta["token"]) != 1 {
 		fmt.Println("RPCServer: Invalid number of tokens: ", len(meta["token"]))
 		return nil, grpc.Errorf(codes.Unauthenticated, "invalid token")
@@ -129,14 +130,33 @@ func authenticate(ctx context.Context, meta metadata.MD) (context.Context, error
 		nctx := context.WithValue(ctx, "authinfo", ai)
 		return nctx, nil
 	}
-	client := apb.NewAuthenticationServiceClient(authconn)
+	authc := apb.NewAuthenticationServiceClient(authconn)
 	req := &apb.VerifyRequest{Token: token}
-	resp, err := client.VerifyUserToken(ctx, req)
-	if err != nil {
-		return nil, err
+	repeat := 4
+	var resp *apb.VerifyResponse
+	for {
+		resp, err = authc.VerifyUserToken(ctx, req)
+		if err == nil {
+			break
+		}
+
+		fmt.Printf("(%d) VerifyUserToken() failed: %s (%v)\n", repeat, err, authconn)
+		if repeat <= 1 {
+			return nil, err
+		}
+
+		fmt.Printf("Due to failure (%s) verifying token we re-connect...\n", err)
+		authconn, err = client.DialWrapper("auth.AuthenticationService")
+		if err != nil {
+			fmt.Printf("Resetting the connection to auth service did not help either:%s\n", err)
+			return nil, err
+		}
+		authc = apb.NewAuthenticationServiceClient(authconn)
+
+		repeat--
 	}
 	// should never happen - but it's auth, so extra check doesn't hurt
-	if resp.UserID == "" {
+	if (resp == nil) || (resp.UserID == "") {
 		fmt.Println("RPCServer: BUG: a user was authenticated but no userid returned!")
 		return nil, grpc.Errorf(codes.Unauthenticated, "invalid token")
 	}
