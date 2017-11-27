@@ -308,6 +308,7 @@ func GetLocalIP() string {
 		fmt.Println("Failed to get interfaces: ", err)
 		return ""
 	}
+	res := ""
 	for _, i := range ifaces {
 		addrs, err := i.Addrs()
 		// handle err
@@ -326,11 +327,29 @@ func GetLocalIP() string {
 			// process IP address
 			s := ip.String()
 			if (s != "127.0.0.1") && (!strings.Contains(s, ":")) {
-				return s
+				res = s
+				break
+			}
+		}
+		if res != "" {
+			break
+		}
+	}
+	if res == "" {
+		fmt.Printf("Failed to get Local IP from:\n")
+		for _, i := range ifaces {
+			addrs, err := i.Addrs()
+			// handle err
+			if err != nil {
+				fmt.Println("Failed to get address: ", err)
+				return ""
+			}
+			for _, addr := range addrs {
+				fmt.Printf("%s : %s\n", i, addr)
 			}
 		}
 	}
-	return ""
+	return res
 }
 func (s *RegistryService) ListServices(ctx context.Context, pr *pb.ListRequest) (*pb.ListResponse, error) {
 	lr := new(pb.ListResponse)
