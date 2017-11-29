@@ -9,6 +9,7 @@ import (
 	"fmt"
 	_ "github.com/lib/pq"
 	"golang.conradwood.net/auth"
+	pb "golang.conradwood.net/auth/proto"
 )
 
 var (
@@ -98,4 +99,7 @@ func (pga *PostGresAuthenticator) getUserIDfromEmail(email string) string {
 		return fmt.Sprintf("%d", userid)
 	}
 	return ""
+}
+func (pga *PostGresAuthenticator) CreateUser(*pb.CreateUserRequest) (string, error) {
+	return "", errors.New("CreateUser() not yet implemented")
 }

@@ -9,6 +9,7 @@ import (
 	"fmt"
 	_ "github.com/lib/pq"
 	"golang.conradwood.net/auth"
+	pb "golang.conradwood.net/auth/proto"
 )
 
 type PsqlLdapAuthenticator struct {
@@ -156,4 +157,19 @@ func (pga *PsqlLdapAuthenticator) addTokenToUser(userid string, token string, va
 	}
 	return nil
 
+}
+func (pga *PsqlLdapAuthenticator) CreateUser(c *pb.CreateUserRequest) (string, error) {
+	pw := c.Password
+	if pw == "" {
+		pw = RandomString(64)
+	}
+	err := CreateLdapUser(c.UserName, c.LastName, c.UserName, pw)
+	if err != nil {
+		return "", err
+	}
+	_, err = pga.dbcon.Exec("insert into usertable (firstname,lastname,email,ldapcn) values ($1,$2,$3,$4)", c.FirstName, c.LastName, c.Email, c.UserName)
+	if err != nil {
+		return "", err
+	}
+	return "", nil
 }

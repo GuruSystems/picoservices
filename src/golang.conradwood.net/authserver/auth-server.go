@@ -17,7 +17,7 @@ import (
 
 // static variables for flag parser
 var (
-	backend  = flag.String("backend", "none", "backend to use: all|none|postgres|file")
+	backend  = flag.String("backend", "none", "backend to use: any|none|postgres|file|ldap|psql-ldap")
 	port     = flag.Int("port", 4998, "The server port")
 	Tokendir = flag.String("tokendir", "/srv/picoservices/tokendir", "directory with token<->user files")
 	authBE   auth.Authenticator
@@ -115,9 +115,7 @@ func start() error {
 /**********************************
 * implementing the functions here:
 ***********************************/
-type AuthServer struct {
-	wtf int
-}
+type AuthServer struct{}
 
 func getUserFromToken(token string) (*auth.User, error) {
 	if token == "" {
@@ -201,4 +199,28 @@ func (s *AuthServer) AuthenticatePassword(ctx context.Context, in *pb.Authentica
 	}
 	r := pb.VerifyPasswordResponse{User: &gd, Token: tk}
 	return &r, nil
+}
+func (s *AuthServer) CreateUser(ctx context.Context, req *pb.CreateUserRequest) (*pb.GetDetailResponse, error) {
+	if req.UserName == "" {
+		return nil, errors.New("Username is required")
+	}
+	if req.Email == "" {
+		return nil, errors.New("Email is required")
+	}
+	if req.FirstName == "" {
+		return nil, errors.New("FirstName is required")
+	}
+	if req.LastName == "" {
+		return nil, errors.New("LastName is required")
+	}
+	uid, err := authBE.CreateUser(req)
+	if err != nil {
+		return nil, errors.New(fmt.Sprintf("Failed to create user %s: %s", req.UserName, err))
+	}
+	gdr := pb.GetDetailResponse{UserID: uid,
+		Email:     req.Email,
+		FirstName: req.FirstName,
+		LastName:  req.LastName}
+
+	return &gdr, nil
 }

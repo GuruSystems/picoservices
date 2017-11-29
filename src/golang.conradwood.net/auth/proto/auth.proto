@@ -38,11 +38,21 @@ GetDetailResponse User = 1;
 string Token = 2;
 }
 
+message CreateUserRequest {
+// e.g. cnw
+string UserName = 1;
+// e.g. junkmail@conradwood.net
+string Email = 2;
+string FirstName = 3;
+string LastName =4;
+string Password=5;
+}
 service AuthenticationService {
 // authenticate a user by username/password, return token
- rpc AuthenticatePassword(AuthenticatePasswordRequest) returns (VerifyPasswordResponse) {}
+ rpc AuthenticatePassword(AuthenticatePasswordRequest) returns (VerifyPasswordResponse) ;
 
 // verify a user by token
- rpc VerifyUserToken(VerifyRequest) returns (VerifyResponse){ }
- rpc GetUserDetail(GetDetailRequest) returns (GetDetailResponse) { }
+ rpc VerifyUserToken(VerifyRequest) returns (VerifyResponse);
+ rpc GetUserDetail(GetDetailRequest) returns (GetDetailResponse) ;
+ rpc CreateUser(CreateUserRequest) returns (GetDetailResponse);
 }

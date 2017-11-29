@@ -12,6 +12,7 @@ import (
 	"errors"
 	"fmt"
 	"golang.conradwood.net/auth"
+	pb "golang.conradwood.net/auth/proto"
 	"io/ioutil"
 	"os"
 	"strings"
@@ -155,4 +156,7 @@ func CreateTokenInFileSystem(dir string, au *auth.User) string {
 		return ""
 	}
 	return tk
+}
+func (pga *FileAuthenticator) CreateUser(*pb.CreateUserRequest) (string, error) {
+	return "", errors.New("CreateUser() not yet implemented")
 }

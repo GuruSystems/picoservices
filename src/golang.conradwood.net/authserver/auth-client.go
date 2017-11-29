@@ -13,10 +13,10 @@ import (
 	"golang.org/x/net/context"
 	//	"net"
 	"bufio"
-	"crypto/tls"
-	"crypto/x509"
+
 	pb "golang.conradwood.net/auth/proto"
-	"google.golang.org/grpc/credentials"
+	// we really only pull it in to get the certificates...
+	"golang.conradwood.net/client"
 	"io/ioutil"
 	"os"
 	"os/user"
@@ -25,10 +25,11 @@ import (
 // static variables for flag parser
 var (
 	serverAddr = flag.String("server_addr", "127.0.0.1:4998", "The server address in the format of host:port")
-	crt        = "/etc/cnw/certs/rpc-client/certificate.pem"
-	key        = "/etc/cnw/certs/rpc-client/privatekey.pem"
-	ca         = "/etc/cnw/certs/rpc-client/ca.pem"
-	token      = flag.String("token", "", "user token to authenticate with")
+	usertoken  = flag.String("usertoken", "", "user token to authenticate with")
+	email      = flag.String("email", "", "email address of the user to create")
+	firstname  = flag.String("firstname", "", "Firstname of the user to create")
+	lastname   = flag.String("lastname", "", "Lastname of the user to create")
+	username   = flag.String("username", "", "username of the user to create")
 )
 
 func readLine(prompt string) string {
@@ -49,27 +50,9 @@ func bail(err error, msg string) {
 
 func main() {
 	flag.Parse()
-	roots := x509.NewCertPool()
-	FrontendKey, err := ioutil.ReadFile(key)
-	bail(err, "Failed to load key")
 
-	FrontendCert, err := ioutil.ReadFile(crt)
-	bail(err, "Failed to load cert")
-	roots.AppendCertsFromPEM(FrontendCert)
-	ImCert, err := ioutil.ReadFile(ca)
-	bail(err, "Failed to load ca")
-	roots.AppendCertsFromPEM(ImCert)
+	creds := client.GetClientCreds()
 
-	// Create credentials
-	//	creds := credentials.NewClientTLSFromCert(roots, "")
-	cert, err := tls.X509KeyPair(FrontendCert, FrontendKey)
-
-	creds := credentials.NewTLS(&tls.Config{
-		ServerName:         *serverAddr,
-		Certificates:       []tls.Certificate{cert},
-		RootCAs:            roots,
-		InsecureSkipVerify: true,
-	})
 	fmt.Println("Connecting to server...", *serverAddr, creds)
 	//conn, err := grpc.Dial(*serverAddr, grpc.WithInsecure())
 	conn, err := grpc.Dial(*serverAddr, grpc.WithTransportCredentials(creds))
@@ -78,19 +61,34 @@ func main() {
 		return
 	}
 	defer conn.Close()
-	fmt.Println("Creating client...")
-	client := pb.NewAuthenticationServiceClient(conn)
-	tok := ResolveAuthToken(*token)
-
+	fmt.Println("Creating aclient...")
+	aclient := pb.NewAuthenticationServiceClient(conn)
 	ctx := context.Background()
+
+	if (*email != "") || (*firstname != "") || (*lastname != "") || (*username != "") {
+		req := &pb.CreateUserRequest{
+			UserName:  *username,
+			Email:     *email,
+			FirstName: *firstname,
+			LastName:  *lastname,
+		}
+		_, err = aclient.CreateUser(ctx, req)
+		if err != nil {
+			fmt.Printf("Failed to create user: %s\n", err)
+			os.Exit(10)
+		}
+		os.Exit(0)
+	}
+
+	tok := ResolveAuthToken(*usertoken)
 
 	// if TLS is f*** we break at the first RPC call
 
-	if *token == "" {
+	if *usertoken == "" {
 		user := readLine("Username: ")
 		pw := readLine("Password: ")
 		fmt.Printf("Attempting to authenticate %s with %s...\n", user, pw)
-		cr, err := client.AuthenticatePassword(ctx, &pb.AuthenticatePasswordRequest{Email: user, Password: pw})
+		cr, err := aclient.AuthenticatePassword(ctx, &pb.AuthenticatePasswordRequest{Email: user, Password: pw})
 		bail(err, "Failed to get auth challenge")
 		fmt.Printf("Result: %v\n", cr)
 		tok = cr.Token
@@ -98,14 +96,14 @@ func main() {
 
 	req := pb.VerifyRequest{Token: tok}
 	fmt.Println("RPC call to auth server...")
-	resp, err := client.VerifyUserToken(ctx, &req)
+	resp, err := aclient.VerifyUserToken(ctx, &req)
 	if err != nil {
 		fmt.Printf("failed to verify user token: %v\n", err)
 		return
 	}
 	fmt.Printf("Response to verify token: %v\n", resp)
 	gdr := pb.GetDetailRequest{UserID: resp.UserID}
-	det, err := client.GetUserDetail(ctx, &gdr)
+	det, err := aclient.GetUserDetail(ctx, &gdr)
 	if err != nil {
 		fmt.Printf("failed to retrieve user %i: %s\n", resp.UserID, err)
 	}

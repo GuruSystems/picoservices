@@ -3,6 +3,7 @@ package main
 import (
 	"errors"
 	"golang.conradwood.net/auth"
+	pb "golang.conradwood.net/auth/proto"
 )
 
 type NilAuthenticator struct {
@@ -16,4 +17,7 @@ func (pga *NilAuthenticator) GetUserDetail(user string) (*auth.User, error) {
 }
 func (pga *NilAuthenticator) CreateVerifiedToken(email string, pw string) string {
 	return ""
+}
+func (pga *NilAuthenticator) CreateUser(*pb.CreateUserRequest) (string, error) {
+	return "", errors.New("CreateUser() not yet implemented")
 }
