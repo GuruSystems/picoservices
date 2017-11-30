@@ -40,7 +40,10 @@ message ListResponse {
 repeated GetResponse Service = 3;
 }
 message EmptyResponse{}
-message ListRequest{}
+message ListRequest{
+// optional - if set filter by Name
+string Name=1;
+}
 
 message DeregisterRequest {
 string ServiceID=1;

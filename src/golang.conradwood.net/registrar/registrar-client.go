@@ -16,8 +16,9 @@ import (
 
 // static variables for flag parser
 var (
-	serverAddr = flag.String("server_addr", "127.0.0.1:5000", "The server address in the format of host:port")
+	serverAddr = flag.String("registry", "127.0.0.1:5000", "The registry server address in the format of host:port")
 	port       = flag.Int("port", 5000, "The server port")
+	name       = flag.String("name", "", "name of a service, if set output will be filtered to only include services with this name")
 )
 
 func main() {
@@ -43,6 +44,7 @@ func main() {
 		}
 	}
 	req := pb.ListRequest{}
+	req.Name = *name
 	resp, err := client.ListServices(context.Background(), &req)
 	if err != nil {
 		log.Fatalf("failed to list services: %v", err)

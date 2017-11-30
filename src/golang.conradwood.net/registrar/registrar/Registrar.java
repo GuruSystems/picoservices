@@ -5326,6 +5326,24 @@ public final class Registrar {
   public interface ListRequestOrBuilder extends
       // @@protoc_insertion_point(interface_extends:registrar.ListRequest)
       com.google.protobuf.MessageOrBuilder {
+
+    /**
+     * <pre>
+     * optional - if set filter by Name
+     * </pre>
+     *
+     * <code>optional string Name = 1;</code>
+     */
+    java.lang.String getName();
+    /**
+     * <pre>
+     * optional - if set filter by Name
+     * </pre>
+     *
+     * <code>optional string Name = 1;</code>
+     */
+    com.google.protobuf.ByteString
+        getNameBytes();
   }
   /**
    * Protobuf type {@code registrar.ListRequest}
@@ -5339,6 +5357,7 @@ public final class Registrar {
       super(builder);
     }
     private ListRequest() {
+      name_ = "";
     }
 
     @java.lang.Override
@@ -5351,6 +5370,7 @@ public final class Registrar {
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       this();
+      int mutable_bitField0_ = 0;
       try {
         boolean done = false;
         while (!done) {
@@ -5363,6 +5383,12 @@ public final class Registrar {
               if (!input.skipField(tag)) {
                 done = true;
               }
+              break;
+            }
+            case 10: {
+              java.lang.String s = input.readStringRequireUtf8();
+
+              name_ = s;
               break;
             }
           }
@@ -5388,6 +5414,48 @@ public final class Registrar {
               registrar.Registrar.ListRequest.class, registrar.Registrar.ListRequest.Builder.class);
     }
 
+    public static final int NAME_FIELD_NUMBER = 1;
+    private volatile java.lang.Object name_;
+    /**
+     * <pre>
+     * optional - if set filter by Name
+     * </pre>
+     *
+     * <code>optional string Name = 1;</code>
+     */
+    public java.lang.String getName() {
+      java.lang.Object ref = name_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        name_ = s;
+        return s;
+      }
+    }
+    /**
+     * <pre>
+     * optional - if set filter by Name
+     * </pre>
+     *
+     * <code>optional string Name = 1;</code>
+     */
+    public com.google.protobuf.ByteString
+        getNameBytes() {
+      java.lang.Object ref = name_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        name_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
@@ -5400,6 +5468,9 @@ public final class Registrar {
 
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
+      if (!getNameBytes().isEmpty()) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 1, name_);
+      }
     }
 
     public int getSerializedSize() {
@@ -5407,6 +5478,9 @@ public final class Registrar {
       if (size != -1) return size;
 
       size = 0;
+      if (!getNameBytes().isEmpty()) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, name_);
+      }
       memoizedSize = size;
       return size;
     }
@@ -5423,6 +5497,8 @@ public final class Registrar {
       registrar.Registrar.ListRequest other = (registrar.Registrar.ListRequest) obj;
 
       boolean result = true;
+      result = result && getName()
+          .equals(other.getName());
       return result;
     }
 
@@ -5433,6 +5509,8 @@ public final class Registrar {
       }
       int hash = 41;
       hash = (19 * hash) + getDescriptorForType().hashCode();
+      hash = (37 * hash) + NAME_FIELD_NUMBER;
+      hash = (53 * hash) + getName().hashCode();
       hash = (29 * hash) + unknownFields.hashCode();
       memoizedHashCode = hash;
       return hash;
@@ -5551,6 +5629,8 @@ public final class Registrar {
       }
       public Builder clear() {
         super.clear();
+        name_ = "";
+
         return this;
       }
 
@@ -5573,6 +5653,7 @@ public final class Registrar {
 
       public registrar.Registrar.ListRequest buildPartial() {
         registrar.Registrar.ListRequest result = new registrar.Registrar.ListRequest(this);
+        result.name_ = name_;
         onBuilt();
         return result;
       }
@@ -5614,6 +5695,10 @@ public final class Registrar {
 
       public Builder mergeFrom(registrar.Registrar.ListRequest other) {
         if (other == registrar.Registrar.ListRequest.getDefaultInstance()) return this;
+        if (!other.getName().isEmpty()) {
+          name_ = other.name_;
+          onChanged();
+        }
         onChanged();
         return this;
       }
@@ -5637,6 +5722,95 @@ public final class Registrar {
             mergeFrom(parsedMessage);
           }
         }
+        return this;
+      }
+
+      private java.lang.Object name_ = "";
+      /**
+       * <pre>
+       * optional - if set filter by Name
+       * </pre>
+       *
+       * <code>optional string Name = 1;</code>
+       */
+      public java.lang.String getName() {
+        java.lang.Object ref = name_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          name_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <pre>
+       * optional - if set filter by Name
+       * </pre>
+       *
+       * <code>optional string Name = 1;</code>
+       */
+      public com.google.protobuf.ByteString
+          getNameBytes() {
+        java.lang.Object ref = name_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          name_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <pre>
+       * optional - if set filter by Name
+       * </pre>
+       *
+       * <code>optional string Name = 1;</code>
+       */
+      public Builder setName(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  
+        name_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * optional - if set filter by Name
+       * </pre>
+       *
+       * <code>optional string Name = 1;</code>
+       */
+      public Builder clearName() {
+        
+        name_ = getDefaultInstance().getName();
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * optional - if set filter by Name
+       * </pre>
+       *
+       * <code>optional string Name = 1;</code>
+       */
+      public Builder setNameBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+        
+        name_ = value;
+        onChanged();
         return this;
       }
       public final Builder setUnknownFields(
@@ -6266,18 +6440,18 @@ public final class Registrar {
       ".ServiceLocation\022\021\n\tServiceID\030\003 \001(\t\"&\n\017S" +
       "hutdownRequest\022\023\n\013ServiceName\030\001 \001(\t\"7\n\014L" +
       "istResponse\022\'\n\007Service\030\003 \003(\0132\026.registrar" +
-      ".GetResponse\"\017\n\rEmptyResponse\"\r\n\013ListReq" +
-      "uest\"&\n\021DeregisterRequest\022\021\n\tServiceID\030\001" +
-      " \001(\t2\354\002\n\010Registry\022K\n\021DeregisterService\022\034" +
-      ".registrar.DeregisterRequest\032\030.registrar",
-      ".EmptyResponse\022E\n\017RegisterService\022\032.regi" +
-      "strar.ServiceLocation\032\026.registrar.GetRes" +
-      "ponse\022B\n\021GetServiceAddress\022\025.registrar.G" +
-      "etRequest\032\026.registrar.GetResponse\022?\n\014Lis" +
-      "tServices\022\026.registrar.ListRequest\032\027.regi" +
-      "strar.ListResponse\022G\n\017ShutdownService\022\032." +
-      "registrar.ShutdownRequest\032\030.registrar.Em" +
-      "ptyResponseb\006proto3"
+      ".GetResponse\"\017\n\rEmptyResponse\"\033\n\013ListReq" +
+      "uest\022\014\n\004Name\030\001 \001(\t\"&\n\021DeregisterRequest\022" +
+      "\021\n\tServiceID\030\001 \001(\t2\354\002\n\010Registry\022K\n\021Dereg" +
+      "isterService\022\034.registrar.DeregisterReque",
+      "st\032\030.registrar.EmptyResponse\022E\n\017Register" +
+      "Service\022\032.registrar.ServiceLocation\032\026.re" +
+      "gistrar.GetResponse\022B\n\021GetServiceAddress" +
+      "\022\025.registrar.GetRequest\032\026.registrar.GetR" +
+      "esponse\022?\n\014ListServices\022\026.registrar.List" +
+      "Request\032\027.registrar.ListResponse\022G\n\017Shut" +
+      "downService\022\032.registrar.ShutdownRequest\032" +
+      "\030.registrar.EmptyResponseb\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -6345,7 +6519,7 @@ public final class Registrar {
     internal_static_registrar_ListRequest_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_registrar_ListRequest_descriptor,
-        new java.lang.String[] { });
+        new java.lang.String[] { "Name", });
     internal_static_registrar_DeregisterRequest_descriptor =
       getDescriptor().getMessageTypes().get(9);
     internal_static_registrar_DeregisterRequest_fieldAccessorTable = new

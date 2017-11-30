@@ -357,6 +357,9 @@ func (s *RegistryService) ListServices(ctx context.Context, pr *pb.ListRequest) 
 	// one GetResponse per element
 	for e := services.Front(); e != nil; e = e.Next() {
 		se := e.Value.(*serviceEntry)
+		if (pr.Name != "") && (pr.Name != se.loc.Name) {
+			continue
+		}
 		fmt.Printf("Service %s has %d instances\n", se.loc.Name, len(se.instances))
 		rr := pb.GetResponse{}
 		lr.Service = append(lr.Service, &rr)

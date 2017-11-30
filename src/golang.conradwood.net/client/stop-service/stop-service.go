@@ -16,22 +16,27 @@ var (
 
 func main() {
 	flag.Parse()
-	if *service == "" {
+	target := *service
+	if target == "" {
+		target = flag.Arg(0)
+	}
+	if target == "" {
 		fmt.Printf("Please provide service name or host:port with --service option\n")
 		os.Exit(10)
 	}
-	if strings.Contains(*service, ":") {
-		doHttp()
+	fmt.Printf("Shutting down service: %s\n", target)
+	if strings.Contains(target, ":") {
+		doHttp(target)
 	} else {
 		doRegistry()
 	}
 }
-func doHttp() {
+func doHttp(target string) {
 	tr := &http.Transport{
 		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
 	}
 	client := &http.Client{Transport: tr}
-	url := fmt.Sprintf("https://%s/internal/pleaseshutdown", *service)
+	url := fmt.Sprintf("https://%s/internal/pleaseshutdown", target)
 	resp, err := client.Get(url)
 	if err != nil {
 		fmt.Printf("Failed to connect to %s: %s\n", url, err)
