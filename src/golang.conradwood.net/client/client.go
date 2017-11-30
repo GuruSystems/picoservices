@@ -19,7 +19,7 @@ import (
 var (
 	cert               = []byte{1, 2, 3}
 	displayedTokenInfo = false
-	Registry           = flag.String("registrar", "localhost:5000", "address of the registrar server (for lookups)")
+	registry           = flag.String("registrar", "localhost:5000", "address of the registrar server (for lookups)")
 	/*
 		clientcrt          = flag.String("clientcert", "/etc/cnw/certs/rfc-client/certificate.pem", "Client certificate")
 		clientkey          = flag.String("clientkey", "/etc/cnw/certs/rfc-client/privatekey.pem", "client private key")
@@ -28,20 +28,25 @@ var (
 	token = flag.String("token", "user_token", "The authentication token (cookie) to authenticate with. May be name of a file in ~/.picoservices/tokens/, if so file contents shall be used as cookie")
 )
 
+func GetRegistryAddress() string {
+	res := *registry
+	if !strings.Contains(res, ":") {
+		res = fmt.Sprintf("%s:5000", res)
+	}
+	return res
+}
+
 // given a service name we look up its address in the registry
 // and return a connection to it.
 // it's a replacement for the normal "dial" but instead of an address
 // it takes a service name
 func DialWrapper(servicename string) (*grpc.ClientConn, error) {
-	reg := *Registry
-	if !strings.Contains(reg, ":") {
-		reg = fmt.Sprintf("%s:5000", reg)
-	}
+	reg := GetRegistryAddress()
 	fmt.Printf("Using registrar @%s\n", reg)
 	opts := []grpc.DialOption{grpc.WithInsecure()}
 	conn, err := grpc.Dial(reg, opts...)
 	if err != nil {
-		fmt.Printf("Error dialling servicename %s @ %s\n", servicename, Registry)
+		fmt.Printf("Error dialling servicename %s @ %s\n", servicename, reg)
 		return nil, err
 	}
 	defer conn.Close()
