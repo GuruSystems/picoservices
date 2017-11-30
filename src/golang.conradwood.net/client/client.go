@@ -54,8 +54,13 @@ func DialWrapper(servicename string) (*grpc.ClientConn, error) {
 		return nil, errors.New("no address for service")
 	}
 	sa := resp.Location.Address[0]
+	return DialService(sa)
+}
+
+// if one needs to, one can still connect explicitly to a service
+func DialService(sa *pb.ServiceAddress) (*grpc.ClientConn, error) {
 	serverAddr := fmt.Sprintf("%s:%d", sa.Host, sa.Port)
-	fmt.Printf("Dialling service \"%s\" at \"%s\"\n", servicename, serverAddr)
+	fmt.Printf("Dialling service at \"%s\"\n", serverAddr)
 
 	creds := GetClientCreds()
 	cc, err := grpc.Dial(serverAddr, grpc.WithTransportCredentials(creds))
@@ -63,7 +68,7 @@ func DialWrapper(servicename string) (*grpc.ClientConn, error) {
 	//	opts = []grpc.DialOption{grpc.WithInsecure()}
 	// cc, err := grpc.Dial(serverAddr, opts...)
 	if err != nil {
-		fmt.Printf("Error dialling servicename %s @ %s\n", servicename, serverAddr)
+		fmt.Printf("Error dialling servicename @ %s\n", serverAddr)
 		return nil, err
 	}
 	//defer cc.Close()
