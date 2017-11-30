@@ -57,7 +57,7 @@ func DialWrapper(servicename string) (*grpc.ClientConn, error) {
 	return DialService(sa)
 }
 
-func GetRegistryClient() (*pb.RegistryClient, error) {
+func GetRegistryClient() (pb.RegistryClient, error) {
 	opts := []grpc.DialOption{grpc.WithInsecure()}
 	conn, err := grpc.Dial(*Registry, opts...)
 	if err != nil {
@@ -66,7 +66,7 @@ func GetRegistryClient() (*pb.RegistryClient, error) {
 	}
 	defer conn.Close()
 	rcl := pb.NewRegistryClient(conn)
-	return &rcl, nil
+	return rcl, nil
 }
 
 // if one needs to, one can still connect explicitly to a service
