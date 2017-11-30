@@ -200,7 +200,7 @@ func stopping() {
 	}
 	fmt.Printf("Server shutdown - deregistering services\n")
 	opts := []grpc.DialOption{grpc.WithInsecure()}
-	rconn, err := grpc.Dial(*Registry, opts...)
+	rconn, err := grpc.Dial(getRegistryAddress(), opts...)
 	if err != nil {
 		fmt.Printf("failed to dial registry server: %v", err)
 		return
@@ -383,10 +383,17 @@ func grpcHandlerFunc(grpcServer *grpc.Server, otherHandler http.Handler) http.Ha
 	})
 }
 
+func getRegistryAddress() string {
+	res := *Registry
+	if !strings.Contains(res, ":") {
+		res = fmt.Sprintf("%s:5000", res)
+	}
+	return res
+}
 func AddRegistry(name string, port int) (string, error) {
 	//fmt.Printf("Registering service %s with registry server\n", name)
 	opts := []grpc.DialOption{grpc.WithInsecure()}
-	conn, err := grpc.Dial(*Registry, opts...)
+	conn, err := grpc.Dial(getRegistryAddress(), opts...)
 	if err != nil {
 		fmt.Println("failed to dial registry server: %v", err)
 		return "", err
@@ -404,7 +411,7 @@ func AddRegistry(name string, port int) (string, error) {
 	if err != nil {
 		fmt.Printf("RegisterService(%s) failed: %s\n", req.Service.Name, err)
 		fmt.Printf("  Published address: \"%s\"\n", req.Address[0].Host)
-		fmt.Printf("  Registry:   %s\n", *Registry)
+		fmt.Printf("  Registry:   %s\n", getRegistryAddress())
 		return "", err
 	}
 	if resp == nil {
