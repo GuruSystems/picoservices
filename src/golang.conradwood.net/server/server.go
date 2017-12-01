@@ -121,8 +121,11 @@ func authenticate(ctx context.Context, meta metadata.MD) (context.Context, error
 	}
 	token := meta["token"][0]
 	if authconn == nil {
-		fmt.Println("RPCServer: No authenticator available")
-		return nil, grpc.Errorf(codes.Unauthenticated, "invalid token")
+		authconn, err = client.DialWrapper("auth.AuthenticationService")
+		if err != nil {
+			fmt.Printf("Could not establish connection to auth service:%s\n", err)
+			return nil, err
+		}
 	}
 	uc := getUserFromCache(token)
 	if uc != "" {

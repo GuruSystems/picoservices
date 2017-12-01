@@ -11,6 +11,6 @@ server:
 	go install ${PKG}-server.go auth-postgres.go auth-file.go auth-any.go auth-nil.go auth-ldap.go auth-psql-ldap.go
 client:
 	go install ${PKG}-client.go 
-
+	go install login.go
 proto:
 	@echo no proto for server
