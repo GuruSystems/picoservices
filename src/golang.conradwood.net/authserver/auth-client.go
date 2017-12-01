@@ -24,7 +24,7 @@ import (
 
 // static variables for flag parser
 var (
-	serverAddr = flag.String("server_addr", "127.0.0.1:4998", "The server address in the format of host:port")
+	serverAddr = flag.String("server_addr", "127.0.0.1:4998", "The address of the authentication-server in the format of host:port")
 	usertoken  = flag.String("usertoken", "", "user token to authenticate with")
 	email      = flag.String("email", "", "email address of the user to create")
 	firstname  = flag.String("firstname", "", "Firstname of the user to create")
@@ -72,6 +72,7 @@ func main() {
 			FirstName: *firstname,
 			LastName:  *lastname,
 		}
+		fmt.Printf("Creating user %s\n", req.UserName)
 		_, err = aclient.CreateUser(ctx, req)
 		if err != nil {
 			fmt.Printf("Failed to create user: %s\n", err)

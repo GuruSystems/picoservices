@@ -201,6 +201,9 @@ func (s *AuthServer) AuthenticatePassword(ctx context.Context, in *pb.Authentica
 	return &r, nil
 }
 func (s *AuthServer) CreateUser(ctx context.Context, req *pb.CreateUserRequest) (*pb.GetDetailResponse, error) {
+	if authBE == nil {
+		return nil, errors.New("no authentication backend available")
+	}
 	if req.UserName == "" {
 		return nil, errors.New("Username is required")
 	}
