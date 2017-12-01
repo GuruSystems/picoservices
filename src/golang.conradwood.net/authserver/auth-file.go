@@ -32,7 +32,7 @@ type userFile struct {
 func (fa *FileAuthenticator) Authenticate(token string) (string, error) {
 	var read []string
 	if (strings.Contains(token, "/")) || (strings.Contains(token, "~")) {
-		return "", errors.New("invalid token")
+		return "", errors.New(fmt.Sprintf("invalid token: \"%s\"", token))
 	}
 	fname := fmt.Sprintf("%s/%s.token", fa.dir, token)
 	fmt.Printf("Looking for token in %s\n", fname)
