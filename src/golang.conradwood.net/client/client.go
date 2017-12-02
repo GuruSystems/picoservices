@@ -123,8 +123,7 @@ func GetClientCreds() credentials.TransportCredentials {
 	return creds
 
 }
-
-func SetAuthToken() context.Context {
+func GetToken() string {
 	var tok string
 	var btok []byte
 	var fname string
@@ -144,6 +143,12 @@ func SetAuthToken() context.Context {
 		}
 	}
 	tok = strings.TrimSpace(tok)
+
+	return tok
+}
+
+func SetAuthToken() context.Context {
+	tok := GetToken()
 	md := metadata.Pairs("token", tok,
 		"clid", "itsme",
 	)
