@@ -164,9 +164,12 @@ func (pga *PsqlLdapAuthenticator) CreateUser(c *pb.CreateUserRequest) (string, e
 		pw = RandomString(64)
 	}
 	err := CreateLdapUser(c.UserName, c.LastName, c.UserName, pw)
-	if err != nil {
-		return "", err
-	}
+	/*
+	// continue anyways, perhaps botched 1. attempt and this is second?
+			if err != nil {
+				return "", err
+			}
+	*/
 	_, err = pga.dbcon.Exec("insert into usertable (firstname,lastname,email,ldapcn) values ($1,$2,$3,$4)", c.FirstName, c.LastName, c.Email, c.UserName)
 	if err != nil {
 		return "", err

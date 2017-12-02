@@ -28,6 +28,20 @@ var (
 	token = flag.String("token", "user_token", "The authentication token (cookie) to authenticate with. May be name of a file in ~/.picoservices/tokens/, if so file contents shall be used as cookie")
 )
 
+func SaveToken(tk string) error {
+	usr, err := user.Current()
+	if err != nil {
+		fmt.Printf("Unable to get current user: %s\n", err)
+		return err
+	}
+	fname := fmt.Sprintf("%s/.picoservices/tokens/%s", usr.HomeDir, *token)
+	fmt.Printf("Saving new token to %s\n", fname)
+	err = ioutil.WriteFile(fname, []byte(tk), 0600)
+	if err != nil {
+		fmt.Printf("Failed to save token to %s: %s\n", fname, err)
+	}
+	return err
+}
 func GetRegistryAddress() string {
 	res := *registry
 	if !strings.Contains(res, ":") {
