@@ -216,14 +216,16 @@ func (s *AuthServer) CreateUser(ctx context.Context, req *pb.CreateUserRequest) 
 	if req.LastName == "" {
 		return nil, errors.New("LastName is required")
 	}
-	uid, err := authBE.CreateUser(req)
+	pw, err := authBE.CreateUser(req)
 	if err != nil {
 		return nil, errors.New(fmt.Sprintf("Failed to create user %s: %s", req.UserName, err))
 	}
-	gdr := pb.GetDetailResponse{UserID: uid,
+	gdr := pb.GetDetailResponse{UserID: req.UserName,
 		Email:     req.Email,
 		FirstName: req.FirstName,
-		LastName:  req.LastName}
+		LastName:  req.LastName,
+		Password:  pw,
+	}
 
 	return &gdr, nil
 }

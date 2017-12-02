@@ -27,6 +27,8 @@ string UserID = 1;
 string Email = 2;
 string FirstName = 3;
 string LastName =4;
+// only set when creating users
+string Password=5;
 }
 
 message AuthenticatePasswordRequest {

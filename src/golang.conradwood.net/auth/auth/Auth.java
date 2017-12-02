@@ -1582,6 +1582,24 @@ public final class Auth {
      */
     com.google.protobuf.ByteString
         getLastNameBytes();
+
+    /**
+     * <pre>
+     * only set when creating users
+     * </pre>
+     *
+     * <code>optional string Password = 5;</code>
+     */
+    java.lang.String getPassword();
+    /**
+     * <pre>
+     * only set when creating users
+     * </pre>
+     *
+     * <code>optional string Password = 5;</code>
+     */
+    com.google.protobuf.ByteString
+        getPasswordBytes();
   }
   /**
    * Protobuf type {@code auth.GetDetailResponse}
@@ -1599,6 +1617,7 @@ public final class Auth {
       email_ = "";
       firstName_ = "";
       lastName_ = "";
+      password_ = "";
     }
 
     @java.lang.Override
@@ -1648,6 +1667,12 @@ public final class Auth {
               java.lang.String s = input.readStringRequireUtf8();
 
               lastName_ = s;
+              break;
+            }
+            case 42: {
+              java.lang.String s = input.readStringRequireUtf8();
+
+              password_ = s;
               break;
             }
           }
@@ -1809,6 +1834,48 @@ public final class Auth {
       }
     }
 
+    public static final int PASSWORD_FIELD_NUMBER = 5;
+    private volatile java.lang.Object password_;
+    /**
+     * <pre>
+     * only set when creating users
+     * </pre>
+     *
+     * <code>optional string Password = 5;</code>
+     */
+    public java.lang.String getPassword() {
+      java.lang.Object ref = password_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        password_ = s;
+        return s;
+      }
+    }
+    /**
+     * <pre>
+     * only set when creating users
+     * </pre>
+     *
+     * <code>optional string Password = 5;</code>
+     */
+    public com.google.protobuf.ByteString
+        getPasswordBytes() {
+      java.lang.Object ref = password_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        password_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
@@ -1833,6 +1900,9 @@ public final class Auth {
       if (!getLastNameBytes().isEmpty()) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 4, lastName_);
       }
+      if (!getPasswordBytes().isEmpty()) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 5, password_);
+      }
     }
 
     public int getSerializedSize() {
@@ -1851,6 +1921,9 @@ public final class Auth {
       }
       if (!getLastNameBytes().isEmpty()) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(4, lastName_);
+      }
+      if (!getPasswordBytes().isEmpty()) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(5, password_);
       }
       memoizedSize = size;
       return size;
@@ -1876,6 +1949,8 @@ public final class Auth {
           .equals(other.getFirstName());
       result = result && getLastName()
           .equals(other.getLastName());
+      result = result && getPassword()
+          .equals(other.getPassword());
       return result;
     }
 
@@ -1894,6 +1969,8 @@ public final class Auth {
       hash = (53 * hash) + getFirstName().hashCode();
       hash = (37 * hash) + LASTNAME_FIELD_NUMBER;
       hash = (53 * hash) + getLastName().hashCode();
+      hash = (37 * hash) + PASSWORD_FIELD_NUMBER;
+      hash = (53 * hash) + getPassword().hashCode();
       hash = (29 * hash) + unknownFields.hashCode();
       memoizedHashCode = hash;
       return hash;
@@ -2020,6 +2097,8 @@ public final class Auth {
 
         lastName_ = "";
 
+        password_ = "";
+
         return this;
       }
 
@@ -2046,6 +2125,7 @@ public final class Auth {
         result.email_ = email_;
         result.firstName_ = firstName_;
         result.lastName_ = lastName_;
+        result.password_ = password_;
         onBuilt();
         return result;
       }
@@ -2101,6 +2181,10 @@ public final class Auth {
         }
         if (!other.getLastName().isEmpty()) {
           lastName_ = other.lastName_;
+          onChanged();
+        }
+        if (!other.getPassword().isEmpty()) {
+          password_ = other.password_;
           onChanged();
         }
         onChanged();
@@ -2401,6 +2485,95 @@ public final class Auth {
   checkByteStringIsUtf8(value);
         
         lastName_ = value;
+        onChanged();
+        return this;
+      }
+
+      private java.lang.Object password_ = "";
+      /**
+       * <pre>
+       * only set when creating users
+       * </pre>
+       *
+       * <code>optional string Password = 5;</code>
+       */
+      public java.lang.String getPassword() {
+        java.lang.Object ref = password_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          password_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <pre>
+       * only set when creating users
+       * </pre>
+       *
+       * <code>optional string Password = 5;</code>
+       */
+      public com.google.protobuf.ByteString
+          getPasswordBytes() {
+        java.lang.Object ref = password_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          password_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <pre>
+       * only set when creating users
+       * </pre>
+       *
+       * <code>optional string Password = 5;</code>
+       */
+      public Builder setPassword(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  
+        password_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * only set when creating users
+       * </pre>
+       *
+       * <code>optional string Password = 5;</code>
+       */
+      public Builder clearPassword() {
+        
+        password_ = getDefaultInstance().getPassword();
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * only set when creating users
+       * </pre>
+       *
+       * <code>optional string Password = 5;</code>
+       */
+      public Builder setPasswordBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+        
+        password_ = value;
         onChanged();
         return this;
       }
@@ -4960,24 +5133,24 @@ public final class Auth {
       "\n\020proto/auth.proto\022\004auth\032\034google/api/ann" +
       "otations.proto\"\036\n\rVerifyRequest\022\r\n\005Token" +
       "\030\001 \001(\t\" \n\016VerifyResponse\022\016\n\006UserID\030\001 \001(\t" +
-      "\"\"\n\020GetDetailRequest\022\016\n\006UserID\030\001 \001(\t\"W\n\021" +
+      "\"\"\n\020GetDetailRequest\022\016\n\006UserID\030\001 \001(\t\"i\n\021" +
       "GetDetailResponse\022\016\n\006UserID\030\001 \001(\t\022\r\n\005Ema" +
       "il\030\002 \001(\t\022\021\n\tFirstName\030\003 \001(\t\022\020\n\010LastName\030" +
-      "\004 \001(\t\">\n\033AuthenticatePasswordRequest\022\r\n\005" +
-      "Email\030\001 \001(\t\022\020\n\010Password\030\002 \001(\t\"N\n\026VerifyP" +
-      "asswordResponse\022%\n\004User\030\001 \001(\0132\027.auth.Get" +
-      "DetailResponse\022\r\n\005Token\030\002 \001(\t\"k\n\021CreateU",
-      "serRequest\022\020\n\010UserName\030\001 \001(\t\022\r\n\005Email\030\002 " +
-      "\001(\t\022\021\n\tFirstName\030\003 \001(\t\022\020\n\010LastName\030\004 \001(\t" +
-      "\022\020\n\010Password\030\005 \001(\t2\260\002\n\025AuthenticationSer" +
-      "vice\022W\n\024AuthenticatePassword\022!.auth.Auth" +
-      "enticatePasswordRequest\032\034.auth.VerifyPas" +
-      "swordResponse\022<\n\017VerifyUserToken\022\023.auth." +
-      "VerifyRequest\032\024.auth.VerifyResponse\022@\n\rG" +
-      "etUserDetail\022\026.auth.GetDetailRequest\032\027.a" +
-      "uth.GetDetailResponse\022>\n\nCreateUser\022\027.au" +
-      "th.CreateUserRequest\032\027.auth.GetDetailRes",
-      "ponseb\006proto3"
+      "\004 \001(\t\022\020\n\010Password\030\005 \001(\t\">\n\033AuthenticateP" +
+      "asswordRequest\022\r\n\005Email\030\001 \001(\t\022\020\n\010Passwor" +
+      "d\030\002 \001(\t\"N\n\026VerifyPasswordResponse\022%\n\004Use" +
+      "r\030\001 \001(\0132\027.auth.GetDetailResponse\022\r\n\005Toke",
+      "n\030\002 \001(\t\"k\n\021CreateUserRequest\022\020\n\010UserName" +
+      "\030\001 \001(\t\022\r\n\005Email\030\002 \001(\t\022\021\n\tFirstName\030\003 \001(\t" +
+      "\022\020\n\010LastName\030\004 \001(\t\022\020\n\010Password\030\005 \001(\t2\260\002\n" +
+      "\025AuthenticationService\022W\n\024AuthenticatePa" +
+      "ssword\022!.auth.AuthenticatePasswordReques" +
+      "t\032\034.auth.VerifyPasswordResponse\022<\n\017Verif" +
+      "yUserToken\022\023.auth.VerifyRequest\032\024.auth.V" +
+      "erifyResponse\022@\n\rGetUserDetail\022\026.auth.Ge" +
+      "tDetailRequest\032\027.auth.GetDetailResponse\022" +
+      ">\n\nCreateUser\022\027.auth.CreateUserRequest\032\027",
+      ".auth.GetDetailResponseb\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -5015,7 +5188,7 @@ public final class Auth {
     internal_static_auth_GetDetailResponse_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_auth_GetDetailResponse_descriptor,
-        new java.lang.String[] { "UserID", "Email", "FirstName", "LastName", });
+        new java.lang.String[] { "UserID", "Email", "FirstName", "LastName", "Password", });
     internal_static_auth_AuthenticatePasswordRequest_descriptor =
       getDescriptor().getMessageTypes().get(4);
     internal_static_auth_AuthenticatePasswordRequest_fieldAccessorTable = new
