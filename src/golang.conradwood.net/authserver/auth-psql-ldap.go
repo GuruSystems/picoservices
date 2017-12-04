@@ -29,6 +29,7 @@ func (pga *PsqlLdapAuthenticator) Authenticate(token string) (string, error) {
 	if err != nil {
 		return "", err
 	}
+	defer rows.Close()
 	for rows.Next() {
 		var uid int
 		err = rows.Scan(&uid)
@@ -116,6 +117,7 @@ func (pga *PsqlLdapAuthenticator) getUserIDfromEmail(email string) string {
 		fmt.Printf("Error quering database: %s\n", err)
 		return ""
 	}
+	defer rows.Close()
 	for rows.Next() {
 		err = rows.Scan(&userid)
 		if err != nil {
@@ -135,6 +137,7 @@ func (pga *PsqlLdapAuthenticator) getUser(userid string) (*dbUser, error) {
 		s := fmt.Sprintf("Error quering database: %s\n", err)
 		return nil, errors.New(s)
 	}
+	defer rows.Close()
 	for rows.Next() {
 		user := auth.User{}
 		dbUser := dbUser{a: &user}
