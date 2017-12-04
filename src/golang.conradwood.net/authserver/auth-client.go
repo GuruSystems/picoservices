@@ -73,11 +73,12 @@ func main() {
 			LastName:  *lastname,
 		}
 		fmt.Printf("Creating user %s\n", req.UserName)
-		_, err = aclient.CreateUser(ctx, req)
+		cru, err := aclient.CreateUser(ctx, req)
 		if err != nil {
 			fmt.Printf("Failed to create user: %s\n", err)
 			os.Exit(10)
 		}
+		fmt.Printf("Created user %s with password %s\n", cru.UserID, cru.Password)
 		os.Exit(0)
 	}
 
