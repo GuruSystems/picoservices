@@ -12,6 +12,7 @@ import (
 	"google.golang.org/grpc/credentials"
 	"google.golang.org/grpc/metadata"
 	"io/ioutil"
+	"os"
 	"os/user"
 	"strings"
 )
@@ -29,12 +30,16 @@ var (
 )
 
 func SaveToken(tk string) error {
+
 	usr, err := user.Current()
 	if err != nil {
 		fmt.Printf("Unable to get current user: %s\n", err)
 		return err
 	}
 	fname := fmt.Sprintf("%s/.picoservices/tokens/%s", usr.HomeDir, *token)
+	if _, err := os.Stat(fname); !os.IsNotExist(err) {
+		return errors.New(fmt.Sprintf("File %s exists already", fname))
+	}
 	fmt.Printf("Saving new token to %s\n", fname)
 	err = ioutil.WriteFile(fname, []byte(tk), 0600)
 	if err != nil {
