@@ -5,19 +5,24 @@ package registrar;
 
 import "google/api/annotations.proto";
 
+enum Apitype {
+status = 0;
+grpc = 1;
+json = 2;
+html = 3;
+tcp = 4;
+}
+
 message ServiceDescription {
 string Name = 1;
 int64 Build =2;
-enum Servicetype {
-grpc = 0;
-json = 1;
-}
-Servicetype type = 4;
 }
 
+// on a given port, we can have multiple apis
 message ServiceAddress {
 string Host=1;
 int32 Port=2;
+repeated Apitype ApiType = 3;
 }
 
 message ServiceLocation {

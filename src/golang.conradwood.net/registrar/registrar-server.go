@@ -32,6 +32,7 @@ type serviceInstance struct {
 	firstRegistered time.Time
 	lastSuccess     time.Time
 	address         pb.ServiceAddress
+	apitype         []pb.Apitype
 }
 
 // static variables for flag parser
@@ -171,7 +172,7 @@ func FindService(sd *pb.ServiceDescription) *serviceEntry {
 	return nil
 }
 
-func AddService(sd *pb.ServiceDescription, hostname string, port int32) *serviceInstance {
+func AddService(sd *pb.ServiceDescription, hostname string, port int32, apitype []pb.Apitype) *serviceInstance {
 	if sd.Name == "" {
 		fmt.Printf("NO NAME: %v\n", sd)
 		return nil
@@ -201,8 +202,9 @@ func AddService(sd *pb.ServiceDescription, hostname string, port int32) *service
 	si.firstRegistered = time.Now()
 	si.lastSuccess = time.Now()
 	si.address = pb.ServiceAddress{Host: hostname, Port: port}
+	si.apitype = apitype
 	sl.instances = append(sl.instances, si)
-	fmt.Printf("Registered service %s (%s) at %s:%d (%d)\n", sd.Name, sd.Type, hostname, port, len(sl.instances))
+	fmt.Printf("Registered service %s at %s:%d (%d)\n", sd.Name, hostname, port, len(sl.instances))
 	slx := FindService(sd)
 	if len(slx.instances) == 0 {
 		fmt.Println("Error, did not save new service")
@@ -296,7 +298,7 @@ func (s *RegistryService) RegisterService(ctx context.Context, pr *pb.ServiceLoc
 				return nil, errors.New("Not registering at localhost")
 			}
 		}
-		si := AddService(pr.Service, host, address.Port)
+		si := AddService(pr.Service, host, address.Port, address.ApiType)
 		rr.ServiceID = fmt.Sprintf("%d", si.serviceID)
 		rr.Location.Address = append(rr.Location.Address, &pb.ServiceAddress{Host: host, Port: address.Port})
 	}

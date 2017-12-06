@@ -40,7 +40,7 @@ var (
 	register_refresh = flag.Int("register_refresh", 10, "registration refresh interval in `seconds`")
 	usercache        = make(map[string]*UserCache)
 	ctrmetrics       = make(map[string]*uint64)
-	registered       = make(map[string]string)
+	registered       []*serverDef
 	stopped          bool
 )
 
@@ -51,32 +51,36 @@ type UserCache struct {
 
 type Register func(server *grpc.Server) error
 
-type ServerDef struct {
+// no longer exported - please use NewServerDef instead
+type serverDef struct {
 	Port        int
 	Certificate []byte
 	Key         []byte
 	CA          []byte
 	Register    Register
 	// set to true if this server does NOT require authentication (default: it does need authentication)
-	NoAuth bool
-	names  []string
+	NoAuth        bool
+	name          string
+	types         []pb.Apitype
+	registered_id string
 }
 
+func (s *serverDef) toString() string {
+	return fmt.Sprintf(":%d %s (%v)", s.Port, s.name, s.types)
+}
+func NewServerDef() *serverDef {
+	res := &serverDef{}
+	res.Key = Privatekey
+	res.Certificate = Certificate
+	res.CA = Ca
+	res.types = append(res.types, pb.Apitype_status)
+	res.types = append(res.types, pb.Apitype_grpc)
+	return res
+}
 func CheckCookie(cookie string) bool {
 	return true
 }
 
-func (s *ServerDef) init() {
-	if len(s.Certificate) == 0 {
-		s.Certificate = Certificate
-	}
-	if len(s.Key) == 0 {
-		s.Key = Privatekey
-	}
-	if len(s.CA) == 0 {
-		s.CA = Ca
-	}
-}
 func StreamAuthInterceptor(srv interface{}, ss grpc.ServerStream, info *grpc.StreamServerInfo, handler grpc.StreamHandler) error {
 	return grpc.Errorf(codes.Unauthenticated, "stream authentication is not yet implemented")
 }
@@ -182,21 +186,6 @@ func GetAuthClient() (apb.AuthenticationServiceClient, error) {
 	return client, nil
 }
 
-func registerMe(def ServerDef) error {
-	for _, name := range def.names {
-		if registered[name] == "" {
-			fmt.Printf("Registering Service: \"%s\"\n", name)
-		}
-		id, err := AddRegistry(name, def.Port)
-		if err != nil {
-			return fmt.Errorf("Failed to register %s with registry server", name, err)
-		}
-		registered[name] = id
-	}
-	return nil
-
-}
-
 func stopping() {
 	if stopped {
 		return
@@ -211,11 +200,12 @@ func stopping() {
 	defer rconn.Close()
 	c := pb.NewRegistryClient(rconn)
 
-	for key, value := range registered {
-		fmt.Printf("Deregistering Service \"%s\" => %s\n", key, value)
-		_, err := c.DeregisterService(context.Background(), &pb.DeregisterRequest{ServiceID: value})
+	// value is a serverdef
+	for _, sd := range registered {
+		fmt.Printf("Deregistering Service \"%s\"\n", sd.toString())
+		_, err := c.DeregisterService(context.Background(), &pb.DeregisterRequest{ServiceID: sd.registered_id})
 		if err != nil {
-			fmt.Printf("Failed to deregister Service \"%s\" => %s: %s\n", key, value, err)
+			fmt.Printf("Failed to deregister Service \"%v\": %s\n", sd, err)
 		}
 	}
 	stopped = true
@@ -227,7 +217,7 @@ func stopping() {
 // together with the server (rather than as part of this software)
 // it also configures the rpc server to expect a token to identify
 // the user in the rpc metadata call
-func ServerStartup(def ServerDef) error {
+func ServerStartup(def *serverDef) error {
 	c := make(chan os.Signal, 2)
 	signal.Notify(c, os.Interrupt, syscall.SIGTERM)
 	go func() {
@@ -237,7 +227,6 @@ func ServerStartup(def ServerDef) error {
 	}()
 	stopped = false
 	defer stopping()
-	def.init()
 	listenAddr := fmt.Sprintf(":%d", def.Port)
 	fmt.Println("Starting server on ", listenAddr)
 
@@ -276,16 +265,19 @@ func ServerStartup(def ServerDef) error {
 	if err != nil {
 		return fmt.Errorf("grpc register error: %s", err)
 	}
-	for name, _ := range grpcServer.GetServiceInfo() {
-		def.names = append(def.names, name)
+	if len(grpcServer.GetServiceInfo()) > 1 {
+		return fmt.Errorf("cannot register multiple(%d) names", len(grpcServer.GetServiceInfo()))
 	}
 
+	for name, _ := range grpcServer.GetServiceInfo() {
+		def.name = name
+	}
 	// start period re-registration
-	registerMe(def)
+	AddRegistry(def)
 	ticker := time.NewTicker(time.Duration(*register_refresh) * time.Second)
 	go func() {
 		for _ = range ticker.C {
-			registerMe(def)
+			AddRegistry(def)
 		}
 	}()
 	// something odd?
@@ -307,12 +299,10 @@ func ServerStartup(def ServerDef) error {
 }
 
 // this services the /service-info/ url
-func serveServiceInfo(w http.ResponseWriter, req *http.Request, sd ServerDef) {
+func serveServiceInfo(w http.ResponseWriter, req *http.Request, sd *serverDef) {
 	p := req.URL.Path
 	if strings.HasPrefix(p, "/internal/service-info/name") {
-		for _, name := range sd.names {
-			w.Write([]byte(name))
-		}
+		w.Write([]byte(sd.name))
 	} else if strings.HasPrefix(p, "/internal/service-info/metrics") {
 		fmt.Printf("Request path: \"%s\"\n", p)
 		m := strings.TrimPrefix(p, "/internal/service-info/metrics")
@@ -329,13 +319,13 @@ func serveServiceInfo(w http.ResponseWriter, req *http.Request, sd ServerDef) {
 }
 
 // this services the /pleaseshutdown url
-func pleaseShutdown(w http.ResponseWriter, req *http.Request, sd ServerDef) {
+func pleaseShutdown(w http.ResponseWriter, req *http.Request, sd *serverDef) {
 	stopping()
 	fmt.Fprintf(w, "OK\n")
 	fmt.Printf("Received request to shutdown.\n")
 	os.Exit(0)
 }
-func startHttpServe(sd ServerDef, grpcServer *grpc.Server) error {
+func startHttpServe(sd *serverDef, grpcServer *grpc.Server) error {
 	mux := http.NewServeMux()
 	mux.HandleFunc("/internal/service-info/", func(w http.ResponseWriter, req *http.Request) {
 		serveServiceInfo(w, req, sd)
@@ -394,7 +384,7 @@ func GetRegistryAddress() string {
 	}
 	return res
 }
-func AddRegistry(name string, port int) (string, error) {
+func AddRegistry(sd *serverDef) (string, error) {
 	//fmt.Printf("Registering service %s with registry server\n", name)
 	opts := []grpc.DialOption{grpc.WithInsecure()}
 	conn, err := grpc.Dial(GetRegistryAddress(), opts...)
@@ -406,8 +396,8 @@ func AddRegistry(name string, port int) (string, error) {
 	client := pb.NewRegistryClient(conn)
 	req := pb.ServiceLocation{}
 	req.Service = &pb.ServiceDescription{}
-	req.Service.Name = name
-	req.Address = []*pb.ServiceAddress{{Port: int32(port)}}
+	req.Service.Name = sd.name
+	req.Address = []*pb.ServiceAddress{{Port: int32(sd.Port)}}
 	if *serveraddr != "" {
 		req.Address[0].Host = *serveraddr
 	}
@@ -421,6 +411,8 @@ func AddRegistry(name string, port int) (string, error) {
 	if resp == nil {
 		fmt.Println("Registration failed with no error provided.")
 	}
+	registered = append(registered, sd)
+	sd.registered_id = resp.ServiceID
 	//fmt.Printf("Response to register service: %v\n", resp)
 	return resp.ServiceID, nil
 }

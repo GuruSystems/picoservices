@@ -36,9 +36,9 @@ func st(server *grpc.Server) error {
 
 func main() {
 	flag.Parse() // parse stuff. see "var" section above
-	sd := server.ServerDef{
-		Port: *port,
-	}
+	sd := server.NewServerDef()
+	sd.Port = *port
+
 	objectStore = list.New()
 	sd.Register = st
 	err := server.ServerStartup(sd)

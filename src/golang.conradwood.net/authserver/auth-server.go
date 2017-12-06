@@ -98,11 +98,11 @@ func start() error {
 		os.Exit(10)
 	}
 
-	sd := server.ServerDef{
-		Port: *port,
-		// we ARE the authentication service so don't insist on authenticated calls
-		NoAuth: true,
-	}
+	sd := server.NewServerDef()
+	sd.Port = *port
+	// we ARE the authentication service so don't insist on authenticated calls
+	sd.NoAuth = true
+
 	sd.Register = st
 	err = server.ServerStartup(sd)
 	if err != nil {
