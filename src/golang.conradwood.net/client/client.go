@@ -6,6 +6,7 @@ import (
 	"errors"
 	"flag"
 	"fmt"
+	"golang.conradwood.net/cmdline"
 	pb "golang.conradwood.net/registrar/proto"
 	"golang.org/x/net/context"
 	"google.golang.org/grpc"
@@ -20,12 +21,7 @@ import (
 var (
 	cert               = []byte{1, 2, 3}
 	displayedTokenInfo = false
-	registry           = flag.String("registrar", "localhost:5000", "address of the registrar server (for lookups)")
-	/*
-		clientcrt          = flag.String("clientcert", "/etc/cnw/certs/rfc-client/certificate.pem", "Client certificate")
-		clientkey          = flag.String("clientkey", "/etc/cnw/certs/rfc-client/privatekey.pem", "client private key")
-		clientca           = flag.String("clientca", "/etc/cnw/certs/rfc-client/ca.pem", "Certificate Authority")
-	*/
+
 	token = flag.String("token", "user_token", "The authentication token (cookie) to authenticate with. May be name of a file in ~/.picoservices/tokens/, if so file contents shall be used as cookie")
 )
 
@@ -47,20 +43,13 @@ func SaveToken(tk string) error {
 	}
 	return err
 }
-func GetRegistryAddress() string {
-	res := *registry
-	if !strings.Contains(res, ":") {
-		res = fmt.Sprintf("%s:5000", res)
-	}
-	return res
-}
 
 // given a service name we look up its address in the registry
 // and return a connection to it.
 // it's a replacement for the normal "dial" but instead of an address
 // it takes a service name
 func DialWrapper(servicename string) (*grpc.ClientConn, error) {
-	reg := GetRegistryAddress()
+	reg := cmdline.GetRegistryAddress()
 	fmt.Printf("Using registrar @%s\n", reg)
 	opts := []grpc.DialOption{grpc.WithInsecure()}
 	conn, err := grpc.Dial(reg, opts...)

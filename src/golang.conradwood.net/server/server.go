@@ -11,6 +11,7 @@ import (
 	"crypto/tls"
 	"crypto/x509"
 	"golang.conradwood.net/client"
+	"golang.conradwood.net/cmdline"
 	"golang.org/x/net/context"
 	"google.golang.org/grpc/credentials"
 	"google.golang.org/grpc/reflection"
@@ -34,7 +35,6 @@ var (
 		servercertkey    = flag.String("rpc_server_certkey", "/etc/grpc/server/privatekey.pem", "`filename` of the key for the server certificate to be used for incoming connections to this rpc server")
 		serverca         = flag.String("rpc_server_ca", "/etc/grpc/server/ca.pem", "`filename` of the the CA certificate which signed both client and server certificate")
 	*/
-	registry         = flag.String("registry", "localhost:5000", "Registrar server address (to register with)")
 	serveraddr       = flag.String("address", "", "Address (default: derive from connection to registrar. does not work well with localhost)")
 	authconn         *grpc.ClientConn
 	register_refresh = flag.Int("register_refresh", 10, "registration refresh interval in `seconds`")
@@ -192,7 +192,7 @@ func stopping() {
 	}
 	fmt.Printf("Server shutdown - deregistering services\n")
 	opts := []grpc.DialOption{grpc.WithInsecure()}
-	rconn, err := grpc.Dial(GetRegistryAddress(), opts...)
+	rconn, err := grpc.Dial(cmdline.GetRegistryAddress(), opts...)
 	if err != nil {
 		fmt.Printf("failed to dial registry server: %v", err)
 		return
@@ -377,17 +377,10 @@ func grpcHandlerFunc(grpcServer *grpc.Server, otherHandler http.Handler) http.Ha
 	})
 }
 
-func GetRegistryAddress() string {
-	res := *registry
-	if !strings.Contains(res, ":") {
-		res = fmt.Sprintf("%s:5000", res)
-	}
-	return res
-}
 func AddRegistry(sd *serverDef) (string, error) {
 	//fmt.Printf("Registering service %s with registry server\n", name)
 	opts := []grpc.DialOption{grpc.WithInsecure()}
-	conn, err := grpc.Dial(GetRegistryAddress(), opts...)
+	conn, err := grpc.Dial(cmdline.GetRegistryAddress(), opts...)
 	if err != nil {
 		fmt.Println("failed to dial registry server: %v", err)
 		return "", err
@@ -405,7 +398,7 @@ func AddRegistry(sd *serverDef) (string, error) {
 	if err != nil {
 		fmt.Printf("RegisterService(%s) failed: %s\n", req.Service.Name, err)
 		fmt.Printf("  Published address: \"%s\"\n", req.Address[0].Host)
-		fmt.Printf("  Registry:   %s\n", GetRegistryAddress())
+		fmt.Printf("  Registry:   %s\n", cmdline.GetRegistryAddress())
 		return "", err
 	}
 	if resp == nil {

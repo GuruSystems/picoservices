@@ -24,7 +24,7 @@ import (
 
 // static variables for flag parser
 var (
-	serverAddr = flag.String("server_addr", "127.0.0.1:4998", "The address of the authentication-server in the format of host:port")
+	serverAddr = flag.String("server_addr", "", "The address of the authentication-server in the format of host:port (if empty, use registry)")
 	usertoken  = flag.String("usertoken", "", "user token to authenticate with")
 	email      = flag.String("email", "", "email address of the user to create")
 	firstname  = flag.String("firstname", "", "Firstname of the user to create")
@@ -50,12 +50,16 @@ func bail(err error, msg string) {
 
 func main() {
 	flag.Parse()
-
+	var err error
+	var conn *grpc.ClientConn
 	creds := client.GetClientCreds()
 
 	fmt.Println("Connecting to server...", *serverAddr, creds)
-	//conn, err := grpc.Dial(*serverAddr, grpc.WithInsecure())
-	conn, err := grpc.Dial(*serverAddr, grpc.WithTransportCredentials(creds))
+	if *serverAddr == "" {
+		conn, err = client.DialWrapper("auth.AuthenticationService")
+	} else {
+		conn, err = grpc.Dial(*serverAddr, grpc.WithTransportCredentials(creds))
+	}
 	if err != nil {
 		fmt.Println("fail to dial: %v", err)
 		return
