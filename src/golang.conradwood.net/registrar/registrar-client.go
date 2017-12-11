@@ -51,7 +51,7 @@ func main() {
 	}
 	fmt.Printf("%d services registered\n", len(resp.Service))
 	for _, getr := range resp.Service {
-		fmt.Printf("Service: %s\n", getr.Service.Name)
+		fmt.Printf("Service: %s (%s)\n", getr.Service.Name, getr.Service.Gurupath)
 		for _, addr := range getr.Location.Address {
 			fmt.Printf("   %s:%d\n", addr.Host, addr.Port)
 		}

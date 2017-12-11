@@ -279,6 +279,9 @@ func (s *RegistryService) RegisterService(ctx context.Context, pr *pb.ServiceLoc
 		fmt.Printf("Invalid request (missing servicename) from peer %s\n", peer)
 		return nil, errors.New("Missing servicename!")
 	}
+	if pr.Service.Gurupath == "" {
+		fmt.Printf("Warning! no gurupath in registration request. Are you testing?\n")
+	}
 	//fmt.Printf("Register service request for service %s from peer %s\n", pr.Service.Name, peer)
 	rr := new(pb.GetResponse)
 	rr.Service = pr.Service
