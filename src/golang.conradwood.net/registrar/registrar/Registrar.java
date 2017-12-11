@@ -154,9 +154,26 @@ public final class Registrar {
         getNameBytes();
 
     /**
-     * <code>optional int64 Build = 2;</code>
+     * <pre>
+     *int64 Build =2;
+     *string Namespace =3;
+     *string Group = 4;
+     * </pre>
+     *
+     * <code>optional string Gurupath = 2;</code>
      */
-    long getBuild();
+    java.lang.String getGurupath();
+    /**
+     * <pre>
+     *int64 Build =2;
+     *string Namespace =3;
+     *string Group = 4;
+     * </pre>
+     *
+     * <code>optional string Gurupath = 2;</code>
+     */
+    com.google.protobuf.ByteString
+        getGurupathBytes();
   }
   /**
    * Protobuf type {@code registrar.ServiceDescription}
@@ -171,7 +188,7 @@ public final class Registrar {
     }
     private ServiceDescription() {
       name_ = "";
-      build_ = 0L;
+      gurupath_ = "";
     }
 
     @java.lang.Override
@@ -205,9 +222,10 @@ public final class Registrar {
               name_ = s;
               break;
             }
-            case 16: {
+            case 18: {
+              java.lang.String s = input.readStringRequireUtf8();
 
-              build_ = input.readInt64();
+              gurupath_ = s;
               break;
             }
           }
@@ -267,13 +285,50 @@ public final class Registrar {
       }
     }
 
-    public static final int BUILD_FIELD_NUMBER = 2;
-    private long build_;
+    public static final int GURUPATH_FIELD_NUMBER = 2;
+    private volatile java.lang.Object gurupath_;
     /**
-     * <code>optional int64 Build = 2;</code>
+     * <pre>
+     *int64 Build =2;
+     *string Namespace =3;
+     *string Group = 4;
+     * </pre>
+     *
+     * <code>optional string Gurupath = 2;</code>
      */
-    public long getBuild() {
-      return build_;
+    public java.lang.String getGurupath() {
+      java.lang.Object ref = gurupath_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        gurupath_ = s;
+        return s;
+      }
+    }
+    /**
+     * <pre>
+     *int64 Build =2;
+     *string Namespace =3;
+     *string Group = 4;
+     * </pre>
+     *
+     * <code>optional string Gurupath = 2;</code>
+     */
+    public com.google.protobuf.ByteString
+        getGurupathBytes() {
+      java.lang.Object ref = gurupath_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        gurupath_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
     }
 
     private byte memoizedIsInitialized = -1;
@@ -291,8 +346,8 @@ public final class Registrar {
       if (!getNameBytes().isEmpty()) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 1, name_);
       }
-      if (build_ != 0L) {
-        output.writeInt64(2, build_);
+      if (!getGurupathBytes().isEmpty()) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 2, gurupath_);
       }
     }
 
@@ -304,9 +359,8 @@ public final class Registrar {
       if (!getNameBytes().isEmpty()) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, name_);
       }
-      if (build_ != 0L) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeInt64Size(2, build_);
+      if (!getGurupathBytes().isEmpty()) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, gurupath_);
       }
       memoizedSize = size;
       return size;
@@ -326,8 +380,8 @@ public final class Registrar {
       boolean result = true;
       result = result && getName()
           .equals(other.getName());
-      result = result && (getBuild()
-          == other.getBuild());
+      result = result && getGurupath()
+          .equals(other.getGurupath());
       return result;
     }
 
@@ -340,9 +394,8 @@ public final class Registrar {
       hash = (19 * hash) + getDescriptorForType().hashCode();
       hash = (37 * hash) + NAME_FIELD_NUMBER;
       hash = (53 * hash) + getName().hashCode();
-      hash = (37 * hash) + BUILD_FIELD_NUMBER;
-      hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
-          getBuild());
+      hash = (37 * hash) + GURUPATH_FIELD_NUMBER;
+      hash = (53 * hash) + getGurupath().hashCode();
       hash = (29 * hash) + unknownFields.hashCode();
       memoizedHashCode = hash;
       return hash;
@@ -463,7 +516,7 @@ public final class Registrar {
         super.clear();
         name_ = "";
 
-        build_ = 0L;
+        gurupath_ = "";
 
         return this;
       }
@@ -488,7 +541,7 @@ public final class Registrar {
       public registrar.Registrar.ServiceDescription buildPartial() {
         registrar.Registrar.ServiceDescription result = new registrar.Registrar.ServiceDescription(this);
         result.name_ = name_;
-        result.build_ = build_;
+        result.gurupath_ = gurupath_;
         onBuilt();
         return result;
       }
@@ -534,8 +587,9 @@ public final class Registrar {
           name_ = other.name_;
           onChanged();
         }
-        if (other.getBuild() != 0L) {
-          setBuild(other.getBuild());
+        if (!other.getGurupath().isEmpty()) {
+          gurupath_ = other.gurupath_;
+          onChanged();
         }
         onChanged();
         return this;
@@ -632,28 +686,101 @@ public final class Registrar {
         return this;
       }
 
-      private long build_ ;
+      private java.lang.Object gurupath_ = "";
       /**
-       * <code>optional int64 Build = 2;</code>
+       * <pre>
+       *int64 Build =2;
+       *string Namespace =3;
+       *string Group = 4;
+       * </pre>
+       *
+       * <code>optional string Gurupath = 2;</code>
        */
-      public long getBuild() {
-        return build_;
+      public java.lang.String getGurupath() {
+        java.lang.Object ref = gurupath_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          gurupath_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
       }
       /**
-       * <code>optional int64 Build = 2;</code>
+       * <pre>
+       *int64 Build =2;
+       *string Namespace =3;
+       *string Group = 4;
+       * </pre>
+       *
+       * <code>optional string Gurupath = 2;</code>
        */
-      public Builder setBuild(long value) {
-        
-        build_ = value;
+      public com.google.protobuf.ByteString
+          getGurupathBytes() {
+        java.lang.Object ref = gurupath_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          gurupath_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <pre>
+       *int64 Build =2;
+       *string Namespace =3;
+       *string Group = 4;
+       * </pre>
+       *
+       * <code>optional string Gurupath = 2;</code>
+       */
+      public Builder setGurupath(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  
+        gurupath_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>optional int64 Build = 2;</code>
+       * <pre>
+       *int64 Build =2;
+       *string Namespace =3;
+       *string Group = 4;
+       * </pre>
+       *
+       * <code>optional string Gurupath = 2;</code>
        */
-      public Builder clearBuild() {
+      public Builder clearGurupath() {
         
-        build_ = 0L;
+        gurupath_ = getDefaultInstance().getGurupath();
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       *int64 Build =2;
+       *string Namespace =3;
+       *string Group = 4;
+       * </pre>
+       *
+       * <code>optional string Gurupath = 2;</code>
+       */
+      public Builder setGurupathBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+        
+        gurupath_ = value;
         onChanged();
         return this;
       }
@@ -6627,33 +6754,34 @@ public final class Registrar {
   static {
     java.lang.String[] descriptorData = {
       "\n\025proto/registrar.proto\022\tregistrar\032\034goog" +
-      "le/api/annotations.proto\"1\n\022ServiceDescr" +
-      "iption\022\014\n\004Name\030\001 \001(\t\022\r\n\005Build\030\002 \001(\003\"Q\n\016S" +
-      "erviceAddress\022\014\n\004Host\030\001 \001(\t\022\014\n\004Port\030\002 \001(" +
-      "\005\022#\n\007ApiType\030\003 \003(\0162\022.registrar.Apitype\"m" +
-      "\n\017ServiceLocation\022.\n\007Service\030\001 \001(\0132\035.reg" +
-      "istrar.ServiceDescription\022*\n\007Address\030\002 \003" +
-      "(\0132\031.registrar.ServiceAddress\"<\n\nGetRequ" +
-      "est\022.\n\007Service\030\001 \001(\0132\035.registrar.Service" +
-      "Description\"~\n\013GetResponse\022.\n\007Service\030\001 ",
-      "\001(\0132\035.registrar.ServiceDescription\022,\n\010Lo" +
-      "cation\030\002 \001(\0132\032.registrar.ServiceLocation" +
-      "\022\021\n\tServiceID\030\003 \001(\t\"&\n\017ShutdownRequest\022\023" +
-      "\n\013ServiceName\030\001 \001(\t\"7\n\014ListResponse\022\'\n\007S" +
-      "ervice\030\003 \003(\0132\026.registrar.GetResponse\"\017\n\r" +
-      "EmptyResponse\"\033\n\013ListRequest\022\014\n\004Name\030\001 \001" +
-      "(\t\"&\n\021DeregisterRequest\022\021\n\tServiceID\030\001 \001" +
-      "(\t*<\n\007Apitype\022\n\n\006status\020\000\022\010\n\004grpc\020\001\022\010\n\004j" +
-      "son\020\002\022\010\n\004html\020\003\022\007\n\003tcp\020\0042\354\002\n\010Registry\022K\n" +
-      "\021DeregisterService\022\034.registrar.Deregiste",
-      "rRequest\032\030.registrar.EmptyResponse\022E\n\017Re" +
-      "gisterService\022\032.registrar.ServiceLocatio" +
-      "n\032\026.registrar.GetResponse\022B\n\021GetServiceA" +
-      "ddress\022\025.registrar.GetRequest\032\026.registra" +
-      "r.GetResponse\022?\n\014ListServices\022\026.registra" +
-      "r.ListRequest\032\027.registrar.ListResponse\022G" +
-      "\n\017ShutdownService\022\032.registrar.ShutdownRe" +
-      "quest\032\030.registrar.EmptyResponseb\006proto3"
+      "le/api/annotations.proto\"4\n\022ServiceDescr" +
+      "iption\022\014\n\004Name\030\001 \001(\t\022\020\n\010Gurupath\030\002 \001(\t\"Q" +
+      "\n\016ServiceAddress\022\014\n\004Host\030\001 \001(\t\022\014\n\004Port\030\002" +
+      " \001(\005\022#\n\007ApiType\030\003 \003(\0162\022.registrar.Apityp" +
+      "e\"m\n\017ServiceLocation\022.\n\007Service\030\001 \001(\0132\035." +
+      "registrar.ServiceDescription\022*\n\007Address\030" +
+      "\002 \003(\0132\031.registrar.ServiceAddress\"<\n\nGetR" +
+      "equest\022.\n\007Service\030\001 \001(\0132\035.registrar.Serv" +
+      "iceDescription\"~\n\013GetResponse\022.\n\007Service",
+      "\030\001 \001(\0132\035.registrar.ServiceDescription\022,\n" +
+      "\010Location\030\002 \001(\0132\032.registrar.ServiceLocat" +
+      "ion\022\021\n\tServiceID\030\003 \001(\t\"&\n\017ShutdownReques" +
+      "t\022\023\n\013ServiceName\030\001 \001(\t\"7\n\014ListResponse\022\'" +
+      "\n\007Service\030\003 \003(\0132\026.registrar.GetResponse\"" +
+      "\017\n\rEmptyResponse\"\033\n\013ListRequest\022\014\n\004Name\030" +
+      "\001 \001(\t\"&\n\021DeregisterRequest\022\021\n\tServiceID\030" +
+      "\001 \001(\t*<\n\007Apitype\022\n\n\006status\020\000\022\010\n\004grpc\020\001\022\010" +
+      "\n\004json\020\002\022\010\n\004html\020\003\022\007\n\003tcp\020\0042\354\002\n\010Registry" +
+      "\022K\n\021DeregisterService\022\034.registrar.Deregi",
+      "sterRequest\032\030.registrar.EmptyResponse\022E\n" +
+      "\017RegisterService\022\032.registrar.ServiceLoca" +
+      "tion\032\026.registrar.GetResponse\022B\n\021GetServi" +
+      "ceAddress\022\025.registrar.GetRequest\032\026.regis" +
+      "trar.GetResponse\022?\n\014ListServices\022\026.regis" +
+      "trar.ListRequest\032\027.registrar.ListRespons" +
+      "e\022G\n\017ShutdownService\022\032.registrar.Shutdow" +
+      "nRequest\032\030.registrar.EmptyResponseb\006prot" +
+      "o3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -6673,7 +6801,7 @@ public final class Registrar {
     internal_static_registrar_ServiceDescription_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_registrar_ServiceDescription_descriptor,
-        new java.lang.String[] { "Name", "Build", });
+        new java.lang.String[] { "Name", "Gurupath", });
     internal_static_registrar_ServiceAddress_descriptor =
       getDescriptor().getMessageTypes().get(1);
     internal_static_registrar_ServiceAddress_fieldAccessorTable = new

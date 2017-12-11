@@ -15,7 +15,12 @@ tcp = 4;
 
 message ServiceDescription {
 string Name = 1;
+/*
 int64 Build =2;
+string Namespace =3;
+string Group = 4;
+*/
+string Gurupath=2;
 }
 
 // on a given port, we can have multiple apis

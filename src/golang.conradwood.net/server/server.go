@@ -35,7 +35,9 @@ var (
 		servercertkey    = flag.String("rpc_server_certkey", "/etc/grpc/server/privatekey.pem", "`filename` of the key for the server certificate to be used for incoming connections to this rpc server")
 		serverca         = flag.String("rpc_server_ca", "/etc/grpc/server/ca.pem", "`filename` of the the CA certificate which signed both client and server certificate")
 	*/
-	serveraddr       = flag.String("address", "", "Address (default: derive from connection to registrar. does not work well with localhost)")
+	serveraddr = flag.String("address", "", "Address (default: derive from connection to registrar. does not work well with localhost)")
+	deploypath = flag.String("deployment_gurupath", "", "The deployment path by which other programs can refer to this deployment. expected is: a path of the format: \"namespace/groupname/repository/buildid\"")
+
 	authconn         *grpc.ClientConn
 	register_refresh = flag.Int("register_refresh", 10, "registration refresh interval in `seconds`")
 	usercache        = make(map[string]*UserCache)
@@ -272,8 +274,8 @@ func ServerStartup(def *serverDef) error {
 	for name, _ := range grpcServer.GetServiceInfo() {
 		def.name = name
 	}
-	// start period re-registration
 	AddRegistry(def)
+	// start period re-registration
 	ticker := time.NewTicker(time.Duration(*register_refresh) * time.Second)
 	go func() {
 		for _ = range ticker.C {
@@ -390,10 +392,19 @@ func AddRegistry(sd *serverDef) (string, error) {
 	req := pb.ServiceLocation{}
 	req.Service = &pb.ServiceDescription{}
 	req.Service.Name = sd.name
+	req.Service.Gurupath = *deploypath
 	req.Address = []*pb.ServiceAddress{{Port: int32(sd.Port)}}
 	if *serveraddr != "" {
 		req.Address[0].Host = *serveraddr
 	}
+
+	// all addresses get the same apitype
+	for _, svcadr := range req.Address {
+		for _, apitype := range sd.types {
+			svcadr.ApiType = append(svcadr.ApiType, apitype)
+		}
+	}
+
 	resp, err := client.RegisterService(context.Background(), &req)
 	if err != nil {
 		fmt.Printf("RegisterService(%s) failed: %s\n", req.Service.Name, err)
