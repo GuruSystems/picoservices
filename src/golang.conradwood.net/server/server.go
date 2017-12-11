@@ -70,6 +70,13 @@ type serverDef struct {
 func (s *serverDef) toString() string {
 	return fmt.Sprintf(":%d %s (%v)", s.Port, s.name, s.types)
 }
+func NewTCPServerDef(name string) *serverDef {
+	sd := NewServerDef()
+	sd.types = sd.types[:0]
+	sd.types = append(sd.types, pb.Apitype_tcp)
+	sd.name = name
+	return sd
+}
 func NewServerDef() *serverDef {
 	res := &serverDef{}
 	res.Key = Privatekey
@@ -207,7 +214,7 @@ func stopping() {
 		fmt.Printf("Deregistering Service \"%s\"\n", sd.toString())
 		_, err := c.DeregisterService(context.Background(), &pb.DeregisterRequest{ServiceID: sd.registered_id})
 		if err != nil {
-			fmt.Printf("Failed to deregister Service \"%v\": %s\n", sd, err)
+			fmt.Printf("Failed to deregister Service \"%s\": %s\n", sd.toString(), err)
 		}
 	}
 	stopped = true

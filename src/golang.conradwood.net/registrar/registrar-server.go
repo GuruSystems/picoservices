@@ -76,6 +76,11 @@ func CheckRegistry() {
 	for e := services.Front(); e != nil; e = e.Next() {
 		sloc := e.Value.(*serviceEntry)
 		for _, instance := range sloc.instances {
+			// we can only verify this if the instance provides apitype "status"
+			if !hasApi(instance.apitype, pb.Apitype_status) {
+				continue
+			}
+
 			err := CheckService(sloc, instance)
 			if err != nil {
 				fmt.Printf("Service %s@%s:%d failed %d times: %s\n", sloc.loc.Name, instance.address.Host, instance.address.Port, instance.failures, err)
@@ -145,6 +150,15 @@ func CheckService(desc *serviceEntry, addr *serviceInstance) error {
 		return errors.New("Servicename mismatch")
 	}
 	return nil
+}
+
+func hasApi(ar []pb.Apitype, lf pb.Apitype) bool {
+	for _, a := range ar {
+		if a == lf {
+			return true
+		}
+	}
+	return false
 }
 
 /**********************************
