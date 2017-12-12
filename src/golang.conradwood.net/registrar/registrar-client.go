@@ -9,6 +9,7 @@ import (
 	"flag"
 	"golang.org/x/net/context"
 	//	"net"
+	"golang.conradwood.net/cmdline"
 	pb "golang.conradwood.net/registrar/proto"
 	"log"
 	"os"
@@ -16,16 +17,15 @@ import (
 
 // static variables for flag parser
 var (
-	serverAddr = flag.String("registry", "127.0.0.1:5000", "The registry server address in the format of host:port")
-	port       = flag.Int("port", 5000, "The server port")
-	name       = flag.String("name", "", "name of a service, if set output will be filtered to only include services with this name")
+	name = flag.String("name", "", "name of a service, if set output will be filtered to only include services with this name")
 )
 
 func main() {
 	flag.Parse()
 	opts := []grpc.DialOption{grpc.WithInsecure()}
 	fmt.Println("Connecting to server...")
-	conn, err := grpc.Dial(*serverAddr, opts...)
+	reg := cmdline.GetRegistryAddress()
+	conn, err := grpc.Dial(reg, opts...)
 	if err != nil {
 		log.Fatalf("failed to dial: %v", err)
 	}
@@ -53,7 +53,18 @@ func main() {
 	for _, getr := range resp.Service {
 		fmt.Printf("Service: %s (%s)\n", getr.Service.Name, getr.Service.Gurupath)
 		for _, addr := range getr.Location.Address {
-			fmt.Printf("   %s:%d\n", addr.Host, addr.Port)
+			api := ApiToString(addr.ApiType)
+			fmt.Printf("   %s:%d (%s)\n", addr.Host, addr.Port, api)
 		}
 	}
+}
+
+func ApiToString(pa []pb.Apitype) string {
+	deli := ""
+	res := ""
+	for _, apitype := range pa {
+		res = fmt.Sprintf("%s%s%s", res, deli, apitype)
+		deli = ", "
+	}
+	return res
 }

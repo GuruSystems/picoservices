@@ -218,6 +218,7 @@ func AddService(sd *pb.ServiceDescription, hostname string, port int32, apitype 
 	si.address = pb.ServiceAddress{Host: hostname, Port: port}
 	si.apitype = apitype
 	sl.instances = append(sl.instances, si)
+	//fmt.Printf("Apitype: %s\n", si.apitype)
 	fmt.Printf("Registered service %s at %s:%d (%d)\n", sd.Name, hostname, port, len(sl.instances))
 	slx := FindService(sd)
 	if len(slx.instances) == 0 {
@@ -317,7 +318,9 @@ func (s *RegistryService) RegisterService(ctx context.Context, pr *pb.ServiceLoc
 		}
 		si := AddService(pr.Service, host, address.Port, address.ApiType)
 		rr.ServiceID = fmt.Sprintf("%d", si.serviceID)
-		rr.Location.Address = append(rr.Location.Address, &pb.ServiceAddress{Host: host, Port: address.Port})
+		nsa := &pb.ServiceAddress{Host: host, Port: address.Port}
+		nsa.ApiType = []pb.Apitype{1, 2}
+		rr.Location.Address = append(rr.Location.Address, nsa)
 	}
 	return rr, nil
 }
@@ -386,12 +389,14 @@ func (s *RegistryService) ListServices(ctx context.Context, pr *pb.ListRequest) 
 		rr.Service = se.loc
 		rr.Location = new(pb.ServiceLocation)
 		rr.Location.Service = rr.Service
-		rr.Location.Address = []*pb.ServiceAddress{}
+		svcadr := []*pb.ServiceAddress{}
 		for _, in := range se.instances {
 			sa := &in.address
-			rr.Location.Address = append(rr.Location.Address, sa)
-			fmt.Printf("Service %s @ %s:%d\n", se.loc.Name, in.address.Host, in.address.Port)
+			sa.ApiType = in.apitype
+			svcadr = append(svcadr, sa)
+			fmt.Printf("Service %s @ %s:%d (%s)\n", se.loc.Name, in.address.Host, in.address.Port, in.apitype)
 		}
+		rr.Location.Address = svcadr
 	}
 	return lr, nil
 }
