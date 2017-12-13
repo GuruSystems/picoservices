@@ -424,3 +424,8 @@ func (s *RegistryService) ShutdownService(ctx context.Context, pr *pb.ShutdownRe
 	}
 	return &pb.EmptyResponse{}, nil
 }
+
+// find target based on gurupath...
+func (s *RegistryService) GetTarget(ctx context.Context, pr *pb.GetTargetRequest) (*pb.ListResponse, error) {
+	return nil, nil
+}

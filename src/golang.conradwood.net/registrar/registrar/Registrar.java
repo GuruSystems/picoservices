@@ -154,22 +154,10 @@ public final class Registrar {
         getNameBytes();
 
     /**
-     * <pre>
-     *int64 Build =2;
-     *string Namespace =3;
-     *string Group = 4;
-     * </pre>
-     *
      * <code>optional string Gurupath = 2;</code>
      */
     java.lang.String getGurupath();
     /**
-     * <pre>
-     *int64 Build =2;
-     *string Namespace =3;
-     *string Group = 4;
-     * </pre>
-     *
      * <code>optional string Gurupath = 2;</code>
      */
     com.google.protobuf.ByteString
@@ -288,12 +276,6 @@ public final class Registrar {
     public static final int GURUPATH_FIELD_NUMBER = 2;
     private volatile java.lang.Object gurupath_;
     /**
-     * <pre>
-     *int64 Build =2;
-     *string Namespace =3;
-     *string Group = 4;
-     * </pre>
-     *
      * <code>optional string Gurupath = 2;</code>
      */
     public java.lang.String getGurupath() {
@@ -309,12 +291,6 @@ public final class Registrar {
       }
     }
     /**
-     * <pre>
-     *int64 Build =2;
-     *string Namespace =3;
-     *string Group = 4;
-     * </pre>
-     *
      * <code>optional string Gurupath = 2;</code>
      */
     public com.google.protobuf.ByteString
@@ -688,12 +664,6 @@ public final class Registrar {
 
       private java.lang.Object gurupath_ = "";
       /**
-       * <pre>
-       *int64 Build =2;
-       *string Namespace =3;
-       *string Group = 4;
-       * </pre>
-       *
        * <code>optional string Gurupath = 2;</code>
        */
       public java.lang.String getGurupath() {
@@ -709,12 +679,6 @@ public final class Registrar {
         }
       }
       /**
-       * <pre>
-       *int64 Build =2;
-       *string Namespace =3;
-       *string Group = 4;
-       * </pre>
-       *
        * <code>optional string Gurupath = 2;</code>
        */
       public com.google.protobuf.ByteString
@@ -731,12 +695,6 @@ public final class Registrar {
         }
       }
       /**
-       * <pre>
-       *int64 Build =2;
-       *string Namespace =3;
-       *string Group = 4;
-       * </pre>
-       *
        * <code>optional string Gurupath = 2;</code>
        */
       public Builder setGurupath(
@@ -750,12 +708,6 @@ public final class Registrar {
         return this;
       }
       /**
-       * <pre>
-       *int64 Build =2;
-       *string Namespace =3;
-       *string Group = 4;
-       * </pre>
-       *
        * <code>optional string Gurupath = 2;</code>
        */
       public Builder clearGurupath() {
@@ -765,12 +717,6 @@ public final class Registrar {
         return this;
       }
       /**
-       * <pre>
-       *int64 Build =2;
-       *string Namespace =3;
-       *string Group = 4;
-       * </pre>
-       *
        * <code>optional string Gurupath = 2;</code>
        */
       public Builder setGurupathBytes(
@@ -6694,6 +6640,509 @@ public final class Registrar {
 
   }
 
+  public interface GetTargetRequestOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:registrar.GetTargetRequest)
+      com.google.protobuf.MessageOrBuilder {
+
+    /**
+     * <code>optional string Gurupath = 1;</code>
+     */
+    java.lang.String getGurupath();
+    /**
+     * <code>optional string Gurupath = 1;</code>
+     */
+    com.google.protobuf.ByteString
+        getGurupathBytes();
+  }
+  /**
+   * Protobuf type {@code registrar.GetTargetRequest}
+   */
+  public  static final class GetTargetRequest extends
+      com.google.protobuf.GeneratedMessageV3 implements
+      // @@protoc_insertion_point(message_implements:registrar.GetTargetRequest)
+      GetTargetRequestOrBuilder {
+    // Use GetTargetRequest.newBuilder() to construct.
+    private GetTargetRequest(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+      super(builder);
+    }
+    private GetTargetRequest() {
+      gurupath_ = "";
+    }
+
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
+    }
+    private GetTargetRequest(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      this();
+      int mutable_bitField0_ = 0;
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            default: {
+              if (!input.skipField(tag)) {
+                done = true;
+              }
+              break;
+            }
+            case 10: {
+              java.lang.String s = input.readStringRequireUtf8();
+
+              gurupath_ = s;
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e).setUnfinishedMessage(this);
+      } finally {
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return registrar.Registrar.internal_static_registrar_GetTargetRequest_descriptor;
+    }
+
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return registrar.Registrar.internal_static_registrar_GetTargetRequest_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              registrar.Registrar.GetTargetRequest.class, registrar.Registrar.GetTargetRequest.Builder.class);
+    }
+
+    public static final int GURUPATH_FIELD_NUMBER = 1;
+    private volatile java.lang.Object gurupath_;
+    /**
+     * <code>optional string Gurupath = 1;</code>
+     */
+    public java.lang.String getGurupath() {
+      java.lang.Object ref = gurupath_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        gurupath_ = s;
+        return s;
+      }
+    }
+    /**
+     * <code>optional string Gurupath = 1;</code>
+     */
+    public com.google.protobuf.ByteString
+        getGurupathBytes() {
+      java.lang.Object ref = gurupath_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        gurupath_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    private byte memoizedIsInitialized = -1;
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
+
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      if (!getGurupathBytes().isEmpty()) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 1, gurupath_);
+      }
+    }
+
+    public int getSerializedSize() {
+      int size = memoizedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (!getGurupathBytes().isEmpty()) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, gurupath_);
+      }
+      memoizedSize = size;
+      return size;
+    }
+
+    private static final long serialVersionUID = 0L;
+    @java.lang.Override
+    public boolean equals(final java.lang.Object obj) {
+      if (obj == this) {
+       return true;
+      }
+      if (!(obj instanceof registrar.Registrar.GetTargetRequest)) {
+        return super.equals(obj);
+      }
+      registrar.Registrar.GetTargetRequest other = (registrar.Registrar.GetTargetRequest) obj;
+
+      boolean result = true;
+      result = result && getGurupath()
+          .equals(other.getGurupath());
+      return result;
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+      if (memoizedHashCode != 0) {
+        return memoizedHashCode;
+      }
+      int hash = 41;
+      hash = (19 * hash) + getDescriptorForType().hashCode();
+      hash = (37 * hash) + GURUPATH_FIELD_NUMBER;
+      hash = (53 * hash) + getGurupath().hashCode();
+      hash = (29 * hash) + unknownFields.hashCode();
+      memoizedHashCode = hash;
+      return hash;
+    }
+
+    public static registrar.Registrar.GetTargetRequest parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static registrar.Registrar.GetTargetRequest parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static registrar.Registrar.GetTargetRequest parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static registrar.Registrar.GetTargetRequest parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static registrar.Registrar.GetTargetRequest parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static registrar.Registrar.GetTargetRequest parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static registrar.Registrar.GetTargetRequest parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input);
+    }
+    public static registrar.Registrar.GetTargetRequest parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static registrar.Registrar.GetTargetRequest parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static registrar.Registrar.GetTargetRequest parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder() {
+      return DEFAULT_INSTANCE.toBuilder();
+    }
+    public static Builder newBuilder(registrar.Registrar.GetTargetRequest prototype) {
+      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+    }
+    public Builder toBuilder() {
+      return this == DEFAULT_INSTANCE
+          ? new Builder() : new Builder().mergeFrom(this);
+    }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code registrar.GetTargetRequest}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:registrar.GetTargetRequest)
+        registrar.Registrar.GetTargetRequestOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return registrar.Registrar.internal_static_registrar_GetTargetRequest_descriptor;
+      }
+
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return registrar.Registrar.internal_static_registrar_GetTargetRequest_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                registrar.Registrar.GetTargetRequest.class, registrar.Registrar.GetTargetRequest.Builder.class);
+      }
+
+      // Construct using registrar.Registrar.GetTargetRequest.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessageV3
+                .alwaysUseFieldBuilders) {
+        }
+      }
+      public Builder clear() {
+        super.clear();
+        gurupath_ = "";
+
+        return this;
+      }
+
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return registrar.Registrar.internal_static_registrar_GetTargetRequest_descriptor;
+      }
+
+      public registrar.Registrar.GetTargetRequest getDefaultInstanceForType() {
+        return registrar.Registrar.GetTargetRequest.getDefaultInstance();
+      }
+
+      public registrar.Registrar.GetTargetRequest build() {
+        registrar.Registrar.GetTargetRequest result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      public registrar.Registrar.GetTargetRequest buildPartial() {
+        registrar.Registrar.GetTargetRequest result = new registrar.Registrar.GetTargetRequest(this);
+        result.gurupath_ = gurupath_;
+        onBuilt();
+        return result;
+      }
+
+      public Builder clone() {
+        return (Builder) super.clone();
+      }
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          Object value) {
+        return (Builder) super.setField(field, value);
+      }
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return (Builder) super.clearField(field);
+      }
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return (Builder) super.clearOneof(oneof);
+      }
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, Object value) {
+        return (Builder) super.setRepeatedField(field, index, value);
+      }
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          Object value) {
+        return (Builder) super.addRepeatedField(field, value);
+      }
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof registrar.Registrar.GetTargetRequest) {
+          return mergeFrom((registrar.Registrar.GetTargetRequest)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(registrar.Registrar.GetTargetRequest other) {
+        if (other == registrar.Registrar.GetTargetRequest.getDefaultInstance()) return this;
+        if (!other.getGurupath().isEmpty()) {
+          gurupath_ = other.gurupath_;
+          onChanged();
+        }
+        onChanged();
+        return this;
+      }
+
+      public final boolean isInitialized() {
+        return true;
+      }
+
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        registrar.Registrar.GetTargetRequest parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (registrar.Registrar.GetTargetRequest) e.getUnfinishedMessage();
+          throw e.unwrapIOException();
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+
+      private java.lang.Object gurupath_ = "";
+      /**
+       * <code>optional string Gurupath = 1;</code>
+       */
+      public java.lang.String getGurupath() {
+        java.lang.Object ref = gurupath_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          gurupath_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>optional string Gurupath = 1;</code>
+       */
+      public com.google.protobuf.ByteString
+          getGurupathBytes() {
+        java.lang.Object ref = gurupath_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          gurupath_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>optional string Gurupath = 1;</code>
+       */
+      public Builder setGurupath(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  
+        gurupath_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string Gurupath = 1;</code>
+       */
+      public Builder clearGurupath() {
+        
+        gurupath_ = getDefaultInstance().getGurupath();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string Gurupath = 1;</code>
+       */
+      public Builder setGurupathBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+        
+        gurupath_ = value;
+        onChanged();
+        return this;
+      }
+      public final Builder setUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return this;
+      }
+
+      public final Builder mergeUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return this;
+      }
+
+
+      // @@protoc_insertion_point(builder_scope:registrar.GetTargetRequest)
+    }
+
+    // @@protoc_insertion_point(class_scope:registrar.GetTargetRequest)
+    private static final registrar.Registrar.GetTargetRequest DEFAULT_INSTANCE;
+    static {
+      DEFAULT_INSTANCE = new registrar.Registrar.GetTargetRequest();
+    }
+
+    public static registrar.Registrar.GetTargetRequest getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static final com.google.protobuf.Parser<GetTargetRequest>
+        PARSER = new com.google.protobuf.AbstractParser<GetTargetRequest>() {
+      public GetTargetRequest parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+          return new GetTargetRequest(input, extensionRegistry);
+      }
+    };
+
+    public static com.google.protobuf.Parser<GetTargetRequest> parser() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<GetTargetRequest> getParserForType() {
+      return PARSER;
+    }
+
+    public registrar.Registrar.GetTargetRequest getDefaultInstanceForType() {
+      return DEFAULT_INSTANCE;
+    }
+
+  }
+
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_registrar_ServiceDescription_descriptor;
   private static final 
@@ -6744,6 +7193,11 @@ public final class Registrar {
   private static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_registrar_DeregisterRequest_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_registrar_GetTargetRequest_descriptor;
+  private static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_registrar_GetTargetRequest_fieldAccessorTable;
 
   public static com.google.protobuf.Descriptors.FileDescriptor
       getDescriptor() {
@@ -6770,18 +7224,20 @@ public final class Registrar {
       "\n\007Service\030\003 \003(\0132\026.registrar.GetResponse\"" +
       "\017\n\rEmptyResponse\"\033\n\013ListRequest\022\014\n\004Name\030" +
       "\001 \001(\t\"&\n\021DeregisterRequest\022\021\n\tServiceID\030" +
-      "\001 \001(\t*<\n\007Apitype\022\n\n\006status\020\000\022\010\n\004grpc\020\001\022\010" +
-      "\n\004json\020\002\022\010\n\004html\020\003\022\007\n\003tcp\020\0042\354\002\n\010Registry" +
-      "\022K\n\021DeregisterService\022\034.registrar.Deregi",
-      "sterRequest\032\030.registrar.EmptyResponse\022E\n" +
-      "\017RegisterService\022\032.registrar.ServiceLoca" +
-      "tion\032\026.registrar.GetResponse\022B\n\021GetServi" +
-      "ceAddress\022\025.registrar.GetRequest\032\026.regis" +
-      "trar.GetResponse\022?\n\014ListServices\022\026.regis" +
-      "trar.ListRequest\032\027.registrar.ListRespons" +
-      "e\022G\n\017ShutdownService\022\032.registrar.Shutdow" +
-      "nRequest\032\030.registrar.EmptyResponseb\006prot" +
-      "o3"
+      "\001 \001(\t\"$\n\020GetTargetRequest\022\020\n\010Gurupath\030\001 " +
+      "\001(\t*<\n\007Apitype\022\n\n\006status\020\000\022\010\n\004grpc\020\001\022\010\n\004" +
+      "json\020\002\022\010\n\004html\020\003\022\007\n\003tcp\020\0042\257\003\n\010Registry\022K",
+      "\n\021DeregisterService\022\034.registrar.Deregist" +
+      "erRequest\032\030.registrar.EmptyResponse\022E\n\017R" +
+      "egisterService\022\032.registrar.ServiceLocati" +
+      "on\032\026.registrar.GetResponse\022B\n\021GetService" +
+      "Address\022\025.registrar.GetRequest\032\026.registr" +
+      "ar.GetResponse\022?\n\014ListServices\022\026.registr" +
+      "ar.ListRequest\032\027.registrar.ListResponse\022" +
+      "G\n\017ShutdownService\022\032.registrar.ShutdownR" +
+      "equest\032\030.registrar.EmptyResponse\022A\n\tGetT" +
+      "arget\022\033.registrar.GetTargetRequest\032\027.reg",
+      "istrar.ListResponseb\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -6856,6 +7312,12 @@ public final class Registrar {
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_registrar_DeregisterRequest_descriptor,
         new java.lang.String[] { "ServiceID", });
+    internal_static_registrar_GetTargetRequest_descriptor =
+      getDescriptor().getMessageTypes().get(10);
+    internal_static_registrar_GetTargetRequest_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_registrar_GetTargetRequest_descriptor,
+        new java.lang.String[] { "Gurupath", });
     com.google.api.AnnotationsProto.getDescriptor();
   }
 

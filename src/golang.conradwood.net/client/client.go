@@ -13,6 +13,7 @@ import (
 	"google.golang.org/grpc/credentials"
 	"google.golang.org/grpc/metadata"
 	"io/ioutil"
+	"net"
 	"os"
 	"os/user"
 	"strings"
@@ -42,6 +43,10 @@ func SaveToken(tk string) error {
 		fmt.Printf("Failed to save token to %s: %s\n", fname, err)
 	}
 	return err
+}
+
+func DialTCPWrapper(gurupath string) (*net.Conn, error) {
+	return nil, nil
 }
 
 // given a service name we look up its address in the registry

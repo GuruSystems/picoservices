@@ -15,11 +15,6 @@ tcp = 4;
 
 message ServiceDescription {
 string Name = 1;
-/*
-int64 Build =2;
-string Namespace =3;
-string Group = 4;
-*/
 string Gurupath=2;
 }
 
@@ -58,10 +53,16 @@ string Name=1;
 message DeregisterRequest {
 string ServiceID=1;
 }
+
+message GetTargetRequest {
+string Gurupath=1;
+}
+
 service Registry {
  rpc DeregisterService(DeregisterRequest) returns (EmptyResponse);
  rpc RegisterService(ServiceLocation) returns (GetResponse);
  rpc GetServiceAddress(GetRequest) returns (GetResponse);
  rpc ListServices(ListRequest) returns (ListResponse);
  rpc ShutdownService(ShutdownRequest) returns (EmptyResponse);
+ rpc GetTarget(GetTargetRequest) returns (ListResponse);
 }
