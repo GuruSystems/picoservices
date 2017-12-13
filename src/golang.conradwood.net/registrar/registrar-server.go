@@ -21,6 +21,14 @@ import (
 	"time"
 )
 
+// static variables for flag parser
+var (
+	port      = flag.Int("port", 5000, "The server port")
+	keepAlive = flag.Int("keepalive", 2, "keep alive interval in seconds to check each registered service")
+	services  *list.List
+	idCtr     = 0
+)
+
 type serviceEntry struct {
 	loc       *pb.ServiceDescription
 	instances []*serviceInstance
@@ -35,14 +43,10 @@ type serviceInstance struct {
 	apitype         []pb.Apitype
 }
 
-// static variables for flag parser
-var (
-	port      = flag.Int("port", 5000, "The server port")
-	keepAlive = flag.Int("keepalive", 2, "keep alive interval in seconds to check each registered service")
-	services  *list.List
-	idCtr     = 0
-)
-
+func (si *serviceInstance) toString() string {
+	s := fmt.Sprintf("%s %s:%d", si.serviceID, si.address.Host, si.address.Port)
+	return s
+}
 func main() {
 	flag.Parse() // parse stuff. see "var" section above
 	listenAddr := fmt.Sprintf(":%d", *port)
@@ -272,7 +276,7 @@ func (s *RegistryService) DeregisterService(ctx context.Context, pr *pb.Deregist
 	}
 	si.disabled = true
 	removeInvalidInstances()
-	fmt.Printf("Deregistered Service %v\n", si)
+	fmt.Printf("Deregistered Service %s\n", si.toString())
 	return &pb.EmptyResponse{}, nil
 }
 func (s *RegistryService) RegisterService(ctx context.Context, pr *pb.ServiceLocation) (*pb.GetResponse, error) {
@@ -468,7 +472,11 @@ func isDeployPath(actual string, requested string) bool {
 		return false
 	}
 
-	for i := 0; i < 3; i++ {
+	for i := 0; i < len(rp); i++ {
+		if i == 3 && rp[i] == "latest" {
+			// see?this is bad, it's not "latest" it's coded as "any"
+			continue
+		}
 		if rp[i] != ap[i] {
 			return false
 		}
