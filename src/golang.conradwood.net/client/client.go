@@ -45,8 +45,37 @@ func SaveToken(tk string) error {
 	return err
 }
 
-func DialTCPWrapper(gurupath string) (*net.Conn, error) {
-	return nil, nil
+// opens a tcp connection to a gurupath.
+func DialTCPWrapper(gurupath string) (net.Conn, error) {
+	reg := cmdline.GetRegistryAddress()
+	conn, err := grpc.Dial(reg)
+	if err != nil {
+		fmt.Printf("Error dialling registry %s @ %s\n", gurupath, reg)
+		return nil, err
+	}
+	rcl := pb.NewRegistryClient(conn)
+	gt := &pb.GetTargetRequest{Gurupath: gurupath, ApiType: pb.Apitype_tcp}
+	lr, err := rcl.GetTarget(context.Background(), gt)
+	if err != nil {
+		s := fmt.Sprintf("Error getting target for gurupath %s: %s", gurupath, err)
+		fmt.Println(s)
+		return nil, errors.New(s)
+	}
+	if len(lr.Service) == 0 {
+		s := fmt.Sprintf("No target found for gurupath %s", gurupath)
+		fmt.Println(s)
+		return nil, errors.New(s)
+	}
+	svr := lr.Service[0]
+	svl := svr.Location
+	if len(svl.Address) == 0 {
+		s := fmt.Sprintf("No location found for gurupath %s", gurupath)
+		fmt.Println(s)
+		return nil, errors.New(s)
+	}
+	adr := svl.Address[0]
+	tc, err := net.Dial("tcp", fmt.Sprintf("%s:%d", adr.Host, adr.Port))
+	return tc, err
 }
 
 // given a service name we look up its address in the registry

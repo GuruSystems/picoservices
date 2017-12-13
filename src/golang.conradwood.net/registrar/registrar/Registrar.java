@@ -6653,6 +6653,15 @@ public final class Registrar {
      */
     com.google.protobuf.ByteString
         getGurupathBytes();
+
+    /**
+     * <code>optional .registrar.Apitype ApiType = 3;</code>
+     */
+    int getApiTypeValue();
+    /**
+     * <code>optional .registrar.Apitype ApiType = 3;</code>
+     */
+    registrar.Registrar.Apitype getApiType();
   }
   /**
    * Protobuf type {@code registrar.GetTargetRequest}
@@ -6667,6 +6676,7 @@ public final class Registrar {
     }
     private GetTargetRequest() {
       gurupath_ = "";
+      apiType_ = 0;
     }
 
     @java.lang.Override
@@ -6698,6 +6708,12 @@ public final class Registrar {
               java.lang.String s = input.readStringRequireUtf8();
 
               gurupath_ = s;
+              break;
+            }
+            case 24: {
+              int rawValue = input.readEnum();
+
+              apiType_ = rawValue;
               break;
             }
           }
@@ -6757,6 +6773,22 @@ public final class Registrar {
       }
     }
 
+    public static final int APITYPE_FIELD_NUMBER = 3;
+    private int apiType_;
+    /**
+     * <code>optional .registrar.Apitype ApiType = 3;</code>
+     */
+    public int getApiTypeValue() {
+      return apiType_;
+    }
+    /**
+     * <code>optional .registrar.Apitype ApiType = 3;</code>
+     */
+    public registrar.Registrar.Apitype getApiType() {
+      registrar.Registrar.Apitype result = registrar.Registrar.Apitype.valueOf(apiType_);
+      return result == null ? registrar.Registrar.Apitype.UNRECOGNIZED : result;
+    }
+
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
@@ -6772,6 +6804,9 @@ public final class Registrar {
       if (!getGurupathBytes().isEmpty()) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 1, gurupath_);
       }
+      if (apiType_ != registrar.Registrar.Apitype.status.getNumber()) {
+        output.writeEnum(3, apiType_);
+      }
     }
 
     public int getSerializedSize() {
@@ -6781,6 +6816,10 @@ public final class Registrar {
       size = 0;
       if (!getGurupathBytes().isEmpty()) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, gurupath_);
+      }
+      if (apiType_ != registrar.Registrar.Apitype.status.getNumber()) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeEnumSize(3, apiType_);
       }
       memoizedSize = size;
       return size;
@@ -6800,6 +6839,7 @@ public final class Registrar {
       boolean result = true;
       result = result && getGurupath()
           .equals(other.getGurupath());
+      result = result && apiType_ == other.apiType_;
       return result;
     }
 
@@ -6812,6 +6852,8 @@ public final class Registrar {
       hash = (19 * hash) + getDescriptorForType().hashCode();
       hash = (37 * hash) + GURUPATH_FIELD_NUMBER;
       hash = (53 * hash) + getGurupath().hashCode();
+      hash = (37 * hash) + APITYPE_FIELD_NUMBER;
+      hash = (53 * hash) + apiType_;
       hash = (29 * hash) + unknownFields.hashCode();
       memoizedHashCode = hash;
       return hash;
@@ -6932,6 +6974,8 @@ public final class Registrar {
         super.clear();
         gurupath_ = "";
 
+        apiType_ = 0;
+
         return this;
       }
 
@@ -6955,6 +6999,7 @@ public final class Registrar {
       public registrar.Registrar.GetTargetRequest buildPartial() {
         registrar.Registrar.GetTargetRequest result = new registrar.Registrar.GetTargetRequest(this);
         result.gurupath_ = gurupath_;
+        result.apiType_ = apiType_;
         onBuilt();
         return result;
       }
@@ -6999,6 +7044,9 @@ public final class Registrar {
         if (!other.getGurupath().isEmpty()) {
           gurupath_ = other.gurupath_;
           onChanged();
+        }
+        if (other.apiType_ != 0) {
+          setApiTypeValue(other.getApiTypeValue());
         }
         onChanged();
         return this;
@@ -7091,6 +7139,50 @@ public final class Registrar {
   checkByteStringIsUtf8(value);
         
         gurupath_ = value;
+        onChanged();
+        return this;
+      }
+
+      private int apiType_ = 0;
+      /**
+       * <code>optional .registrar.Apitype ApiType = 3;</code>
+       */
+      public int getApiTypeValue() {
+        return apiType_;
+      }
+      /**
+       * <code>optional .registrar.Apitype ApiType = 3;</code>
+       */
+      public Builder setApiTypeValue(int value) {
+        apiType_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional .registrar.Apitype ApiType = 3;</code>
+       */
+      public registrar.Registrar.Apitype getApiType() {
+        registrar.Registrar.Apitype result = registrar.Registrar.Apitype.valueOf(apiType_);
+        return result == null ? registrar.Registrar.Apitype.UNRECOGNIZED : result;
+      }
+      /**
+       * <code>optional .registrar.Apitype ApiType = 3;</code>
+       */
+      public Builder setApiType(registrar.Registrar.Apitype value) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        
+        apiType_ = value.getNumber();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional .registrar.Apitype ApiType = 3;</code>
+       */
+      public Builder clearApiType() {
+        
+        apiType_ = 0;
         onChanged();
         return this;
       }
@@ -7224,20 +7316,21 @@ public final class Registrar {
       "\n\007Service\030\003 \003(\0132\026.registrar.GetResponse\"" +
       "\017\n\rEmptyResponse\"\033\n\013ListRequest\022\014\n\004Name\030" +
       "\001 \001(\t\"&\n\021DeregisterRequest\022\021\n\tServiceID\030" +
-      "\001 \001(\t\"$\n\020GetTargetRequest\022\020\n\010Gurupath\030\001 " +
-      "\001(\t*<\n\007Apitype\022\n\n\006status\020\000\022\010\n\004grpc\020\001\022\010\n\004" +
-      "json\020\002\022\010\n\004html\020\003\022\007\n\003tcp\020\0042\257\003\n\010Registry\022K",
-      "\n\021DeregisterService\022\034.registrar.Deregist" +
-      "erRequest\032\030.registrar.EmptyResponse\022E\n\017R" +
-      "egisterService\022\032.registrar.ServiceLocati" +
-      "on\032\026.registrar.GetResponse\022B\n\021GetService" +
-      "Address\022\025.registrar.GetRequest\032\026.registr" +
-      "ar.GetResponse\022?\n\014ListServices\022\026.registr" +
-      "ar.ListRequest\032\027.registrar.ListResponse\022" +
-      "G\n\017ShutdownService\022\032.registrar.ShutdownR" +
-      "equest\032\030.registrar.EmptyResponse\022A\n\tGetT" +
-      "arget\022\033.registrar.GetTargetRequest\032\027.reg",
-      "istrar.ListResponseb\006proto3"
+      "\001 \001(\t\"I\n\020GetTargetRequest\022\020\n\010Gurupath\030\001 " +
+      "\001(\t\022#\n\007ApiType\030\003 \001(\0162\022.registrar.Apitype" +
+      "*<\n\007Apitype\022\n\n\006status\020\000\022\010\n\004grpc\020\001\022\010\n\004jso",
+      "n\020\002\022\010\n\004html\020\003\022\007\n\003tcp\020\0042\257\003\n\010Registry\022K\n\021D" +
+      "eregisterService\022\034.registrar.DeregisterR" +
+      "equest\032\030.registrar.EmptyResponse\022E\n\017Regi" +
+      "sterService\022\032.registrar.ServiceLocation\032" +
+      "\026.registrar.GetResponse\022B\n\021GetServiceAdd" +
+      "ress\022\025.registrar.GetRequest\032\026.registrar." +
+      "GetResponse\022?\n\014ListServices\022\026.registrar." +
+      "ListRequest\032\027.registrar.ListResponse\022G\n\017" +
+      "ShutdownService\022\032.registrar.ShutdownRequ" +
+      "est\032\030.registrar.EmptyResponse\022A\n\tGetTarg",
+      "et\022\033.registrar.GetTargetRequest\032\027.regist" +
+      "rar.ListResponseb\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -7317,7 +7410,7 @@ public final class Registrar {
     internal_static_registrar_GetTargetRequest_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_registrar_GetTargetRequest_descriptor,
-        new java.lang.String[] { "Gurupath", });
+        new java.lang.String[] { "Gurupath", "ApiType", });
     com.google.api.AnnotationsProto.getDescriptor();
   }
 

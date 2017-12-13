@@ -56,6 +56,7 @@ string ServiceID=1;
 
 message GetTargetRequest {
 string Gurupath=1;
+Apitype ApiType = 3;
 }
 
 service Registry {
