@@ -17,7 +17,9 @@ import (
 
 // static variables for flag parser
 var (
-	name = flag.String("name", "", "name of a service, if set output will be filtered to only include services with this name")
+	deploypath = flag.String("deployment_path", "", "deployment path to lookup (requires \"apitype\")")
+	apitype    = flag.String("apitype", "", "apitype to look up")
+	name       = flag.String("name", "", "name of a service, if set output will be filtered to only include services with this name")
 )
 
 func main() {
@@ -43,20 +45,53 @@ func main() {
 			os.Exit(0)
 		}
 	}
+	if *deploypath != "" {
+		lookup(client)
+		os.Exit(0)
+	}
 	req := pb.ListRequest{}
 	req.Name = *name
 	resp, err := client.ListServices(context.Background(), &req)
 	if err != nil {
 		log.Fatalf("failed to list services: %v", err)
 	}
-	fmt.Printf("%d services registered\n", len(resp.Service))
-	for _, getr := range resp.Service {
+	printResponse(resp)
+}
+func printResponse(lr *pb.ListResponse) {
+	fmt.Printf("%d services registered\n", len(lr.Service))
+	for _, getr := range lr.Service {
 		fmt.Printf("Service: %s (%s)\n", getr.Service.Name, getr.Service.Gurupath)
 		for _, addr := range getr.Location.Address {
 			api := ApiToString(addr.ApiType)
 			fmt.Printf("   %s:%d (%s)\n", addr.Host, addr.Port, api)
 		}
 	}
+}
+
+func lookup(client pb.RegistryClient) {
+	if *apitype == "" {
+		fmt.Printf("apitype is required\n")
+		os.Exit(10)
+	}
+	v, ok := pb.Apitype_value[*apitype]
+	if !ok {
+		fmt.Printf("Invalid apitype %s\n", *apitype)
+		fmt.Printf("Valid types: ")
+		for name, _ := range pb.Apitype_value {
+			fmt.Printf("%s ", name)
+		}
+		fmt.Printf("\n")
+		os.Exit(10)
+	}
+	fmt.Printf("Finding api endpoint for %s (type %s)\n", *deploypath, pb.Apitype_name[v])
+	gt := &pb.GetTargetRequest{Gurupath: *deploypath,
+		ApiType: pb.Apitype(v)}
+	lr, err := client.GetTarget(context.Background(), gt)
+	if err != nil {
+		fmt.Printf("Failed to lookup api endpoint for %s (type %s): %s\n", *deploypath, pb.Apitype_name[v], err)
+		os.Exit(10)
+	}
+	printResponse(lr)
 }
 
 func ApiToString(pa []pb.Apitype) string {

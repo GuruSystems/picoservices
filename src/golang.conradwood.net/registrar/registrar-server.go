@@ -425,7 +425,53 @@ func (s *RegistryService) ShutdownService(ctx context.Context, pr *pb.ShutdownRe
 	return &pb.EmptyResponse{}, nil
 }
 
-// find target based on gurupath...
+// find target based on gurupath & apitype...
 func (s *RegistryService) GetTarget(ctx context.Context, pr *pb.GetTargetRequest) (*pb.ListResponse, error) {
-	return nil, nil
+	lr := &pb.ListResponse{}
+	for e := services.Front(); e != nil; e = e.Next() {
+		se := e.Value.(*serviceEntry)
+		if !isDeployPath(se.loc.Gurupath, pr.Gurupath) {
+			fmt.Printf("No match \"%s\" and \"%s\"\n", se.loc.Gurupath, pr.Gurupath)
+			continue
+		}
+		for _, si := range se.instances {
+			if hasApi(si.apitype, pr.ApiType) {
+				fmt.Printf("Adding %v\n", si)
+				sd := se.loc
+				gr := &pb.GetResponse{}
+				gr.Service = sd
+				gr.Location = &pb.ServiceLocation{}
+				sa := &si.address
+				sa.ApiType = si.apitype
+				gr.Location.Address = append(gr.Location.Address, sa)
+				lr.Service = append(lr.Service, gr)
+			}
+
+		}
+	}
+	return lr, nil
+	//	return nil, errors.New("No such endpoint (%v)", pr)
+}
+
+// this needs to be smarter and handle stuff like "better" matches
+// see golang.conradwood.net/server/server.go for path syntax
+func isDeployPath(actual string, requested string) bool {
+	ap := strings.Split(actual, "/")
+	rp := strings.Split(requested, "/")
+
+	if len(ap) != 4 {
+		// invalid actual deploypath
+		return false
+	}
+	// last section is optional
+	if (len(rp) != 4) && (len(rp) != 3) {
+		return false
+	}
+
+	for i := 0; i < 3; i++ {
+		if rp[i] != ap[i] {
+			return false
+		}
+	}
+	return true
 }

@@ -48,7 +48,9 @@ func SaveToken(tk string) error {
 // opens a tcp connection to a gurupath.
 func DialTCPWrapper(gurupath string) (net.Conn, error) {
 	reg := cmdline.GetRegistryAddress()
-	conn, err := grpc.Dial(reg)
+	fmt.Printf("Using registrar @%s\n", reg)
+	opts := []grpc.DialOption{grpc.WithInsecure()}
+	conn, err := grpc.Dial(reg, opts...)
 	if err != nil {
 		fmt.Printf("Error dialling registry %s @ %s\n", gurupath, reg)
 		return nil, err
