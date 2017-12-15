@@ -68,7 +68,7 @@ type serverDef struct {
 }
 
 func (s *serverDef) toString() string {
-	return fmt.Sprintf(":%d %s (%v)", s.Port, s.name, s.types)
+	return fmt.Sprintf("Port #%d: %s (%v)", s.Port, s.name, s.types)
 }
 func NewTCPServerDef(name string) *serverDef {
 	sd := NewServerDef()
@@ -79,6 +79,7 @@ func NewTCPServerDef(name string) *serverDef {
 }
 func NewServerDef() *serverDef {
 	res := &serverDef{}
+	res.registered_id = ""
 	res.Key = Privatekey
 	res.Certificate = Certificate
 	res.CA = Ca
@@ -422,7 +423,9 @@ func AddRegistry(sd *serverDef) (string, error) {
 	if resp == nil {
 		fmt.Println("Registration failed with no error provided.")
 	}
-	registered = append(registered, sd)
+	if sd.registered_id == "" {
+		registered = append(registered, sd)
+	}
 	sd.registered_id = resp.ServiceID
 	//fmt.Printf("Response to register service: %v\n", resp)
 	return resp.ServiceID, nil

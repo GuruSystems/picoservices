@@ -299,7 +299,7 @@ func (s *RegistryService) RegisterService(ctx context.Context, pr *pb.ServiceLoc
 		return nil, errors.New("Missing servicename!")
 	}
 	if pr.Service.Gurupath == "" {
-		fmt.Printf("Warning! no gurupath in registration request. Are you testing? (peer=%s, servicename=%s \n", peer, pr.Service.Name)
+		fmt.Printf("Warning! no deploymentpath in registration request. Are you testing? (peer=%s, servicename=%s \n", peer, pr.Service.Name)
 	}
 	//fmt.Printf("Register service request for service %s from peer %s\n", pr.Service.Name, peer)
 	rr := new(pb.GetResponse)
@@ -429,7 +429,7 @@ func (s *RegistryService) ShutdownService(ctx context.Context, pr *pb.ShutdownRe
 	return &pb.EmptyResponse{}, nil
 }
 
-// find target based on gurupath & apitype...
+// find target based on deploymentpath & apitype...
 func (s *RegistryService) GetTarget(ctx context.Context, pr *pb.GetTargetRequest) (*pb.ListResponse, error) {
 	lr := &pb.ListResponse{}
 	for e := services.Front(); e != nil; e = e.Next() {
