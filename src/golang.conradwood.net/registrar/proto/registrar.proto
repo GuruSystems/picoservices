@@ -55,7 +55,9 @@ string ServiceID=1;
 }
 
 message GetTargetRequest {
+// use either gurupath or name - not both
 string Gurupath=1;
+string Name=2;
 Apitype ApiType = 3;
 }
 

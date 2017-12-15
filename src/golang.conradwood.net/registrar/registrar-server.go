@@ -455,9 +455,16 @@ func (s *RegistryService) GetTarget(ctx context.Context, pr *pb.GetTargetRequest
 	lr := &pb.ListResponse{}
 	for e := services.Front(); e != nil; e = e.Next() {
 		se := e.Value.(*serviceEntry)
-		if !isDeployPath(se.loc.Gurupath, pr.Gurupath) {
-			fmt.Printf("No match \"%s\" and \"%s\"\n", se.loc.Gurupath, pr.Gurupath)
-			continue
+		if pr.Gurupath != "" {
+			if !isDeployPath(se.loc.Gurupath, pr.Gurupath) {
+				fmt.Printf("No match \"%s\" and \"%s\"\n", se.loc.Gurupath, pr.Gurupath)
+				continue
+			}
+		}
+		if pr.Name != "" {
+			if se.loc.Name != pr.Name {
+				continue
+			}
 		}
 		for _, si := range se.instances {
 			if hasApi(si.apitype, pr.ApiType) {
