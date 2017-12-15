@@ -66,14 +66,14 @@ func DialTCPWrapper(gurupath string) (net.Conn, error) {
 		return nil, errors.New(s)
 	}
 	if len(lr.Service) == 0 {
-		s := fmt.Sprintf("No target found for gurupath %s", gurupath)
+		s := fmt.Sprintf("No target found for path %s", gurupath)
 		fmt.Println(s)
 		return nil, errors.New(s)
 	}
 	svr := lr.Service[0]
 	svl := svr.Location
 	if len(svl.Address) == 0 {
-		s := fmt.Sprintf("No location found for gurupath %s", gurupath)
+		s := fmt.Sprintf("No location found for path %s", gurupath)
 		fmt.Println(s)
 		return nil, errors.New(s)
 	}
@@ -88,7 +88,7 @@ func DialTCPWrapper(gurupath string) (net.Conn, error) {
 // it takes a service name
 func DialWrapper(servicename string) (*grpc.ClientConn, error) {
 	reg := cmdline.GetRegistryAddress()
-	fmt.Printf("Using registrar @%s\n", reg)
+	fmt.Printf("Using registrar @%s to dial %s\n", reg, servicename)
 	opts := []grpc.DialOption{grpc.WithInsecure()}
 	conn, err := grpc.Dial(reg, opts...)
 	if err != nil {
@@ -108,8 +108,21 @@ func DialWrapper(servicename string) (*grpc.ClientConn, error) {
 		fmt.Printf("Received no address for service \"%s\" - is it running?\n", servicename)
 		return nil, errors.New("no address for service")
 	}
-	sa := resp.Location.Address[0]
-	return DialService(sa)
+	for _, sa := range resp.Location.Address {
+		if hasApi(sa.ApiType, pb.Apitype_grpc) {
+			return DialService(sa)
+		}
+	}
+	return nil, errors.New(fmt.Sprintf("No GRPC api found for %s\n", servicename))
+}
+
+func hasApi(ar []pb.Apitype, lf pb.Apitype) bool {
+	for _, a := range ar {
+		if a == lf {
+			return true
+		}
+	}
+	return false
 }
 
 // if one needs to, one can still connect explicitly to a service

@@ -77,6 +77,15 @@ func NewTCPServerDef(name string) *serverDef {
 	sd.name = name
 	return sd
 }
+
+func NewHTMLServerDef(name string) *serverDef {
+	sd := NewServerDef()
+	sd.types = sd.types[:0]
+	sd.types = append(sd.types, pb.Apitype_html)
+	sd.name = name
+	return sd
+}
+
 func NewServerDef() *serverDef {
 	res := &serverDef{}
 	res.registered_id = ""

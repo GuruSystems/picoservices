@@ -180,6 +180,24 @@ func FindInstanceById(id int) *serviceInstance {
 	return nil
 }
 
+//
+func FindServices(sd *pb.ServiceDescription) []*serviceEntry {
+	var res []*serviceEntry
+	for e := services.Front(); e != nil; e = e.Next() {
+		sl := e.Value.(*serviceEntry)
+		if (sl.loc.Gurupath != "") && (sd.Gurupath != "") {
+			if sl.loc.Gurupath != sd.Gurupath {
+				continue
+			}
+		}
+		if sl.loc.Name == sd.Name {
+			res = append(res, sl)
+		}
+	}
+	return res
+}
+
+// this is not a good thing - it finds the FIRST entry by name
 func FindService(sd *pb.ServiceDescription) *serviceEntry {
 	for e := services.Front(); e != nil; e = e.Next() {
 		sl := e.Value.(*serviceEntry)
@@ -244,13 +262,8 @@ func AddService(sd *pb.ServiceDescription, hostname string, port int32, apitype 
 * implementing the functions here:
 ***********************************/
 type RegistryService struct {
-	wtf int
 }
 
-// in C we put methods into structs and call them pointers to functions
-// in java/python we also put pointers to functions into structs and but call them "objects" instead
-// in Go we don't put functions pointers into structs, we "associate" a function with a struct.
-// (I think that's more or less the same as what C does, just different Syntax)
 func (s *RegistryService) GetServiceAddress(ctx context.Context, gr *pb.GetRequest) (*pb.GetResponse, error) {
 	peer, ok := peer.FromContext(ctx)
 	if !ok {
@@ -258,19 +271,21 @@ func (s *RegistryService) GetServiceAddress(ctx context.Context, gr *pb.GetReque
 		return nil, errors.New("Error getting peer from contextn")
 	}
 	fmt.Printf("%s called get service address for service %s\n", peer.Addr, gr.Service.Name)
-	sl := FindService(gr.Service)
-	if sl == nil {
+	slv := FindServices(gr.Service)
+	if len(slv) == 0 {
 		fmt.Printf("Service \"%s\" is not currently registered\n", gr.Service.Name)
 		return nil, errors.New("service not registered")
 	}
 	resp := pb.GetResponse{}
-	resp.Service = sl.loc
+	resp.Service = slv[0].loc
 	resp.Location = new(pb.ServiceLocation)
-	resp.Location.Service = sl.loc
-	//var serviceAddresses []pb.ServiceAddress
-	for _, in := range sl.instances {
-		sa := in.address
-		resp.Location.Address = append(resp.Location.Address, &sa)
+	resp.Location.Service = slv[0].loc
+	for _, sl := range slv {
+		//var serviceAddresses []pb.ServiceAddress
+		for _, in := range sl.instances {
+			sa := in.address
+			resp.Location.Address = append(resp.Location.Address, &sa)
+		}
 	}
 	return &resp, nil
 }
