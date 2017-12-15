@@ -97,23 +97,26 @@ func DialWrapper(servicename string) (*grpc.ClientConn, error) {
 	}
 	defer conn.Close()
 	rcl := pb.NewRegistryClient(conn)
-	req := pb.GetRequest{}
-	req.Service = &pb.ServiceDescription{Name: servicename}
-	resp, err := rcl.GetServiceAddress(context.Background(), &req)
+	gt := &pb.GetTargetRequest{Name: servicename, ApiType: pb.Apitype_grpc}
+	lr, err := rcl.GetTarget(context.Background(), gt)
 	if err != nil {
 		fmt.Printf("Error getting service address %s: %s\n", servicename, err)
 		return nil, err
 	}
-	if (resp.Location == nil) || (len(resp.Location.Address) == 0) {
-		fmt.Printf("Received no address for service \"%s\" - is it running?\n", servicename)
-		return nil, errors.New("no address for service")
+	if len(lr.Service) == 0 {
+		s := fmt.Sprintf("No grpc target found for name %s", servicename)
+		fmt.Println(s)
+		return nil, errors.New(s)
 	}
-	for _, sa := range resp.Location.Address {
-		if hasApi(sa.ApiType, pb.Apitype_grpc) {
-			return DialService(sa)
-		}
+	svr := lr.Service[0]
+	svl := svr.Location
+	if len(svl.Address) == 0 {
+		s := fmt.Sprintf("No grpc location found for name %s - is it running?", servicename)
+		fmt.Println(s)
+		return nil, errors.New(s)
 	}
-	return nil, errors.New(fmt.Sprintf("No GRPC api found for %s\n", servicename))
+	sa := svl.Address[0]
+	return DialService(sa)
 }
 
 func hasApi(ar []pb.Apitype, lf pb.Apitype) bool {

@@ -39,6 +39,7 @@ type serviceInstance struct {
 	disabled        bool
 	firstRegistered time.Time
 	lastSuccess     time.Time
+	lastRefresh     time.Time
 	address         pb.ServiceAddress
 	apitype         []pb.Apitype
 }
@@ -115,6 +116,10 @@ func removeInvalidInstances() {
 	}
 }
 func isValid(si *serviceInstance) bool {
+	// time it out if there's no refresh!
+	if time.Since(si.lastRefresh) > (time.Second * 180) {
+		return false
+	}
 	if si.disabled {
 		return false
 	}
@@ -231,7 +236,7 @@ func AddService(sd *pb.ServiceDescription, hostname string, port int32, apitype 
 	// check if address sa already in location
 	for _, instance := range sl.instances {
 		if (instance.address.Host == hostname) && (instance.address.Port == port) {
-
+			instance.lastRefresh = time.Now()
 			//fmt.Printf("Re-Registered service %s (%s) at %s:%d\n", sd.Name, sd.Type, hostname, port)
 			return instance
 		}
@@ -243,6 +248,7 @@ func AddService(sd *pb.ServiceDescription, hostname string, port int32, apitype 
 	si.serviceID = idCtr
 	si.firstRegistered = time.Now()
 	si.lastSuccess = time.Now()
+	si.lastRefresh = time.Now()
 	si.address = pb.ServiceAddress{Host: hostname, Port: port}
 	si.apitype = apitype
 	sl.instances = append(sl.instances, si)

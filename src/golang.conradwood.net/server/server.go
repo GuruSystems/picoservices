@@ -44,6 +44,7 @@ var (
 	ctrmetrics       = make(map[string]*uint64)
 	registered       []*serverDef
 	stopped          bool
+	ticker           *time.Ticker
 )
 
 type UserCache struct {
@@ -293,12 +294,14 @@ func ServerStartup(def *serverDef) error {
 	}
 	AddRegistry(def)
 	// start period re-registration
-	ticker := time.NewTicker(time.Duration(*register_refresh) * time.Second)
-	go func() {
-		for _ = range ticker.C {
-			AddRegistry(def)
-		}
-	}()
+	if ticker == nil {
+		ticker = time.NewTicker(time.Duration(*register_refresh) * time.Second)
+		go func() {
+			for _ = range ticker.C {
+				reRegister()
+			}
+		}()
+	}
 	// something odd?
 	reflection.Register(grpcServer)
 	// Serve and Listen
@@ -438,6 +441,13 @@ func AddRegistry(sd *serverDef) (string, error) {
 	sd.registered_id = resp.ServiceID
 	//fmt.Printf("Response to register service: %v\n", resp)
 	return resp.ServiceID, nil
+}
+
+func reRegister() {
+	for _, sd := range registered {
+		AddRegistry(sd)
+	}
+
 }
 
 // expose an ever-increasing counter with the given metric
