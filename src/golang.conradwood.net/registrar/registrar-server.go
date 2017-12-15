@@ -44,7 +44,7 @@ type serviceInstance struct {
 }
 
 func (si *serviceInstance) toString() string {
-	s := fmt.Sprintf("%s %s:%d", si.serviceID, si.address.Host, si.address.Port)
+	s := fmt.Sprintf("%d %s:%d", si.serviceID, si.address.Host, si.address.Port)
 	return s
 }
 func main() {
@@ -183,6 +183,11 @@ func FindInstanceById(id int) *serviceInstance {
 func FindService(sd *pb.ServiceDescription) *serviceEntry {
 	for e := services.Front(); e != nil; e = e.Next() {
 		sl := e.Value.(*serviceEntry)
+		if (sl.loc.Gurupath != "") && (sd.Gurupath != "") {
+			if sl.loc.Gurupath != sd.Gurupath {
+				continue
+			}
+		}
 		if sl.loc.Name == sd.Name {
 			return sl
 		}
@@ -208,6 +213,7 @@ func AddService(sd *pb.ServiceDescription, hostname string, port int32, apitype 
 	// check if address sa already in location
 	for _, instance := range sl.instances {
 		if (instance.address.Host == hostname) && (instance.address.Port == port) {
+
 			//fmt.Printf("Re-Registered service %s (%s) at %s:%d\n", sd.Name, sd.Type, hostname, port)
 			return instance
 		}
@@ -223,7 +229,7 @@ func AddService(sd *pb.ServiceDescription, hostname string, port int32, apitype 
 	si.apitype = apitype
 	sl.instances = append(sl.instances, si)
 	//fmt.Printf("Apitype: %s\n", si.apitype)
-	fmt.Printf("Registered service %s at %s:%d (%d)\n", sd.Name, hostname, port, len(sl.instances))
+	fmt.Printf("Registered new service %s at %s:%d (%d) [%s]\n", sd.Name, hostname, port, len(sl.instances), sd.Gurupath)
 	slx := FindService(sd)
 	if len(slx.instances) == 0 {
 		fmt.Println("Error, did not save new service")
