@@ -107,29 +107,41 @@ func removeInvalidInstances() {
 			if !isValid(instance) {
 				se.instances[len(se.instances)-1], se.instances[i] = se.instances[i], se.instances[len(se.instances)-1]
 				se.instances = se.instances[:len(se.instances)-1]
-				name := fmt.Sprintf("%s@%s:%d", se.loc.Name, instance.address.Host,
-					instance.address.Port)
-				fmt.Printf("Instance %s removed due to excessive failures (or disabled)\n", name)
+
+				fmt.Printf("Instance %s removed due to excessive failures (or disabled)\n", se.toString())
 				break
 			}
 		}
 	}
 }
+
+func (si *serviceEntry) toString() string {
+	name := fmt.Sprintf("%s:%s", si.loc.Name, si.loc.Gurupath)
+	return name
+}
+
 func isValid(si *serviceInstance) bool {
+	MAXAGE := time.Duration(180)
 	// time it out if there's no refresh!
-	if time.Since(si.lastRefresh) > (time.Second * 180) {
+	if time.Since(si.lastRefresh) > (time.Second * MAXAGE) {
+		fmt.Printf("invalidating instance %s: has not refreshed for %d seconds\n", si.toString(), MAXAGE)
 		return false
 	}
 	if si.disabled {
+		fmt.Printf("invalidating instance %s: its disabled\n", si.toString())
 		return false
 	}
-	if si.failures < 10 {
-		return true
+	if si.failures > 10 {
+		fmt.Printf("invalidating instance %s: failed %d times\n", si.toString(), si.failures)
+		return false
 	}
-	if time.Since(si.lastSuccess) < (time.Second * 30) {
-		return true
+	if hasApi(si.apitype, pb.Apitype_status) {
+		if time.Since(si.lastSuccess) > (time.Second * 30) {
+			fmt.Printf("invalidating instance %s: last success is too long ago\n", si.toString())
+			return false
+		}
 	}
-	return false
+	return true
 }
 func CheckService(desc *serviceEntry, addr *serviceInstance) error {
 	url := fmt.Sprintf("https://%s:%d/internal/service-info/name", addr.address.Host, addr.address.Port)

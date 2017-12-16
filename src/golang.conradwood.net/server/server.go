@@ -47,6 +47,10 @@ var (
 	ticker           *time.Ticker
 )
 
+const (
+	COOKIE_NAME = "Auth-Token"
+)
+
 type UserCache struct {
 	UserID  string
 	created time.Time
@@ -118,6 +122,21 @@ func UnaryAuthInterceptor(ctx context.Context, req interface{}, info *grpc.Unary
 	return handler(nctx, req)
 }
 
+// given a request will return authinfo or nil
+// if it fails to verify it, it'll be an error
+// not having a cookie is not an error - it's nil auth
+// having a cookie and it's bad is not an error - nil auth
+// having a cookie and we cannot talk to the auth service is an error
+func HttpAuthInterceptor(r *http.Request) (context.Context, error) {
+	c, err := r.Cookie(COOKIE_NAME)
+	if err != nil {
+		// no cookie
+		return nil, nil
+	}
+	// got cookie - auth it
+	return authenticateToken(r.Context(), c.Value)
+}
+
 // return userid
 func getUserFromCache(token string) string {
 	uc := usercache[token]
@@ -138,12 +157,15 @@ func addUserToCache(token string, id string) {
 // we must not return useful errormessages here,
 // so we print them to stdout instead and return a generic message
 func authenticate(ctx context.Context, meta metadata.MD) (context.Context, error) {
-	var err error
 	if len(meta["token"]) != 1 {
 		fmt.Println("RPCServer: Invalid number of tokens: ", len(meta["token"]))
 		return nil, grpc.Errorf(codes.Unauthenticated, "invalid token")
 	}
 	token := meta["token"][0]
+	return authenticateToken(ctx, token)
+}
+func authenticateToken(ctx context.Context, token string) (context.Context, error) {
+	var err error
 	if authconn == nil {
 		authconn, err = client.DialWrapper("auth.AuthenticationService")
 		if err != nil {
