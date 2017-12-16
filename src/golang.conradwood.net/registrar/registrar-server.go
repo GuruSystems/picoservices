@@ -532,3 +532,34 @@ func isDeployPath(actual string, requested string) bool {
 	}
 	return true
 }
+func (s *RegistryService) InformProcessShutdown(ctx context.Context, pr *pb.ProcessShutdownRequest) (*pb.EmptyResponse, error) {
+	peer, ok := peer.FromContext(ctx)
+	if !ok {
+		fmt.Println("Error getting peer ")
+		return nil, errors.New("Error getting peer from contextn")
+	}
+	adr := pr.IP
+	if adr == "" {
+		peerhost, _, err := net.SplitHostPort(peer.Addr.String())
+		if err != nil {
+			return nil, errors.New("Invalid peer")
+		}
+		adr = peerhost
+	}
+	fmt.Printf("called shutdown service from address %s with adr %s\n", peer.Addr.String(), adr)
+	for e := services.Front(); e != nil; e = e.Next() {
+		sloc := e.Value.(*serviceEntry)
+		for _, instance := range sloc.instances {
+			if instance.address.Host != adr {
+				continue
+			}
+			for _, dp := range pr.Port {
+				if instance.address.Port == dp {
+					fmt.Printf("Disabled %s\n", instance.toString())
+					instance.disabled = true
+				}
+			}
+		}
+	}
+	return &pb.EmptyResponse{}, nil
+}

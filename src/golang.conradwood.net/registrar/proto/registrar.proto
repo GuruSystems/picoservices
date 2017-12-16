@@ -61,6 +61,13 @@ string Name=2;
 Apitype ApiType = 3;
 }
 
+message ProcessShutdownRequest {
+// optional, if nil use originators ip
+string IP=1;
+// list all the ports we just shutdown...
+repeated int32 Port=2;
+}
+
 service Registry {
  rpc DeregisterService(DeregisterRequest) returns (EmptyResponse);
  rpc RegisterService(ServiceLocation) returns (GetResponse);
@@ -68,4 +75,7 @@ service Registry {
  rpc ListServices(ListRequest) returns (ListResponse);
  rpc ShutdownService(ShutdownRequest) returns (EmptyResponse);
  rpc GetTarget(GetTargetRequest) returns (ListResponse);
+ // this is called, by the autodeployer if it detects a shutdown process
+ // essentially the ports and ip will be deregistered
+ rpc InformProcessShutdown(ProcessShutdownRequest) returns (EmptyResponse);
 }

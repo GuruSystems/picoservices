@@ -7408,6 +7408,774 @@ public final class Registrar {
 
   }
 
+  public interface ProcessShutdownRequestOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:registrar.ProcessShutdownRequest)
+      com.google.protobuf.MessageOrBuilder {
+
+    /**
+     * <pre>
+     * optional, if nil use originators ip
+     * </pre>
+     *
+     * <code>optional string IP = 1;</code>
+     */
+    java.lang.String getIP();
+    /**
+     * <pre>
+     * optional, if nil use originators ip
+     * </pre>
+     *
+     * <code>optional string IP = 1;</code>
+     */
+    com.google.protobuf.ByteString
+        getIPBytes();
+
+    /**
+     * <pre>
+     * list all the ports we just shutdown...
+     * </pre>
+     *
+     * <code>repeated int32 Port = 2;</code>
+     */
+    java.util.List<java.lang.Integer> getPortList();
+    /**
+     * <pre>
+     * list all the ports we just shutdown...
+     * </pre>
+     *
+     * <code>repeated int32 Port = 2;</code>
+     */
+    int getPortCount();
+    /**
+     * <pre>
+     * list all the ports we just shutdown...
+     * </pre>
+     *
+     * <code>repeated int32 Port = 2;</code>
+     */
+    int getPort(int index);
+  }
+  /**
+   * Protobuf type {@code registrar.ProcessShutdownRequest}
+   */
+  public  static final class ProcessShutdownRequest extends
+      com.google.protobuf.GeneratedMessageV3 implements
+      // @@protoc_insertion_point(message_implements:registrar.ProcessShutdownRequest)
+      ProcessShutdownRequestOrBuilder {
+    // Use ProcessShutdownRequest.newBuilder() to construct.
+    private ProcessShutdownRequest(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+      super(builder);
+    }
+    private ProcessShutdownRequest() {
+      iP_ = "";
+      port_ = java.util.Collections.emptyList();
+    }
+
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
+    }
+    private ProcessShutdownRequest(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      this();
+      int mutable_bitField0_ = 0;
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            default: {
+              if (!input.skipField(tag)) {
+                done = true;
+              }
+              break;
+            }
+            case 10: {
+              java.lang.String s = input.readStringRequireUtf8();
+
+              iP_ = s;
+              break;
+            }
+            case 16: {
+              if (!((mutable_bitField0_ & 0x00000002) == 0x00000002)) {
+                port_ = new java.util.ArrayList<java.lang.Integer>();
+                mutable_bitField0_ |= 0x00000002;
+              }
+              port_.add(input.readInt32());
+              break;
+            }
+            case 18: {
+              int length = input.readRawVarint32();
+              int limit = input.pushLimit(length);
+              if (!((mutable_bitField0_ & 0x00000002) == 0x00000002) && input.getBytesUntilLimit() > 0) {
+                port_ = new java.util.ArrayList<java.lang.Integer>();
+                mutable_bitField0_ |= 0x00000002;
+              }
+              while (input.getBytesUntilLimit() > 0) {
+                port_.add(input.readInt32());
+              }
+              input.popLimit(limit);
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e).setUnfinishedMessage(this);
+      } finally {
+        if (((mutable_bitField0_ & 0x00000002) == 0x00000002)) {
+          port_ = java.util.Collections.unmodifiableList(port_);
+        }
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return registrar.Registrar.internal_static_registrar_ProcessShutdownRequest_descriptor;
+    }
+
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return registrar.Registrar.internal_static_registrar_ProcessShutdownRequest_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              registrar.Registrar.ProcessShutdownRequest.class, registrar.Registrar.ProcessShutdownRequest.Builder.class);
+    }
+
+    private int bitField0_;
+    public static final int IP_FIELD_NUMBER = 1;
+    private volatile java.lang.Object iP_;
+    /**
+     * <pre>
+     * optional, if nil use originators ip
+     * </pre>
+     *
+     * <code>optional string IP = 1;</code>
+     */
+    public java.lang.String getIP() {
+      java.lang.Object ref = iP_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        iP_ = s;
+        return s;
+      }
+    }
+    /**
+     * <pre>
+     * optional, if nil use originators ip
+     * </pre>
+     *
+     * <code>optional string IP = 1;</code>
+     */
+    public com.google.protobuf.ByteString
+        getIPBytes() {
+      java.lang.Object ref = iP_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        iP_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    public static final int PORT_FIELD_NUMBER = 2;
+    private java.util.List<java.lang.Integer> port_;
+    /**
+     * <pre>
+     * list all the ports we just shutdown...
+     * </pre>
+     *
+     * <code>repeated int32 Port = 2;</code>
+     */
+    public java.util.List<java.lang.Integer>
+        getPortList() {
+      return port_;
+    }
+    /**
+     * <pre>
+     * list all the ports we just shutdown...
+     * </pre>
+     *
+     * <code>repeated int32 Port = 2;</code>
+     */
+    public int getPortCount() {
+      return port_.size();
+    }
+    /**
+     * <pre>
+     * list all the ports we just shutdown...
+     * </pre>
+     *
+     * <code>repeated int32 Port = 2;</code>
+     */
+    public int getPort(int index) {
+      return port_.get(index);
+    }
+    private int portMemoizedSerializedSize = -1;
+
+    private byte memoizedIsInitialized = -1;
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
+
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      getSerializedSize();
+      if (!getIPBytes().isEmpty()) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 1, iP_);
+      }
+      if (getPortList().size() > 0) {
+        output.writeUInt32NoTag(18);
+        output.writeUInt32NoTag(portMemoizedSerializedSize);
+      }
+      for (int i = 0; i < port_.size(); i++) {
+        output.writeInt32NoTag(port_.get(i));
+      }
+    }
+
+    public int getSerializedSize() {
+      int size = memoizedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (!getIPBytes().isEmpty()) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, iP_);
+      }
+      {
+        int dataSize = 0;
+        for (int i = 0; i < port_.size(); i++) {
+          dataSize += com.google.protobuf.CodedOutputStream
+            .computeInt32SizeNoTag(port_.get(i));
+        }
+        size += dataSize;
+        if (!getPortList().isEmpty()) {
+          size += 1;
+          size += com.google.protobuf.CodedOutputStream
+              .computeInt32SizeNoTag(dataSize);
+        }
+        portMemoizedSerializedSize = dataSize;
+      }
+      memoizedSize = size;
+      return size;
+    }
+
+    private static final long serialVersionUID = 0L;
+    @java.lang.Override
+    public boolean equals(final java.lang.Object obj) {
+      if (obj == this) {
+       return true;
+      }
+      if (!(obj instanceof registrar.Registrar.ProcessShutdownRequest)) {
+        return super.equals(obj);
+      }
+      registrar.Registrar.ProcessShutdownRequest other = (registrar.Registrar.ProcessShutdownRequest) obj;
+
+      boolean result = true;
+      result = result && getIP()
+          .equals(other.getIP());
+      result = result && getPortList()
+          .equals(other.getPortList());
+      return result;
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+      if (memoizedHashCode != 0) {
+        return memoizedHashCode;
+      }
+      int hash = 41;
+      hash = (19 * hash) + getDescriptorForType().hashCode();
+      hash = (37 * hash) + IP_FIELD_NUMBER;
+      hash = (53 * hash) + getIP().hashCode();
+      if (getPortCount() > 0) {
+        hash = (37 * hash) + PORT_FIELD_NUMBER;
+        hash = (53 * hash) + getPortList().hashCode();
+      }
+      hash = (29 * hash) + unknownFields.hashCode();
+      memoizedHashCode = hash;
+      return hash;
+    }
+
+    public static registrar.Registrar.ProcessShutdownRequest parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static registrar.Registrar.ProcessShutdownRequest parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static registrar.Registrar.ProcessShutdownRequest parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static registrar.Registrar.ProcessShutdownRequest parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static registrar.Registrar.ProcessShutdownRequest parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static registrar.Registrar.ProcessShutdownRequest parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static registrar.Registrar.ProcessShutdownRequest parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input);
+    }
+    public static registrar.Registrar.ProcessShutdownRequest parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static registrar.Registrar.ProcessShutdownRequest parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static registrar.Registrar.ProcessShutdownRequest parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder() {
+      return DEFAULT_INSTANCE.toBuilder();
+    }
+    public static Builder newBuilder(registrar.Registrar.ProcessShutdownRequest prototype) {
+      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+    }
+    public Builder toBuilder() {
+      return this == DEFAULT_INSTANCE
+          ? new Builder() : new Builder().mergeFrom(this);
+    }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code registrar.ProcessShutdownRequest}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:registrar.ProcessShutdownRequest)
+        registrar.Registrar.ProcessShutdownRequestOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return registrar.Registrar.internal_static_registrar_ProcessShutdownRequest_descriptor;
+      }
+
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return registrar.Registrar.internal_static_registrar_ProcessShutdownRequest_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                registrar.Registrar.ProcessShutdownRequest.class, registrar.Registrar.ProcessShutdownRequest.Builder.class);
+      }
+
+      // Construct using registrar.Registrar.ProcessShutdownRequest.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessageV3
+                .alwaysUseFieldBuilders) {
+        }
+      }
+      public Builder clear() {
+        super.clear();
+        iP_ = "";
+
+        port_ = java.util.Collections.emptyList();
+        bitField0_ = (bitField0_ & ~0x00000002);
+        return this;
+      }
+
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return registrar.Registrar.internal_static_registrar_ProcessShutdownRequest_descriptor;
+      }
+
+      public registrar.Registrar.ProcessShutdownRequest getDefaultInstanceForType() {
+        return registrar.Registrar.ProcessShutdownRequest.getDefaultInstance();
+      }
+
+      public registrar.Registrar.ProcessShutdownRequest build() {
+        registrar.Registrar.ProcessShutdownRequest result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      public registrar.Registrar.ProcessShutdownRequest buildPartial() {
+        registrar.Registrar.ProcessShutdownRequest result = new registrar.Registrar.ProcessShutdownRequest(this);
+        int from_bitField0_ = bitField0_;
+        int to_bitField0_ = 0;
+        result.iP_ = iP_;
+        if (((bitField0_ & 0x00000002) == 0x00000002)) {
+          port_ = java.util.Collections.unmodifiableList(port_);
+          bitField0_ = (bitField0_ & ~0x00000002);
+        }
+        result.port_ = port_;
+        result.bitField0_ = to_bitField0_;
+        onBuilt();
+        return result;
+      }
+
+      public Builder clone() {
+        return (Builder) super.clone();
+      }
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          Object value) {
+        return (Builder) super.setField(field, value);
+      }
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return (Builder) super.clearField(field);
+      }
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return (Builder) super.clearOneof(oneof);
+      }
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, Object value) {
+        return (Builder) super.setRepeatedField(field, index, value);
+      }
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          Object value) {
+        return (Builder) super.addRepeatedField(field, value);
+      }
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof registrar.Registrar.ProcessShutdownRequest) {
+          return mergeFrom((registrar.Registrar.ProcessShutdownRequest)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(registrar.Registrar.ProcessShutdownRequest other) {
+        if (other == registrar.Registrar.ProcessShutdownRequest.getDefaultInstance()) return this;
+        if (!other.getIP().isEmpty()) {
+          iP_ = other.iP_;
+          onChanged();
+        }
+        if (!other.port_.isEmpty()) {
+          if (port_.isEmpty()) {
+            port_ = other.port_;
+            bitField0_ = (bitField0_ & ~0x00000002);
+          } else {
+            ensurePortIsMutable();
+            port_.addAll(other.port_);
+          }
+          onChanged();
+        }
+        onChanged();
+        return this;
+      }
+
+      public final boolean isInitialized() {
+        return true;
+      }
+
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        registrar.Registrar.ProcessShutdownRequest parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (registrar.Registrar.ProcessShutdownRequest) e.getUnfinishedMessage();
+          throw e.unwrapIOException();
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+      private int bitField0_;
+
+      private java.lang.Object iP_ = "";
+      /**
+       * <pre>
+       * optional, if nil use originators ip
+       * </pre>
+       *
+       * <code>optional string IP = 1;</code>
+       */
+      public java.lang.String getIP() {
+        java.lang.Object ref = iP_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          iP_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <pre>
+       * optional, if nil use originators ip
+       * </pre>
+       *
+       * <code>optional string IP = 1;</code>
+       */
+      public com.google.protobuf.ByteString
+          getIPBytes() {
+        java.lang.Object ref = iP_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          iP_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <pre>
+       * optional, if nil use originators ip
+       * </pre>
+       *
+       * <code>optional string IP = 1;</code>
+       */
+      public Builder setIP(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  
+        iP_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * optional, if nil use originators ip
+       * </pre>
+       *
+       * <code>optional string IP = 1;</code>
+       */
+      public Builder clearIP() {
+        
+        iP_ = getDefaultInstance().getIP();
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * optional, if nil use originators ip
+       * </pre>
+       *
+       * <code>optional string IP = 1;</code>
+       */
+      public Builder setIPBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+        
+        iP_ = value;
+        onChanged();
+        return this;
+      }
+
+      private java.util.List<java.lang.Integer> port_ = java.util.Collections.emptyList();
+      private void ensurePortIsMutable() {
+        if (!((bitField0_ & 0x00000002) == 0x00000002)) {
+          port_ = new java.util.ArrayList<java.lang.Integer>(port_);
+          bitField0_ |= 0x00000002;
+         }
+      }
+      /**
+       * <pre>
+       * list all the ports we just shutdown...
+       * </pre>
+       *
+       * <code>repeated int32 Port = 2;</code>
+       */
+      public java.util.List<java.lang.Integer>
+          getPortList() {
+        return java.util.Collections.unmodifiableList(port_);
+      }
+      /**
+       * <pre>
+       * list all the ports we just shutdown...
+       * </pre>
+       *
+       * <code>repeated int32 Port = 2;</code>
+       */
+      public int getPortCount() {
+        return port_.size();
+      }
+      /**
+       * <pre>
+       * list all the ports we just shutdown...
+       * </pre>
+       *
+       * <code>repeated int32 Port = 2;</code>
+       */
+      public int getPort(int index) {
+        return port_.get(index);
+      }
+      /**
+       * <pre>
+       * list all the ports we just shutdown...
+       * </pre>
+       *
+       * <code>repeated int32 Port = 2;</code>
+       */
+      public Builder setPort(
+          int index, int value) {
+        ensurePortIsMutable();
+        port_.set(index, value);
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * list all the ports we just shutdown...
+       * </pre>
+       *
+       * <code>repeated int32 Port = 2;</code>
+       */
+      public Builder addPort(int value) {
+        ensurePortIsMutable();
+        port_.add(value);
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * list all the ports we just shutdown...
+       * </pre>
+       *
+       * <code>repeated int32 Port = 2;</code>
+       */
+      public Builder addAllPort(
+          java.lang.Iterable<? extends java.lang.Integer> values) {
+        ensurePortIsMutable();
+        com.google.protobuf.AbstractMessageLite.Builder.addAll(
+            values, port_);
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * list all the ports we just shutdown...
+       * </pre>
+       *
+       * <code>repeated int32 Port = 2;</code>
+       */
+      public Builder clearPort() {
+        port_ = java.util.Collections.emptyList();
+        bitField0_ = (bitField0_ & ~0x00000002);
+        onChanged();
+        return this;
+      }
+      public final Builder setUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return this;
+      }
+
+      public final Builder mergeUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return this;
+      }
+
+
+      // @@protoc_insertion_point(builder_scope:registrar.ProcessShutdownRequest)
+    }
+
+    // @@protoc_insertion_point(class_scope:registrar.ProcessShutdownRequest)
+    private static final registrar.Registrar.ProcessShutdownRequest DEFAULT_INSTANCE;
+    static {
+      DEFAULT_INSTANCE = new registrar.Registrar.ProcessShutdownRequest();
+    }
+
+    public static registrar.Registrar.ProcessShutdownRequest getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static final com.google.protobuf.Parser<ProcessShutdownRequest>
+        PARSER = new com.google.protobuf.AbstractParser<ProcessShutdownRequest>() {
+      public ProcessShutdownRequest parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+          return new ProcessShutdownRequest(input, extensionRegistry);
+      }
+    };
+
+    public static com.google.protobuf.Parser<ProcessShutdownRequest> parser() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<ProcessShutdownRequest> getParserForType() {
+      return PARSER;
+    }
+
+    public registrar.Registrar.ProcessShutdownRequest getDefaultInstanceForType() {
+      return DEFAULT_INSTANCE;
+    }
+
+  }
+
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_registrar_ServiceDescription_descriptor;
   private static final 
@@ -7463,6 +8231,11 @@ public final class Registrar {
   private static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_registrar_GetTargetRequest_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_registrar_ProcessShutdownRequest_descriptor;
+  private static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_registrar_ProcessShutdownRequest_fieldAccessorTable;
 
   public static com.google.protobuf.Descriptors.FileDescriptor
       getDescriptor() {
@@ -7491,19 +8264,23 @@ public final class Registrar {
       "\001 \001(\t\"&\n\021DeregisterRequest\022\021\n\tServiceID\030" +
       "\001 \001(\t\"W\n\020GetTargetRequest\022\020\n\010Gurupath\030\001 " +
       "\001(\t\022\014\n\004Name\030\002 \001(\t\022#\n\007ApiType\030\003 \001(\0162\022.reg" +
-      "istrar.Apitype*<\n\007Apitype\022\n\n\006status\020\000\022\010\n",
-      "\004grpc\020\001\022\010\n\004json\020\002\022\010\n\004html\020\003\022\007\n\003tcp\020\0042\257\003\n" +
-      "\010Registry\022K\n\021DeregisterService\022\034.registr" +
-      "ar.DeregisterRequest\032\030.registrar.EmptyRe" +
-      "sponse\022E\n\017RegisterService\022\032.registrar.Se" +
-      "rviceLocation\032\026.registrar.GetResponse\022B\n" +
-      "\021GetServiceAddress\022\025.registrar.GetReques" +
-      "t\032\026.registrar.GetResponse\022?\n\014ListService" +
-      "s\022\026.registrar.ListRequest\032\027.registrar.Li" +
-      "stResponse\022G\n\017ShutdownService\022\032.registra" +
-      "r.ShutdownRequest\032\030.registrar.EmptyRespo",
-      "nse\022A\n\tGetTarget\022\033.registrar.GetTargetRe" +
-      "quest\032\027.registrar.ListResponseb\006proto3"
+      "istrar.Apitype\"2\n\026ProcessShutdownRequest",
+      "\022\n\n\002IP\030\001 \001(\t\022\014\n\004Port\030\002 \003(\005*<\n\007Apitype\022\n\n" +
+      "\006status\020\000\022\010\n\004grpc\020\001\022\010\n\004json\020\002\022\010\n\004html\020\003\022" +
+      "\007\n\003tcp\020\0042\205\004\n\010Registry\022K\n\021DeregisterServi" +
+      "ce\022\034.registrar.DeregisterRequest\032\030.regis" +
+      "trar.EmptyResponse\022E\n\017RegisterService\022\032." +
+      "registrar.ServiceLocation\032\026.registrar.Ge" +
+      "tResponse\022B\n\021GetServiceAddress\022\025.registr" +
+      "ar.GetRequest\032\026.registrar.GetResponse\022?\n" +
+      "\014ListServices\022\026.registrar.ListRequest\032\027." +
+      "registrar.ListResponse\022G\n\017ShutdownServic",
+      "e\022\032.registrar.ShutdownRequest\032\030.registra" +
+      "r.EmptyResponse\022A\n\tGetTarget\022\033.registrar" +
+      ".GetTargetRequest\032\027.registrar.ListRespon" +
+      "se\022T\n\025InformProcessShutdown\022!.registrar." +
+      "ProcessShutdownRequest\032\030.registrar.Empty" +
+      "Responseb\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -7584,6 +8361,12 @@ public final class Registrar {
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_registrar_GetTargetRequest_descriptor,
         new java.lang.String[] { "Gurupath", "Name", "ApiType", });
+    internal_static_registrar_ProcessShutdownRequest_descriptor =
+      getDescriptor().getMessageTypes().get(11);
+    internal_static_registrar_ProcessShutdownRequest_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_registrar_ProcessShutdownRequest_descriptor,
+        new java.lang.String[] { "IP", "Port", });
     com.google.api.AnnotationsProto.getDescriptor();
   }
 
