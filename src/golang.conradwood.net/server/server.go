@@ -315,15 +315,6 @@ func ServerStartup(def *serverDef) error {
 		def.name = name
 	}
 	AddRegistry(def)
-	// start period re-registration
-	if ticker == nil {
-		ticker = time.NewTicker(time.Duration(*register_refresh) * time.Second)
-		go func() {
-			for _ = range ticker.C {
-				reRegister()
-			}
-		}()
-	}
 	// something odd?
 	reflection.Register(grpcServer)
 	// Serve and Listen
@@ -422,6 +413,16 @@ func grpcHandlerFunc(grpcServer *grpc.Server, otherHandler http.Handler) http.Ha
 }
 
 func AddRegistry(sd *serverDef) (string, error) {
+	// start period re-registration
+	if ticker == nil {
+		ticker = time.NewTicker(time.Duration(*register_refresh) * time.Second)
+		go func() {
+			for _ = range ticker.C {
+				reRegister()
+			}
+		}()
+	}
+
 	//fmt.Printf("Registering service %s with registry server\n", name)
 	opts := []grpc.DialOption{grpc.WithInsecure()}
 	conn, err := grpc.Dial(cmdline.GetRegistryAddress(), opts...)
