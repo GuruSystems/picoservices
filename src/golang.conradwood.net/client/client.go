@@ -61,19 +61,19 @@ func DialTCPWrapper(gurupath string) (net.Conn, error) {
 	gt := &pb.GetTargetRequest{Gurupath: gurupath, ApiType: pb.Apitype_tcp}
 	lr, err := rcl.GetTarget(context.Background(), gt)
 	if err != nil {
-		s := fmt.Sprintf("Error getting target for gurupath %s: %s", gurupath, err)
+		s := fmt.Sprintf("Error getting TCP target for gurupath %s: %s", gurupath, err)
 		fmt.Println(s)
 		return nil, errors.New(s)
 	}
 	if len(lr.Service) == 0 {
-		s := fmt.Sprintf("No target found for path %s", gurupath)
+		s := fmt.Sprintf("No TCP target found for path %s", gurupath)
 		fmt.Println(s)
 		return nil, errors.New(s)
 	}
 	svr := lr.Service[0]
 	svl := svr.Location
 	if len(svl.Address) == 0 {
-		s := fmt.Sprintf("No location found for path %s", gurupath)
+		s := fmt.Sprintf("No TCP location found for path %s", gurupath)
 		fmt.Println(s)
 		return nil, errors.New(s)
 	}
@@ -100,7 +100,7 @@ func DialWrapper(servicename string) (*grpc.ClientConn, error) {
 	gt := &pb.GetTargetRequest{Name: servicename, ApiType: pb.Apitype_grpc}
 	lr, err := rcl.GetTarget(context.Background(), gt)
 	if err != nil {
-		fmt.Printf("Error getting service address %s: %s\n", servicename, err)
+		fmt.Printf("Error getting grpc service address %s: %s\n", servicename, err)
 		return nil, err
 	}
 	if len(lr.Service) == 0 {
