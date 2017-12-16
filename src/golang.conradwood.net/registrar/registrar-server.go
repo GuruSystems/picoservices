@@ -414,6 +414,9 @@ func (s *RegistryService) ListServices(ctx context.Context, pr *pb.ListRequest) 
 			continue
 		}
 		fmt.Printf("Service %s has %d instances\n", se.loc.Name, len(se.instances))
+		if len(se.instances) == 0 {
+			continue
+		}
 		rr := pb.GetResponse{}
 		lr.Service = append(lr.Service, &rr)
 
