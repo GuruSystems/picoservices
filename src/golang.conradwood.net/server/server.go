@@ -44,6 +44,11 @@ var (
 	ctrmetrics       = make(map[string]*uint64)
 	registered       []*serverDef
 	stopped          bool
+	ticker           *time.Ticker
+)
+
+const (
+	COOKIE_NAME = "Auth-Token"
 )
 
 type UserCache struct {
@@ -68,7 +73,7 @@ type serverDef struct {
 }
 
 func (s *serverDef) toString() string {
-	return fmt.Sprintf(":%d %s (%v)", s.Port, s.name, s.types)
+	return fmt.Sprintf("Port #%d: %s (%v)", s.Port, s.name, s.types)
 }
 func NewTCPServerDef(name string) *serverDef {
 	sd := NewServerDef()
@@ -77,8 +82,18 @@ func NewTCPServerDef(name string) *serverDef {
 	sd.name = name
 	return sd
 }
+
+func NewHTMLServerDef(name string) *serverDef {
+	sd := NewServerDef()
+	sd.types = sd.types[:0]
+	sd.types = append(sd.types, pb.Apitype_html)
+	sd.name = name
+	return sd
+}
+
 func NewServerDef() *serverDef {
 	res := &serverDef{}
+	res.registered_id = ""
 	res.Key = Privatekey
 	res.Certificate = Certificate
 	res.CA = Ca
@@ -107,6 +122,21 @@ func UnaryAuthInterceptor(ctx context.Context, req interface{}, info *grpc.Unary
 	return handler(nctx, req)
 }
 
+// given a request will return authinfo or nil
+// if it fails to verify it, it'll be an error
+// not having a cookie is not an error - it's nil auth
+// having a cookie and it's bad is not an error - nil auth
+// having a cookie and we cannot talk to the auth service is an error
+func HttpAuthInterceptor(r *http.Request) (context.Context, error) {
+	c, err := r.Cookie(COOKIE_NAME)
+	if err != nil {
+		// no cookie
+		return nil, nil
+	}
+	// got cookie - auth it
+	return authenticateToken(r.Context(), c.Value)
+}
+
 // return userid
 func getUserFromCache(token string) string {
 	uc := usercache[token]
@@ -127,12 +157,15 @@ func addUserToCache(token string, id string) {
 // we must not return useful errormessages here,
 // so we print them to stdout instead and return a generic message
 func authenticate(ctx context.Context, meta metadata.MD) (context.Context, error) {
-	var err error
 	if len(meta["token"]) != 1 {
 		fmt.Println("RPCServer: Invalid number of tokens: ", len(meta["token"]))
 		return nil, grpc.Errorf(codes.Unauthenticated, "invalid token")
 	}
 	token := meta["token"][0]
+	return authenticateToken(ctx, token)
+}
+func authenticateToken(ctx context.Context, token string) (context.Context, error) {
+	var err error
 	if authconn == nil {
 		authconn, err = client.DialWrapper("auth.AuthenticationService")
 		if err != nil {
@@ -282,13 +315,6 @@ func ServerStartup(def *serverDef) error {
 		def.name = name
 	}
 	AddRegistry(def)
-	// start period re-registration
-	ticker := time.NewTicker(time.Duration(*register_refresh) * time.Second)
-	go func() {
-		for _ = range ticker.C {
-			AddRegistry(def)
-		}
-	}()
 	// something odd?
 	reflection.Register(grpcServer)
 	// Serve and Listen
@@ -398,6 +424,16 @@ func UnregisterPortRegistry(port int) error {
 	return nil
 }
 func AddRegistry(sd *serverDef) (string, error) {
+	// start period re-registration
+	if ticker == nil {
+		ticker = time.NewTicker(time.Duration(*register_refresh) * time.Second)
+		go func() {
+			for _ = range ticker.C {
+				reRegister()
+			}
+		}()
+	}
+
 	//fmt.Printf("Registering service %s with registry server\n", name)
 	opts := []grpc.DialOption{grpc.WithInsecure()}
 	conn, err := grpc.Dial(cmdline.GetRegistryAddress(), opts...)
@@ -433,10 +469,19 @@ func AddRegistry(sd *serverDef) (string, error) {
 	if resp == nil {
 		fmt.Println("Registration failed with no error provided.")
 	}
-	registered = append(registered, sd)
+	if sd.registered_id == "" {
+		registered = append(registered, sd)
+	}
 	sd.registered_id = resp.ServiceID
 	//fmt.Printf("Response to register service: %v\n", resp)
 	return resp.ServiceID, nil
+}
+
+func reRegister() {
+	for _, sd := range registered {
+		AddRegistry(sd)
+	}
+
 }
 
 // expose an ever-increasing counter with the given metric

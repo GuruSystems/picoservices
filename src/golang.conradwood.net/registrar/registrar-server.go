@@ -39,12 +39,13 @@ type serviceInstance struct {
 	disabled        bool
 	firstRegistered time.Time
 	lastSuccess     time.Time
+	lastRefresh     time.Time
 	address         pb.ServiceAddress
 	apitype         []pb.Apitype
 }
 
 func (si *serviceInstance) toString() string {
-	s := fmt.Sprintf("%s %s:%d", si.serviceID, si.address.Host, si.address.Port)
+	s := fmt.Sprintf("%d %s:%d", si.serviceID, si.address.Host, si.address.Port)
 	return s
 }
 func main() {
@@ -106,25 +107,41 @@ func removeInvalidInstances() {
 			if !isValid(instance) {
 				se.instances[len(se.instances)-1], se.instances[i] = se.instances[i], se.instances[len(se.instances)-1]
 				se.instances = se.instances[:len(se.instances)-1]
-				name := fmt.Sprintf("%s@%s:%d", se.loc.Name, instance.address.Host,
-					instance.address.Port)
-				fmt.Printf("Instance %s removed due to excessive failures (or disabled)\n", name)
+
+				fmt.Printf("Instance %s removed due to excessive failures (or disabled)\n", se.toString())
 				break
 			}
 		}
 	}
 }
+
+func (si *serviceEntry) toString() string {
+	name := fmt.Sprintf("%s:%s", si.loc.Name, si.loc.Gurupath)
+	return name
+}
+
 func isValid(si *serviceInstance) bool {
-	if si.disabled {
+	MAXAGE := time.Duration(180)
+	// time it out if there's no refresh!
+	if time.Since(si.lastRefresh) > (time.Second * MAXAGE) {
+		fmt.Printf("invalidating instance %s: has not refreshed for %d seconds\n", si.toString(), MAXAGE)
 		return false
 	}
-	if si.failures < 10 {
-		return true
+	if si.disabled {
+		fmt.Printf("invalidating instance %s: its disabled\n", si.toString())
+		return false
 	}
-	if time.Since(si.lastSuccess) < (time.Second * 30) {
-		return true
+	if si.failures > 10 {
+		fmt.Printf("invalidating instance %s: failed %d times\n", si.toString(), si.failures)
+		return false
 	}
-	return false
+	if hasApi(si.apitype, pb.Apitype_status) {
+		if time.Since(si.lastSuccess) > (time.Second * 30) {
+			fmt.Printf("invalidating instance %s: last success is too long ago\n", si.toString())
+			return false
+		}
+	}
+	return true
 }
 func CheckService(desc *serviceEntry, addr *serviceInstance) error {
 	url := fmt.Sprintf("https://%s:%d/internal/service-info/name", addr.address.Host, addr.address.Port)
@@ -180,9 +197,32 @@ func FindInstanceById(id int) *serviceInstance {
 	return nil
 }
 
+//
+func FindServices(sd *pb.ServiceDescription) []*serviceEntry {
+	var res []*serviceEntry
+	for e := services.Front(); e != nil; e = e.Next() {
+		sl := e.Value.(*serviceEntry)
+		if (sl.loc.Gurupath != "") && (sd.Gurupath != "") {
+			if sl.loc.Gurupath != sd.Gurupath {
+				continue
+			}
+		}
+		if sl.loc.Name == sd.Name {
+			res = append(res, sl)
+		}
+	}
+	return res
+}
+
+// this is not a good thing - it finds the FIRST entry by name
 func FindService(sd *pb.ServiceDescription) *serviceEntry {
 	for e := services.Front(); e != nil; e = e.Next() {
 		sl := e.Value.(*serviceEntry)
+		if (sl.loc.Gurupath != "") && (sd.Gurupath != "") {
+			if sl.loc.Gurupath != sd.Gurupath {
+				continue
+			}
+		}
 		if sl.loc.Name == sd.Name {
 			return sl
 		}
@@ -208,6 +248,7 @@ func AddService(sd *pb.ServiceDescription, hostname string, port int32, apitype 
 	// check if address sa already in location
 	for _, instance := range sl.instances {
 		if (instance.address.Host == hostname) && (instance.address.Port == port) {
+			instance.lastRefresh = time.Now()
 			//fmt.Printf("Re-Registered service %s (%s) at %s:%d\n", sd.Name, sd.Type, hostname, port)
 			return instance
 		}
@@ -219,11 +260,12 @@ func AddService(sd *pb.ServiceDescription, hostname string, port int32, apitype 
 	si.serviceID = idCtr
 	si.firstRegistered = time.Now()
 	si.lastSuccess = time.Now()
+	si.lastRefresh = time.Now()
 	si.address = pb.ServiceAddress{Host: hostname, Port: port}
 	si.apitype = apitype
 	sl.instances = append(sl.instances, si)
 	//fmt.Printf("Apitype: %s\n", si.apitype)
-	fmt.Printf("Registered service %s at %s:%d (%d)\n", sd.Name, hostname, port, len(sl.instances))
+	fmt.Printf("Registered new service %s at %s:%d (%d) [%s]\n", sd.Name, hostname, port, len(sl.instances), sd.Gurupath)
 	slx := FindService(sd)
 	if len(slx.instances) == 0 {
 		fmt.Println("Error, did not save new service")
@@ -238,13 +280,8 @@ func AddService(sd *pb.ServiceDescription, hostname string, port int32, apitype 
 * implementing the functions here:
 ***********************************/
 type RegistryService struct {
-	wtf int
 }
 
-// in C we put methods into structs and call them pointers to functions
-// in java/python we also put pointers to functions into structs and but call them "objects" instead
-// in Go we don't put functions pointers into structs, we "associate" a function with a struct.
-// (I think that's more or less the same as what C does, just different Syntax)
 func (s *RegistryService) GetServiceAddress(ctx context.Context, gr *pb.GetRequest) (*pb.GetResponse, error) {
 	peer, ok := peer.FromContext(ctx)
 	if !ok {
@@ -252,19 +289,21 @@ func (s *RegistryService) GetServiceAddress(ctx context.Context, gr *pb.GetReque
 		return nil, errors.New("Error getting peer from contextn")
 	}
 	fmt.Printf("%s called get service address for service %s\n", peer.Addr, gr.Service.Name)
-	sl := FindService(gr.Service)
-	if sl == nil {
+	slv := FindServices(gr.Service)
+	if len(slv) == 0 {
 		fmt.Printf("Service \"%s\" is not currently registered\n", gr.Service.Name)
 		return nil, errors.New("service not registered")
 	}
 	resp := pb.GetResponse{}
-	resp.Service = sl.loc
+	resp.Service = slv[0].loc
 	resp.Location = new(pb.ServiceLocation)
-	resp.Location.Service = sl.loc
-	//var serviceAddresses []pb.ServiceAddress
-	for _, in := range sl.instances {
-		sa := in.address
-		resp.Location.Address = append(resp.Location.Address, &sa)
+	resp.Location.Service = slv[0].loc
+	for _, sl := range slv {
+		//var serviceAddresses []pb.ServiceAddress
+		for _, in := range sl.instances {
+			sa := in.address
+			resp.Location.Address = append(resp.Location.Address, &sa)
+		}
 	}
 	return &resp, nil
 }
@@ -299,7 +338,7 @@ func (s *RegistryService) RegisterService(ctx context.Context, pr *pb.ServiceLoc
 		return nil, errors.New("Missing servicename!")
 	}
 	if pr.Service.Gurupath == "" {
-		fmt.Printf("Warning! no gurupath in registration request. Are you testing? (peer=%s, servicename=%s \n", peer, pr.Service.Name)
+		fmt.Printf("Warning! no deploymentpath in registration request. Are you testing? (peer=%s, servicename=%s \n", peer, pr.Service.Name)
 	}
 	//fmt.Printf("Register service request for service %s from peer %s\n", pr.Service.Name, peer)
 	rr := new(pb.GetResponse)
@@ -387,6 +426,9 @@ func (s *RegistryService) ListServices(ctx context.Context, pr *pb.ListRequest) 
 			continue
 		}
 		fmt.Printf("Service %s has %d instances\n", se.loc.Name, len(se.instances))
+		if len(se.instances) == 0 {
+			continue
+		}
 		rr := pb.GetResponse{}
 		lr.Service = append(lr.Service, &rr)
 
@@ -429,14 +471,21 @@ func (s *RegistryService) ShutdownService(ctx context.Context, pr *pb.ShutdownRe
 	return &pb.EmptyResponse{}, nil
 }
 
-// find target based on gurupath & apitype...
+// find target based on deploymentpath & apitype...
 func (s *RegistryService) GetTarget(ctx context.Context, pr *pb.GetTargetRequest) (*pb.ListResponse, error) {
 	lr := &pb.ListResponse{}
 	for e := services.Front(); e != nil; e = e.Next() {
 		se := e.Value.(*serviceEntry)
-		if !isDeployPath(se.loc.Gurupath, pr.Gurupath) {
-			fmt.Printf("No match \"%s\" and \"%s\"\n", se.loc.Gurupath, pr.Gurupath)
-			continue
+		if pr.Gurupath != "" {
+			if !isDeployPath(se.loc.Gurupath, pr.Gurupath) {
+				fmt.Printf("No match \"%s\" and \"%s\"\n", se.loc.Gurupath, pr.Gurupath)
+				continue
+			}
+		}
+		if pr.Name != "" {
+			if se.loc.Name != pr.Name {
+				continue
+			}
 		}
 		for _, si := range se.instances {
 			if hasApi(si.apitype, pr.ApiType) {
@@ -482,4 +531,35 @@ func isDeployPath(actual string, requested string) bool {
 		}
 	}
 	return true
+}
+func (s *RegistryService) InformProcessShutdown(ctx context.Context, pr *pb.ProcessShutdownRequest) (*pb.EmptyResponse, error) {
+	peer, ok := peer.FromContext(ctx)
+	if !ok {
+		fmt.Println("Error getting peer ")
+		return nil, errors.New("Error getting peer from contextn")
+	}
+	adr := pr.IP
+	if adr == "" {
+		peerhost, _, err := net.SplitHostPort(peer.Addr.String())
+		if err != nil {
+			return nil, errors.New("Invalid peer")
+		}
+		adr = peerhost
+	}
+	fmt.Printf("called shutdown service from address %s with adr %s\n", peer.Addr.String(), adr)
+	for e := services.Front(); e != nil; e = e.Next() {
+		sloc := e.Value.(*serviceEntry)
+		for _, instance := range sloc.instances {
+			if instance.address.Host != adr {
+				continue
+			}
+			for _, dp := range pr.Port {
+				if instance.address.Port == dp {
+					fmt.Printf("Disabled %s\n", instance.toString())
+					instance.disabled = true
+				}
+			}
+		}
+	}
+	return &pb.EmptyResponse{}, nil
 }

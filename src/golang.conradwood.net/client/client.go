@@ -33,10 +33,12 @@ func SaveToken(tk string) error {
 		fmt.Printf("Unable to get current user: %s\n", err)
 		return err
 	}
-	fname := fmt.Sprintf("%s/.picoservices/tokens/%s", usr.HomeDir, *token)
+	cfgdir := fmt.Sprintf("%s/.picoservices/tokens", usr.HomeDir)
+	fname := fmt.Sprintf("%s/%s", cfgdir, *token)
 	if _, err := os.Stat(fname); !os.IsNotExist(err) {
 		return errors.New(fmt.Sprintf("File %s exists already", fname))
 	}
+	os.MkdirAll(cfgdir, 0600)
 	fmt.Printf("Saving new token to %s\n", fname)
 	err = ioutil.WriteFile(fname, []byte(tk), 0600)
 	if err != nil {
@@ -59,19 +61,19 @@ func DialTCPWrapper(gurupath string) (net.Conn, error) {
 	gt := &pb.GetTargetRequest{Gurupath: gurupath, ApiType: pb.Apitype_tcp}
 	lr, err := rcl.GetTarget(context.Background(), gt)
 	if err != nil {
-		s := fmt.Sprintf("Error getting target for gurupath %s: %s", gurupath, err)
+		s := fmt.Sprintf("Error getting TCP target for gurupath %s: %s", gurupath, err)
 		fmt.Println(s)
 		return nil, errors.New(s)
 	}
 	if len(lr.Service) == 0 {
-		s := fmt.Sprintf("No target found for gurupath %s", gurupath)
+		s := fmt.Sprintf("No TCP target found for path %s", gurupath)
 		fmt.Println(s)
 		return nil, errors.New(s)
 	}
 	svr := lr.Service[0]
 	svl := svr.Location
 	if len(svl.Address) == 0 {
-		s := fmt.Sprintf("No location found for gurupath %s", gurupath)
+		s := fmt.Sprintf("No TCP location found for path %s", gurupath)
 		fmt.Println(s)
 		return nil, errors.New(s)
 	}
@@ -86,7 +88,7 @@ func DialTCPWrapper(gurupath string) (net.Conn, error) {
 // it takes a service name
 func DialWrapper(servicename string) (*grpc.ClientConn, error) {
 	reg := cmdline.GetRegistryAddress()
-	fmt.Printf("Using registrar @%s\n", reg)
+	fmt.Printf("Using registrar @%s to dial %s\n", reg, servicename)
 	opts := []grpc.DialOption{grpc.WithInsecure()}
 	conn, err := grpc.Dial(reg, opts...)
 	if err != nil {
@@ -95,19 +97,35 @@ func DialWrapper(servicename string) (*grpc.ClientConn, error) {
 	}
 	defer conn.Close()
 	rcl := pb.NewRegistryClient(conn)
-	req := pb.GetRequest{}
-	req.Service = &pb.ServiceDescription{Name: servicename}
-	resp, err := rcl.GetServiceAddress(context.Background(), &req)
+	gt := &pb.GetTargetRequest{Name: servicename, ApiType: pb.Apitype_grpc}
+	lr, err := rcl.GetTarget(context.Background(), gt)
 	if err != nil {
-		fmt.Printf("Error getting service address %s: %s\n", servicename, err)
+		fmt.Printf("Error getting grpc service address %s: %s\n", servicename, err)
 		return nil, err
 	}
-	if (resp.Location == nil) || (len(resp.Location.Address) == 0) {
-		fmt.Printf("Received no address for service \"%s\" - is it running?\n", servicename)
-		return nil, errors.New("no address for service")
+	if len(lr.Service) == 0 {
+		s := fmt.Sprintf("No grpc target found for name %s", servicename)
+		fmt.Println(s)
+		return nil, errors.New(s)
 	}
-	sa := resp.Location.Address[0]
+	svr := lr.Service[0]
+	svl := svr.Location
+	if len(svl.Address) == 0 {
+		s := fmt.Sprintf("No grpc location found for name %s - is it running?", servicename)
+		fmt.Println(s)
+		return nil, errors.New(s)
+	}
+	sa := svl.Address[0]
 	return DialService(sa)
+}
+
+func hasApi(ar []pb.Apitype, lf pb.Apitype) bool {
+	for _, a := range ar {
+		if a == lf {
+			return true
+		}
+	}
+	return false
 }
 
 // if one needs to, one can still connect explicitly to a service

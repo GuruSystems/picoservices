@@ -45,7 +45,7 @@ func main() {
 			os.Exit(0)
 		}
 	}
-	if *deploypath != "" {
+	if *apitype != "" {
 		lookup(client)
 		os.Exit(0)
 	}
@@ -69,10 +69,6 @@ func printResponse(lr *pb.ListResponse) {
 }
 
 func lookup(client pb.RegistryClient) {
-	if *apitype == "" {
-		fmt.Printf("apitype is required\n")
-		os.Exit(10)
-	}
 	v, ok := pb.Apitype_value[*apitype]
 	if !ok {
 		fmt.Printf("Invalid apitype %s\n", *apitype)
@@ -83,8 +79,13 @@ func lookup(client pb.RegistryClient) {
 		fmt.Printf("\n")
 		os.Exit(10)
 	}
-	fmt.Printf("Finding api endpoint for %s (type %s)\n", *deploypath, pb.Apitype_name[v])
+	x := *deploypath
+	if x == "" {
+		x = *name
+	}
+	fmt.Printf("Finding api endpoint for %s (type %s)\n", x, pb.Apitype_name[v])
 	gt := &pb.GetTargetRequest{Gurupath: *deploypath,
+		Name:    *name,
 		ApiType: pb.Apitype(v)}
 	lr, err := client.GetTarget(context.Background(), gt)
 	if err != nil {
