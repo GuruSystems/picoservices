@@ -88,7 +88,7 @@ func DialTCPWrapper(gurupath string) (net.Conn, error) {
 // it takes a service name
 func DialWrapper(servicename string) (*grpc.ClientConn, error) {
 	reg := cmdline.GetRegistryAddress()
-	fmt.Printf("Using registrar @%s to dial %s\n", reg, servicename)
+	fmt.Printf("Using registrar @%s to dial %s (grpc)\n", reg, servicename)
 	opts := []grpc.DialOption{grpc.WithInsecure()}
 	conn, err := grpc.Dial(reg, opts...)
 	if err != nil {
