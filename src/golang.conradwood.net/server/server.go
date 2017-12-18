@@ -412,7 +412,7 @@ func grpcHandlerFunc(grpcServer *grpc.Server, otherHandler http.Handler) http.Ha
 	})
 }
 
-func UnregisterPortRegistry(port int) error {
+func UnregisterPortRegistry(port []int) error {
 	opts := []grpc.DialOption{grpc.WithInsecure()}
 	conn, err := grpc.Dial(cmdline.GetRegistryAddress(), opts...)
 	if err != nil {
@@ -421,7 +421,13 @@ func UnregisterPortRegistry(port int) error {
 	}
 	defer conn.Close()
 	client := pb.NewRegistryClient(conn)
-	return nil
+	var ps []int32
+	for _, p := range port {
+		ps = append(ps, int32(p))
+	}
+	psr := pb.ProcessShutdownRequest{Port: ps}
+	_, err = client.InformProcessShutdown(context.Background(), &psr)
+	return err
 }
 func AddRegistry(sd *serverDef) (string, error) {
 	// start period re-registration
