@@ -386,6 +386,17 @@ func grpcHandlerFunc(grpcServer *grpc.Server, otherHandler http.Handler) http.Ha
 	})
 }
 
+func UnregisterPortRegistry(port int) error {
+	opts := []grpc.DialOption{grpc.WithInsecure()}
+	conn, err := grpc.Dial(cmdline.GetRegistryAddress(), opts...)
+	if err != nil {
+		fmt.Println("failed to dial registry server: %v", err)
+		return err
+	}
+	defer conn.Close()
+	client := pb.NewRegistryClient(conn)
+	return nil
+}
 func AddRegistry(sd *serverDef) (string, error) {
 	//fmt.Printf("Registering service %s with registry server\n", name)
 	opts := []grpc.DialOption{grpc.WithInsecure()}
