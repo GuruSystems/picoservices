@@ -297,11 +297,16 @@ func ServerStartup(def *serverDef) error {
 			grpc.StreamInterceptor(StreamAuthInterceptor),
 		)
 
-		// set up a connection to our authentication service
-		authconn, err = client.DialWrapper("auth.AuthenticationService")
-		if err != nil {
-			return fmt.Errorf("Failed to connect to authserver")
-		}
+		// we postpone connection to authserver until we need it
+		// d'oh.
+		/*
+			// set up a connection to our authentication service
+			authconn, err = client.DialWrapper("auth.AuthenticationService")
+			if err != nil {
+				return fmt.Errorf("Failed to connect to authserver")
+			}
+		*/
+
 	}
 
 	grpc.EnableTracing = true
