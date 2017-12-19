@@ -489,7 +489,7 @@ func (s *RegistryService) GetTarget(ctx context.Context, pr *pb.GetTargetRequest
 		}
 		for _, si := range se.instances {
 			if hasApi(si.apitype, pr.ApiType) {
-				fmt.Printf("Adding %s\n", si.toString())
+				//fmt.Printf("Adding %s\n", si.toString())
 				sd := se.loc
 				gr := &pb.GetResponse{}
 				gr.Service = sd
