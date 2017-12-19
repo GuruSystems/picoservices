@@ -57,6 +57,7 @@ func DialTCPWrapper(gurupath string) (net.Conn, error) {
 		fmt.Printf("Error dialling registry %s @ %s\n", gurupath, reg)
 		return nil, err
 	}
+	defer conn.Close()
 	rcl := pb.NewRegistryClient(conn)
 	gt := &pb.GetTargetRequest{Gurupath: gurupath, ApiType: pb.Apitype_tcp}
 	lr, err := rcl.GetTarget(context.Background(), gt)
