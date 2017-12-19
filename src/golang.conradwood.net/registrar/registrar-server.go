@@ -288,7 +288,7 @@ func (s *RegistryService) GetServiceAddress(ctx context.Context, gr *pb.GetReque
 		fmt.Println("Error getting peer ")
 		return nil, errors.New("Error getting peer from contextn")
 	}
-	fmt.Printf("%s called get service address for service %s\n", peer.Addr, gr.Service.Name)
+	//fmt.Printf("%s called get service address for service %s\n", peer.Addr, gr.Service.Name)
 	slv := FindServices(gr.Service)
 	if len(slv) == 0 {
 		fmt.Printf("Service \"%s\" is not currently registered\n", gr.Service.Name)
