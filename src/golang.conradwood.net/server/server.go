@@ -119,7 +119,7 @@ func UnaryAuthInterceptor(ctx context.Context, req interface{}, info *grpc.Unary
 	}
 	nctx, err := authenticate(ctx, meta)
 	if err != nil {
-		return nil, err
+		return nil, errors.New(fmt.Sprintf("intercepted and failed call to %v: %s", req, err))
 	}
 	return handler(nctx, req)
 }
@@ -170,6 +170,7 @@ func authenticateToken(ctx context.Context, token string) (context.Context, erro
 	var err error
 	if authconn == nil {
 		authconn, err = client.DialWrapper("auth.AuthenticationService")
+		defer authconn.Close()
 		if err != nil {
 			fmt.Printf("Could not establish connection to auth service:%s\n", err)
 			return nil, err
@@ -190,14 +191,20 @@ func authenticateToken(ctx context.Context, token string) (context.Context, erro
 		if err == nil {
 			break
 		}
+		ps = "unknown"
+		peer, ok := peer.FromContext(ctx)
+		if ok {
+			ps = fmt.Sprintf("%v", peer)
+		}
 
-		fmt.Printf("(%d) VerifyUserToken() failed: %s (%v)\n", repeat, err, authconn)
+		fmt.Printf("(%d) VerifyUserToken(%s) failed: %s (%v) for request from %s\n", repeat, token, err, authconn, ps)
 		if repeat <= 1 {
 			return nil, err
 		}
 
 		fmt.Printf("Due to failure (%s) verifying token we re-connect...\n", err)
 		authconn, err = client.DialWrapper("auth.AuthenticationService")
+		defer authconn.Close()
 		if err != nil {
 			fmt.Printf("Resetting the connection to auth service did not help either:%s\n", err)
 			return nil, err
