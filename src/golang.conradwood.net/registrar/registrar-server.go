@@ -499,7 +499,6 @@ func (s *RegistryService) GetTarget(ctx context.Context, pr *pb.GetTargetRequest
 				gr.Location.Address = append(gr.Location.Address, sa)
 				lr.Service = append(lr.Service, gr)
 			}
-
 		}
 	}
 	return lr, nil
