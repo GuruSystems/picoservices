@@ -10,17 +10,18 @@ import (
 	//	"github.com/golang/protobuf/proto"
 	"crypto/tls"
 	"crypto/x509"
+	"errors"
 	"golang.conradwood.net/client"
 	"golang.conradwood.net/cmdline"
 	"golang.org/x/net/context"
 	"google.golang.org/grpc/credentials"
 	"google.golang.org/grpc/reflection"
 
-	//	"google.golang.org/grpc/peer"
 	"golang.conradwood.net/auth"
 	apb "golang.conradwood.net/auth/proto"
 	pb "golang.conradwood.net/registrar/proto"
 	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/peer"
 	"net"
 	"net/http"
 	"os"
@@ -191,7 +192,7 @@ func authenticateToken(ctx context.Context, token string) (context.Context, erro
 		if err == nil {
 			break
 		}
-		ps = "unknown"
+		ps := "unknown"
 		peer, ok := peer.FromContext(ctx)
 		if ok {
 			ps = fmt.Sprintf("%v", peer)
