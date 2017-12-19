@@ -283,12 +283,14 @@ type RegistryService struct {
 }
 
 func (s *RegistryService) GetServiceAddress(ctx context.Context, gr *pb.GetRequest) (*pb.GetResponse, error) {
-	peer, ok := peer.FromContext(ctx)
-	if !ok {
-		fmt.Println("Error getting peer ")
-		return nil, errors.New("Error getting peer from contextn")
-	}
-	fmt.Printf("%s called get service address for service %s\n", peer.Addr, gr.Service.Name)
+	/*
+		peer, ok := peer.FromContext(ctx)
+		if !ok {
+			fmt.Println("Error getting peer ")
+			return nil, errors.New("Error getting peer from contextn")
+		}
+	*/
+	//fmt.Printf("%s called get service address for service %s\n", peer.Addr, gr.Service.Name)
 	slv := FindServices(gr.Service)
 	if len(slv) == 0 {
 		fmt.Printf("Service \"%s\" is not currently registered\n", gr.Service.Name)
@@ -489,7 +491,7 @@ func (s *RegistryService) GetTarget(ctx context.Context, pr *pb.GetTargetRequest
 		}
 		for _, si := range se.instances {
 			if hasApi(si.apitype, pr.ApiType) {
-				fmt.Printf("Adding %v\n", si)
+				//fmt.Printf("Adding %s\n", si.toString())
 				sd := se.loc
 				gr := &pb.GetResponse{}
 				gr.Service = sd

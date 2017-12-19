@@ -10,17 +10,18 @@ import (
 	//	"github.com/golang/protobuf/proto"
 	"crypto/tls"
 	"crypto/x509"
+	"errors"
 	"golang.conradwood.net/client"
 	"golang.conradwood.net/cmdline"
 	"golang.org/x/net/context"
 	"google.golang.org/grpc/credentials"
 	"google.golang.org/grpc/reflection"
 
-	//	"google.golang.org/grpc/peer"
 	"golang.conradwood.net/auth"
 	apb "golang.conradwood.net/auth/proto"
 	pb "golang.conradwood.net/registrar/proto"
 	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/peer"
 	"net"
 	"net/http"
 	"os"
@@ -70,6 +71,7 @@ type serverDef struct {
 	name          string
 	types         []pb.Apitype
 	registered_id string
+	DeployPath    string
 }
 
 func (s *serverDef) toString() string {
@@ -97,6 +99,7 @@ func NewServerDef() *serverDef {
 	res.Key = Privatekey
 	res.Certificate = Certificate
 	res.CA = Ca
+	res.DeployPath = *deploypath
 	res.types = append(res.types, pb.Apitype_status)
 	res.types = append(res.types, pb.Apitype_grpc)
 	return res
@@ -117,7 +120,7 @@ func UnaryAuthInterceptor(ctx context.Context, req interface{}, info *grpc.Unary
 	}
 	nctx, err := authenticate(ctx, meta)
 	if err != nil {
-		return nil, err
+		return nil, errors.New(fmt.Sprintf("intercepted and failed call to %v: %s", req, err))
 	}
 	return handler(nctx, req)
 }
@@ -168,6 +171,7 @@ func authenticateToken(ctx context.Context, token string) (context.Context, erro
 	var err error
 	if authconn == nil {
 		authconn, err = client.DialWrapper("auth.AuthenticationService")
+		defer authconn.Close()
 		if err != nil {
 			fmt.Printf("Could not establish connection to auth service:%s\n", err)
 			return nil, err
@@ -188,14 +192,20 @@ func authenticateToken(ctx context.Context, token string) (context.Context, erro
 		if err == nil {
 			break
 		}
+		ps := "unknown"
+		peer, ok := peer.FromContext(ctx)
+		if ok {
+			ps = fmt.Sprintf("%v", peer)
+		}
 
-		fmt.Printf("(%d) VerifyUserToken() failed: %s (%v)\n", repeat, err, authconn)
+		fmt.Printf("(%d) VerifyUserToken(%s) failed: %s (%v) for request from %s\n", repeat, token, err, authconn, ps)
 		if repeat <= 1 {
 			return nil, err
 		}
 
 		fmt.Printf("Due to failure (%s) verifying token we re-connect...\n", err)
 		authconn, err = client.DialWrapper("auth.AuthenticationService")
+		defer authconn.Close()
 		if err != nil {
 			fmt.Printf("Resetting the connection to auth service did not help either:%s\n", err)
 			return nil, err
@@ -295,11 +305,16 @@ func ServerStartup(def *serverDef) error {
 			grpc.StreamInterceptor(StreamAuthInterceptor),
 		)
 
-		// set up a connection to our authentication service
-		authconn, err = client.DialWrapper("auth.AuthenticationService")
-		if err != nil {
-			return fmt.Errorf("Failed to connect to authserver")
-		}
+		// we postpone connection to authserver until we need it
+		// d'oh.
+		/*
+			// set up a connection to our authentication service
+			authconn, err = client.DialWrapper("auth.AuthenticationService")
+			if err != nil {
+				return fmt.Errorf("Failed to connect to authserver")
+			}
+		*/
+
 	}
 
 	grpc.EnableTracing = true
@@ -452,7 +467,7 @@ func AddRegistry(sd *serverDef) (string, error) {
 	req := pb.ServiceLocation{}
 	req.Service = &pb.ServiceDescription{}
 	req.Service.Name = sd.name
-	req.Service.Gurupath = *deploypath
+	req.Service.Gurupath = sd.DeployPath
 	req.Address = []*pb.ServiceAddress{{Port: int32(sd.Port)}}
 	if *serveraddr != "" {
 		req.Address[0].Host = *serveraddr
