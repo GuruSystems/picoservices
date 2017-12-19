@@ -70,6 +70,7 @@ type serverDef struct {
 	name          string
 	types         []pb.Apitype
 	registered_id string
+	DeployPath    string
 }
 
 func (s *serverDef) toString() string {
@@ -97,6 +98,7 @@ func NewServerDef() *serverDef {
 	res.Key = Privatekey
 	res.Certificate = Certificate
 	res.CA = Ca
+	res.DeployPath = *deploypath
 	res.types = append(res.types, pb.Apitype_status)
 	res.types = append(res.types, pb.Apitype_grpc)
 	return res
@@ -452,7 +454,7 @@ func AddRegistry(sd *serverDef) (string, error) {
 	req := pb.ServiceLocation{}
 	req.Service = &pb.ServiceDescription{}
 	req.Service.Name = sd.name
-	req.Service.Gurupath = *deploypath
+	req.Service.Gurupath = sd.DeployPath
 	req.Address = []*pb.ServiceAddress{{Port: int32(sd.Port)}}
 	if *serveraddr != "" {
 		req.Address[0].Host = *serveraddr

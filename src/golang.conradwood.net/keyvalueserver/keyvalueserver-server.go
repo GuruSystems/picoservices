@@ -38,7 +38,7 @@ func main() {
 	flag.Parse() // parse stuff. see "var" section above
 	sd := server.NewServerDef()
 	sd.Port = *port
-
+	sd.DeployPath = "testing/keyvalue/server/1"
 	objectStore = list.New()
 	sd.Register = st
 	err := server.ServerStartup(sd)
