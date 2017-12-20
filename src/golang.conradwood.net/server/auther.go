@@ -1,6 +1,7 @@
 package server
 
 import (
+	"errors"
 	"fmt"
 	"golang.conradwood.net/auth"
 	apb "golang.conradwood.net/auth/proto"
@@ -10,7 +11,6 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/metadata"
 	"google.golang.org/grpc/peer"
-
 	"time"
 )
 
@@ -45,7 +45,10 @@ func authenticateToken(ctx context.Context, token string) (context.Context, erro
 		fmt.Printf("Could not establish connection to auth service:%s\n", err)
 		return nil, err
 	}
-
+	if authconn == nil {
+		fmt.Printf("no authentication server connection?\n")
+		return nil, errors.New("Now auth available\n")
+	}
 	uc := getUserFromCache(token)
 	if uc != "" {
 		ai := auth.AuthInfo{UserID: uc}
