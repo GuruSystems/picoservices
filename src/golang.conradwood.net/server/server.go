@@ -104,10 +104,12 @@ func NewServerDef() *serverDef {
 	res.types = append(res.types, pb.Apitype_grpc)
 	return res
 }
+
+/*
 func CheckCookie(cookie string) bool {
 	return true
 }
-
+*/
 func StreamAuthInterceptor(srv interface{}, ss grpc.ServerStream, info *grpc.StreamServerInfo, handler grpc.StreamHandler) error {
 	return grpc.Errorf(codes.Unauthenticated, "stream authentication is not yet implemented")
 }
@@ -171,7 +173,7 @@ func authenticateToken(ctx context.Context, token string) (context.Context, erro
 	var err error
 	if authconn == nil {
 		authconn, err = client.DialWrapper("auth.AuthenticationService")
-		defer authconn.Close()
+		defer closeAuth()
 		if err != nil {
 			fmt.Printf("Could not establish connection to auth service:%s\n", err)
 			return nil, err
@@ -198,14 +200,14 @@ func authenticateToken(ctx context.Context, token string) (context.Context, erro
 			ps = fmt.Sprintf("%v", peer)
 		}
 
-		fmt.Printf("(%d) VerifyUserToken(%s) failed: %s (%v) for request from %s\n", repeat, token, err, authconn, ps)
+		fmt.Printf("(%d) VerifyUserToken(%s) failed: %s for request from %s\n", repeat, token, err, ps)
 		if repeat <= 1 {
 			return nil, err
 		}
 
 		fmt.Printf("Due to failure (%s) verifying token we re-connect...\n", err)
 		authconn, err = client.DialWrapper("auth.AuthenticationService")
-		defer authconn.Close()
+		defer closeAuth()
 		if err != nil {
 			fmt.Printf("Resetting the connection to auth service did not help either:%s\n", err)
 			return nil, err
@@ -230,12 +232,21 @@ func GetUserID(ctx context.Context) auth.AuthInfo {
 	return ai
 }
 func GetAuthClient() (apb.AuthenticationServiceClient, error) {
+	var err error
 	if authconn == nil {
-		fmt.Println("No authenticator available")
-		return nil, grpc.Errorf(codes.Unauthenticated, "invalid token")
+		authconn, err = client.DialWrapper("auth.AuthenticationService")
+		defer closeAuth()
+		if err != nil {
+			fmt.Printf("Could not establish connection to auth service:%s\n", err)
+			return nil, err
+		}
 	}
 	client := apb.NewAuthenticationServiceClient(authconn)
 	return client, nil
+}
+func closeAuth() {
+	authconn.Close()
+	authconn = nil
 }
 
 func stopping() {

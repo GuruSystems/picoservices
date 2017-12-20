@@ -50,7 +50,7 @@ func SaveToken(tk string) error {
 // opens a tcp connection to a gurupath.
 func DialTCPWrapper(gurupath string) (net.Conn, error) {
 	reg := cmdline.GetRegistryAddress()
-	fmt.Printf("Using registrar @%s\n", reg)
+	//fmt.Printf("Using registrar @%s\n", reg)
 	opts := []grpc.DialOption{grpc.WithInsecure()}
 	conn, err := grpc.Dial(reg, opts...)
 	if err != nil {
@@ -89,7 +89,7 @@ func DialTCPWrapper(gurupath string) (net.Conn, error) {
 // it takes a service name
 func DialWrapper(servicename string) (*grpc.ClientConn, error) {
 	reg := cmdline.GetRegistryAddress()
-	fmt.Printf("Using registrar @%s to dial %s (grpc)\n", reg, servicename)
+	//fmt.Printf("Using registrar @%s to dial %s (grpc)\n", reg, servicename)
 	opts := []grpc.DialOption{grpc.WithInsecure()}
 	conn, err := grpc.Dial(reg, opts...)
 	if err != nil {
@@ -130,9 +130,10 @@ func hasApi(ar []pb.Apitype, lf pb.Apitype) bool {
 }
 
 // if one needs to, one can still connect explicitly to a service
+// this call DOES NOT CLOSE THE CONNECTION
 func DialService(sa *pb.ServiceAddress) (*grpc.ClientConn, error) {
 	serverAddr := fmt.Sprintf("%s:%d", sa.Host, sa.Port)
-	fmt.Printf("Dialling service at \"%s\"\n", serverAddr)
+	//fmt.Printf("Dialling service at \"%s\"\n", serverAddr)
 
 	creds := GetClientCreds()
 	cc, err := grpc.Dial(serverAddr, grpc.WithTransportCredentials(creds))
