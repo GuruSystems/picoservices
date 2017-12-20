@@ -40,7 +40,6 @@ func authenticate(ctx context.Context, meta metadata.MD) (context.Context, error
 func authenticateToken(ctx context.Context, token string) (context.Context, error) {
 	var err error
 	authconn, err := client.DialWrapper("auth.AuthenticationService")
-	defer authconn.Close()
 	if err != nil {
 		fmt.Printf("Could not establish connection to auth service:%s\n", err)
 		return nil, err
@@ -49,6 +48,7 @@ func authenticateToken(ctx context.Context, token string) (context.Context, erro
 		fmt.Printf("no authentication server connection?\n")
 		return nil, errors.New("Now auth available\n")
 	}
+	defer authconn.Close()
 	uc := getUserFromCache(token)
 	if uc != "" {
 		ai := auth.AuthInfo{UserID: uc}
