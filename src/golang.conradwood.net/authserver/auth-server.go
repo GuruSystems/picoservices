@@ -165,6 +165,28 @@ func (s *AuthServer) VerifyUserToken(ctx context.Context, req *pb.VerifyRequest)
 	return resp, nil
 }
 
+func (s *AuthServer) GetUserByToken(ctx context.Context, req *pb.VerifyRequest) (*pb.GetDetailResponse, error) {
+
+	peer, ok := peer.FromContext(ctx)
+	if !ok {
+		fmt.Println("Error getting peer ")
+	}
+	fmt.Printf("backend \"%s\" has been asked by \"%s\" to get user for token: \"%s\"\n", *backend, peer.Addr, req.Token)
+	if req.Token == "" {
+		return nil, errors.New("Missing token")
+	}
+	au, err := getUserFromToken(req.Token)
+	if err != nil {
+		return nil, err
+	}
+	gd := pb.GetDetailResponse{UserID: au.ID,
+		Email:     au.Email,
+		FirstName: au.FirstName,
+		LastName:  au.LastName,
+	}
+	return &gd, nil
+}
+
 func (s *AuthServer) GetUserDetail(ctx context.Context, req *pb.GetDetailRequest) (*pb.GetDetailResponse, error) {
 	fmt.Printf("backend \"%s\" has been asked to get details for user#\"%s\"\n", *backend, req.UserID)
 	if req.UserID == "" {

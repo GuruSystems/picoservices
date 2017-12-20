@@ -5142,15 +5142,17 @@ public final class Auth {
       "r\030\001 \001(\0132\027.auth.GetDetailResponse\022\r\n\005Toke",
       "n\030\002 \001(\t\"k\n\021CreateUserRequest\022\020\n\010UserName" +
       "\030\001 \001(\t\022\r\n\005Email\030\002 \001(\t\022\021\n\tFirstName\030\003 \001(\t" +
-      "\022\020\n\010LastName\030\004 \001(\t\022\020\n\010Password\030\005 \001(\t2\260\002\n" +
+      "\022\020\n\010LastName\030\004 \001(\t\022\020\n\010Password\030\005 \001(\t2\360\002\n" +
       "\025AuthenticationService\022W\n\024AuthenticatePa" +
       "ssword\022!.auth.AuthenticatePasswordReques" +
       "t\032\034.auth.VerifyPasswordResponse\022<\n\017Verif" +
       "yUserToken\022\023.auth.VerifyRequest\032\024.auth.V" +
-      "erifyResponse\022@\n\rGetUserDetail\022\026.auth.Ge" +
-      "tDetailRequest\032\027.auth.GetDetailResponse\022" +
-      ">\n\nCreateUser\022\027.auth.CreateUserRequest\032\027",
-      ".auth.GetDetailResponseb\006proto3"
+      "erifyResponse\022>\n\016GetUserByToken\022\023.auth.V" +
+      "erifyRequest\032\027.auth.GetDetailResponse\022@\n" +
+      "\rGetUserDetail\022\026.auth.GetDetailRequest\032\027",
+      ".auth.GetDetailResponse\022>\n\nCreateUser\022\027." +
+      "auth.CreateUserRequest\032\027.auth.GetDetailR" +
+      "esponseb\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {

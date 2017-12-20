@@ -55,6 +55,7 @@ service AuthenticationService {
 
 // verify a user by token
  rpc VerifyUserToken(VerifyRequest) returns (VerifyResponse);
+ rpc GetUserByToken(VerifyRequest) returns (GetDetailResponse);
  rpc GetUserDetail(GetDetailRequest) returns (GetDetailResponse) ;
  rpc CreateUser(CreateUserRequest) returns (GetDetailResponse);
 }
