@@ -11,17 +11,13 @@ import (
 	"crypto/tls"
 	"crypto/x509"
 	"errors"
-	"golang.conradwood.net/client"
 	"golang.conradwood.net/cmdline"
 	"golang.org/x/net/context"
 	"google.golang.org/grpc/credentials"
 	"google.golang.org/grpc/reflection"
 
-	"golang.conradwood.net/auth"
-	apb "golang.conradwood.net/auth/proto"
 	pb "golang.conradwood.net/registrar/proto"
 	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/peer"
 	"net"
 	"net/http"
 	"os"
@@ -39,17 +35,12 @@ var (
 	serveraddr = flag.String("address", "", "Address (default: derive from connection to registrar. does not work well with localhost)")
 	deploypath = flag.String("deployment_gurupath", "", "The deployment path by which other programs can refer to this deployment. expected is: a path of the format: \"namespace/groupname/repository/buildid\"")
 
-	authconn         *grpc.ClientConn
 	register_refresh = flag.Int("register_refresh", 10, "registration refresh interval in `seconds`")
 	usercache        = make(map[string]*UserCache)
 	ctrmetrics       = make(map[string]*uint64)
 	registered       []*serverDef
 	stopped          bool
 	ticker           *time.Ticker
-)
-
-const (
-	COOKIE_NAME = "Auth-Token"
 )
 
 type UserCache struct {
@@ -153,100 +144,6 @@ func getUserFromCache(token string) string {
 	}
 	return uc.UserID
 
-}
-func addUserToCache(token string, id string) {
-	uc := UserCache{UserID: id, created: time.Now()}
-	usercache[token] = &uc
-}
-
-// we must not return useful errormessages here,
-// so we print them to stdout instead and return a generic message
-func authenticate(ctx context.Context, meta metadata.MD) (context.Context, error) {
-	if len(meta["token"]) != 1 {
-		fmt.Println("RPCServer: Invalid number of tokens: ", len(meta["token"]))
-		return nil, grpc.Errorf(codes.Unauthenticated, "invalid token")
-	}
-	token := meta["token"][0]
-	return authenticateToken(ctx, token)
-}
-func authenticateToken(ctx context.Context, token string) (context.Context, error) {
-	var err error
-	if authconn == nil {
-		authconn, err = client.DialWrapper("auth.AuthenticationService")
-		defer closeAuth()
-		if err != nil {
-			fmt.Printf("Could not establish connection to auth service:%s\n", err)
-			return nil, err
-		}
-	}
-	uc := getUserFromCache(token)
-	if uc != "" {
-		ai := auth.AuthInfo{UserID: uc}
-		nctx := context.WithValue(ctx, "authinfo", ai)
-		return nctx, nil
-	}
-	authc := apb.NewAuthenticationServiceClient(authconn)
-	req := &apb.VerifyRequest{Token: token}
-	repeat := 4
-	var resp *apb.VerifyResponse
-	for {
-		resp, err = authc.VerifyUserToken(ctx, req)
-		if err == nil {
-			break
-		}
-		ps := "unknown"
-		peer, ok := peer.FromContext(ctx)
-		if ok {
-			ps = fmt.Sprintf("%v", peer)
-		}
-
-		fmt.Printf("(%d) VerifyUserToken(%s) failed: %s for request from %s\n", repeat, token, err, ps)
-		if repeat <= 1 {
-			return nil, err
-		}
-
-		fmt.Printf("Due to failure (%s) verifying token we re-connect...\n", err)
-		authconn, err = client.DialWrapper("auth.AuthenticationService")
-		defer closeAuth()
-		if err != nil {
-			fmt.Printf("Resetting the connection to auth service did not help either:%s\n", err)
-			return nil, err
-		}
-		authc = apb.NewAuthenticationServiceClient(authconn)
-
-		repeat--
-	}
-	// should never happen - but it's auth, so extra check doesn't hurt
-	if (resp == nil) || (resp.UserID == "") {
-		fmt.Println("RPCServer: BUG: a user was authenticated but no userid returned!")
-		return nil, grpc.Errorf(codes.Unauthenticated, "invalid token")
-	}
-	addUserToCache(token, resp.UserID)
-	ai := auth.AuthInfo{UserID: resp.UserID}
-	fmt.Printf("RPCServer: Authenticated user \"%s\".\n", resp.UserID)
-	nctx := context.WithValue(ctx, "authinfo", ai)
-	return nctx, nil
-}
-func GetUserID(ctx context.Context) auth.AuthInfo {
-	ai := ctx.Value("authinfo").(auth.AuthInfo)
-	return ai
-}
-func GetAuthClient() (apb.AuthenticationServiceClient, error) {
-	var err error
-	if authconn == nil {
-		authconn, err = client.DialWrapper("auth.AuthenticationService")
-		defer closeAuth()
-		if err != nil {
-			fmt.Printf("Could not establish connection to auth service:%s\n", err)
-			return nil, err
-		}
-	}
-	client := apb.NewAuthenticationServiceClient(authconn)
-	return client, nil
-}
-func closeAuth() {
-	authconn.Close()
-	authconn = nil
 }
 
 func stopping() {
