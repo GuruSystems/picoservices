@@ -14,3 +14,6 @@ client:
 	go install login.go
 proto:
 	@echo no proto for server
+all:
+	make proto
+	make client server

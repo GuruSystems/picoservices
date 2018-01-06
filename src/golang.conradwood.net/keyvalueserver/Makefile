@@ -9,6 +9,9 @@ server:
 	go install keyvalueserver-server.go
 client:
 	go install keyvalueserver-client.go
+all:
+	make proto
+	make client server
 
 .PHONY: proto
 proto:

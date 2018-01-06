@@ -10,6 +10,10 @@ server:
 client:
 	go install registrar-client.go
 
+all:
+	make proto
+	make client server
+
 .PHONY: proto
 proto:
 	@echo compiling Go proto stubs
