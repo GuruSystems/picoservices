@@ -13,8 +13,7 @@ client:
 	echo "no client for auth lib"
 
 all:
-	make proto
-	make client server
+	echo nothing todo 
 
 
 .PHONY: proto

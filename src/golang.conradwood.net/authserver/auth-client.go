@@ -83,6 +83,12 @@ func main() {
 			os.Exit(10)
 		}
 		fmt.Printf("Created user %s with password %s\n", cru.UserID, cru.Password)
+
+		apr := &pb.AuthenticatePasswordRequest{
+			Email:    *email,
+			Password: cru.Password}
+		cr, err := aclient.AuthenticatePassword(ctx, apr)
+		fmt.Printf("Token: %s\n", cr.Token)
 		os.Exit(0)
 	}
 
