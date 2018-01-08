@@ -132,7 +132,10 @@ func UnaryAuthInterceptor(ctx context.Context, req interface{}, info *grpc.Unary
 	method := MethodNameFromInfo(info)
 	//fmt.Printf("Method: \"%s\"\n", method)
 
-	def.grpc_server_requests.With(prometheus.Labels{"method": method}).Inc()
+	def.grpc_server_requests.With(prometheus.Labels{
+		"method":      method,
+		"servicename": def.name,
+	}).Inc()
 	nctx, err := authenticate(ctx, meta)
 	if err != nil {
 		return nil, errors.New(fmt.Sprintf("intercepted and failed call to %v: %s", req, err))
@@ -266,10 +269,10 @@ func ServerStartup(def *serverDef) error {
 	// hook up prometheus
 	def.grpc_server_requests = prometheus.NewCounterVec(
 		prometheus.CounterOpts{
-			Name: fmt.Sprintf("%s_grpc_requests_received", targetName(def.name)),
+			Name: "grpc_requests_received",
 			Help: "requests to log stuff received",
 		},
-		[]string{"method"},
+		[]string{"servicename", "method"},
 	)
 	err = prometheus.Register(def.grpc_server_requests)
 	if err != nil {
