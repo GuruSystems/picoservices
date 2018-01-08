@@ -247,13 +247,26 @@ func ServerStartup(def *serverDef) error {
 
 	}
 
+	grpc.EnableTracing = true
+	def.Register(grpcServer)
+	if err != nil {
+		return fmt.Errorf("grpc register error: %s", err)
+	}
+	if len(grpcServer.GetServiceInfo()) > 1 {
+		return fmt.Errorf("cannot register multiple(%d) names", len(grpcServer.GetServiceInfo()))
+	}
 	for name, _ := range grpcServer.GetServiceInfo() {
 		def.name = name
 	}
+	if def.name == "" {
+		fmt.Println("Got no server name!")
+		return errors.New("Missing servername")
+	}
+	serverDefs[def.name] = def
 	// hook up prometheus
 	def.grpc_server_requests = prometheus.NewCounterVec(
 		prometheus.CounterOpts{
-			Name: fmt.Sprintf("%s_grpc_requests_received", def.name),
+			Name: fmt.Sprintf("%s_grpc_requests_received", targetName(def.name)),
 			Help: "requests to log stuff received",
 		},
 		[]string{"method"},
@@ -264,17 +277,6 @@ func ServerStartup(def *serverDef) error {
 		fmt.Println(s)
 		return errors.New(s)
 	}
-	grpc.EnableTracing = true
-	def.Register(grpcServer)
-	if err != nil {
-		return fmt.Errorf("grpc register error: %s", err)
-	}
-	if len(grpcServer.GetServiceInfo()) > 1 {
-		return fmt.Errorf("cannot register multiple(%d) names", len(grpcServer.GetServiceInfo()))
-	}
-
-	serverDefs[def.name] = def
-
 	AddRegistry(def)
 	// something odd?
 	reflection.Register(grpcServer)
@@ -477,4 +479,8 @@ func ServiceNameFromInfo(info *grpc.UnaryServerInfo) string {
 // Deprecation: We switched to prometheus
 func exposeMetricCounter(name string, value *uint64) error {
 	return nil
+}
+func targetName(name string) string {
+	x := strings.Split(name, ".")
+	return x[0]
 }
