@@ -6,7 +6,7 @@ PROTOCINC += -I${GOPATH}/src/github.com/googleapis/googleapis/third_party/
 PROTOCINC += -I${GOPATH}/src/github.com/grpc-ecosystem/grpc-gateway/third_party/googleapis
 
 server:
-	go install registrar-server.go
+	go install registrar-server.go prometheus-files.go
 client:
 	go install registrar-client.go
 

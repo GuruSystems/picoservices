@@ -23,14 +23,15 @@ import (
 
 // static variables for flag parser
 var (
-	port      = flag.Int("port", 5000, "The server port")
-	keepAlive = flag.Int("keepalive", 2, "keep alive interval in seconds to check each registered service")
-	services  *list.List
-	idCtr     = 0
+	port         = flag.Int("port", 5000, "The server port")
+	keepAlive    = flag.Int("keepalive", 2, "keep alive interval in seconds to check each registered service")
+	max_failures = flag.Int("max_failures", 10, "max failures after which service will be deregistered")
+	services     *list.List
+	idCtr        = 0
 )
 
 type serviceEntry struct {
-	loc       *pb.ServiceDescription
+	desc      *pb.ServiceDescription
 	instances []*serviceInstance
 }
 type serviceInstance struct {
@@ -82,13 +83,13 @@ func CheckRegistry() {
 		sloc := e.Value.(*serviceEntry)
 		for _, instance := range sloc.instances {
 			// we can only verify this if the instance provides apitype "status"
-			if !hasApi(instance.apitype, pb.Apitype_status) {
+			if !instance.hasApi(pb.Apitype_status) {
 				continue
 			}
 
 			err := CheckService(sloc, instance)
 			if err != nil {
-				fmt.Printf("Service %s@%s:%d failed %d times: %s\n", sloc.loc.Name, instance.address.Host, instance.address.Port, instance.failures, err)
+				fmt.Printf("Service %s@%s:%d failed %d times: %s\n", sloc.desc.Name, instance.address.Host, instance.address.Port, instance.failures, err)
 				instance.failures++
 			} else {
 				instance.failures = 0
@@ -96,10 +97,16 @@ func CheckRegistry() {
 			}
 		}
 	}
-	removeInvalidInstances()
+	removed := removeInvalidInstances()
+	if removed {
+		UpdateTargets()
+	}
 }
-func removeInvalidInstances() {
+
+// true if some where removed
+func removeInvalidInstances() bool {
 	// remove failed instances
+	res := false
 	for e := services.Front(); e != nil; e = e.Next() {
 		se := e.Value.(*serviceEntry)
 		for i := 0; i < len(se.instances); i++ {
@@ -109,14 +116,16 @@ func removeInvalidInstances() {
 				se.instances = se.instances[:len(se.instances)-1]
 
 				fmt.Printf("Instance %s removed due to excessive failures (or disabled)\n", se.toString())
+				res = true
 				break
 			}
 		}
 	}
+	return res
 }
 
 func (si *serviceEntry) toString() string {
-	name := fmt.Sprintf("%s:%s", si.loc.Name, si.loc.Gurupath)
+	name := fmt.Sprintf("%s:%s", si.desc.Name, si.desc.Gurupath)
 	return name
 }
 
@@ -131,11 +140,11 @@ func isValid(si *serviceInstance) bool {
 		fmt.Printf("invalidating instance %s: its disabled\n", si.toString())
 		return false
 	}
-	if si.failures > 10 {
+	if si.failures > *max_failures {
 		fmt.Printf("invalidating instance %s: failed %d times\n", si.toString(), si.failures)
 		return false
 	}
-	if hasApi(si.apitype, pb.Apitype_status) {
+	if si.hasApi(pb.Apitype_status) {
 		if time.Since(si.lastSuccess) > (time.Second * 30) {
 			fmt.Printf("invalidating instance %s: last success is too long ago\n", si.toString())
 			return false
@@ -166,14 +175,15 @@ func CheckService(desc *serviceEntry, addr *serviceInstance) error {
 		return err
 	}
 	sn := string(body)
-	if sn != desc.loc.Name {
-		fmt.Printf("Reported Service: \"%s\", expected: \"%s\"\n", sn, desc.loc.Name)
+	if sn != desc.desc.Name {
+		fmt.Printf("Reported Service: \"%s\", expected: \"%s\"\n", sn, desc.desc.Name)
 		return errors.New("Servicename mismatch")
 	}
 	return nil
 }
 
-func hasApi(ar []pb.Apitype, lf pb.Apitype) bool {
+func (si *serviceInstance) hasApi(lf pb.Apitype) bool {
+	ar := si.apitype
 	for _, a := range ar {
 		if a == lf {
 			return true
@@ -202,12 +212,12 @@ func FindServices(sd *pb.ServiceDescription) []*serviceEntry {
 	var res []*serviceEntry
 	for e := services.Front(); e != nil; e = e.Next() {
 		sl := e.Value.(*serviceEntry)
-		if (sl.loc.Gurupath != "") && (sd.Gurupath != "") {
-			if sl.loc.Gurupath != sd.Gurupath {
+		if (sl.desc.Gurupath != "") && (sd.Gurupath != "") {
+			if sl.desc.Gurupath != sd.Gurupath {
 				continue
 			}
 		}
-		if sl.loc.Name == sd.Name {
+		if sl.desc.Name == sd.Name {
 			res = append(res, sl)
 		}
 	}
@@ -218,12 +228,12 @@ func FindServices(sd *pb.ServiceDescription) []*serviceEntry {
 func FindService(sd *pb.ServiceDescription) *serviceEntry {
 	for e := services.Front(); e != nil; e = e.Next() {
 		sl := e.Value.(*serviceEntry)
-		if (sl.loc.Gurupath != "") && (sd.Gurupath != "") {
-			if sl.loc.Gurupath != sd.Gurupath {
+		if (sl.desc.Gurupath != "") && (sd.Gurupath != "") {
+			if sl.desc.Gurupath != sd.Gurupath {
 				continue
 			}
 		}
-		if sl.loc.Name == sd.Name {
+		if sl.desc.Name == sd.Name {
 			return sl
 		}
 	}
@@ -240,7 +250,7 @@ func AddService(sd *pb.ServiceDescription, hostname string, port int32, apitype 
 	if sl == nil {
 		fmt.Printf("New service! %s\n", sd)
 		sln := serviceEntry{}
-		sln.loc = sd
+		sln.desc = sd
 		sl = &sln
 		sl.instances = make([]*serviceInstance, 0)
 		services.PushFront(sl)
@@ -266,6 +276,7 @@ func AddService(sd *pb.ServiceDescription, hostname string, port int32, apitype 
 	sl.instances = append(sl.instances, si)
 	//fmt.Printf("Apitype: %s\n", si.apitype)
 	fmt.Printf("Registered new service %s at %s:%d (%d) [%s]\n", sd.Name, hostname, port, len(sl.instances), sd.Gurupath)
+	UpdateTargets()
 	slx := FindService(sd)
 	if len(slx.instances) == 0 {
 		fmt.Println("Error, did not save new service")
@@ -297,9 +308,9 @@ func (s *RegistryService) GetServiceAddress(ctx context.Context, gr *pb.GetReque
 		return nil, errors.New("service not registered")
 	}
 	resp := pb.GetResponse{}
-	resp.Service = slv[0].loc
+	resp.Service = slv[0].desc
 	resp.Location = new(pb.ServiceLocation)
-	resp.Location.Service = slv[0].loc
+	resp.Location.Service = slv[0].desc
 	for _, sl := range slv {
 		//var serviceAddresses []pb.ServiceAddress
 		for _, in := range sl.instances {
@@ -318,6 +329,7 @@ func (s *RegistryService) DeregisterService(ctx context.Context, pr *pb.Deregist
 	si.disabled = true
 	removeInvalidInstances()
 	fmt.Printf("Deregistered Service %s\n", si.toString())
+	UpdateTargets()
 	return &pb.EmptyResponse{}, nil
 }
 func (s *RegistryService) RegisterService(ctx context.Context, pr *pb.ServiceLocation) (*pb.GetResponse, error) {
@@ -424,17 +436,17 @@ func (s *RegistryService) ListServices(ctx context.Context, pr *pb.ListRequest) 
 	// one GetResponse per element
 	for e := services.Front(); e != nil; e = e.Next() {
 		se := e.Value.(*serviceEntry)
-		if (pr.Name != "") && (pr.Name != se.loc.Name) {
+		if (pr.Name != "") && (pr.Name != se.desc.Name) {
 			continue
 		}
-		fmt.Printf("Service %s has %d instances\n", se.loc.Name, len(se.instances))
+		fmt.Printf("Service %s has %d instances\n", se.desc.Name, len(se.instances))
 		if len(se.instances) == 0 {
 			continue
 		}
 		rr := pb.GetResponse{}
 		lr.Service = append(lr.Service, &rr)
 
-		rr.Service = se.loc
+		rr.Service = se.desc
 		rr.Location = new(pb.ServiceLocation)
 		rr.Location.Service = rr.Service
 		svcadr := []*pb.ServiceAddress{}
@@ -442,7 +454,7 @@ func (s *RegistryService) ListServices(ctx context.Context, pr *pb.ListRequest) 
 			sa := &in.address
 			sa.ApiType = in.apitype
 			svcadr = append(svcadr, sa)
-			fmt.Printf("Service %s @ %s:%d (%s)\n", se.loc.Name, in.address.Host, in.address.Port, in.apitype)
+			fmt.Printf("Service %s @ %s:%d (%s)\n", se.desc.Name, in.address.Host, in.address.Port, in.apitype)
 		}
 		rr.Location.Address = svcadr
 	}
@@ -479,20 +491,20 @@ func (s *RegistryService) GetTarget(ctx context.Context, pr *pb.GetTargetRequest
 	for e := services.Front(); e != nil; e = e.Next() {
 		se := e.Value.(*serviceEntry)
 		if pr.Gurupath != "" {
-			if !isDeployPath(se.loc.Gurupath, pr.Gurupath) {
-				fmt.Printf("No match \"%s\" and \"%s\"\n", se.loc.Gurupath, pr.Gurupath)
+			if !isDeployPath(se.desc.Gurupath, pr.Gurupath) {
+				fmt.Printf("No match \"%s\" and \"%s\"\n", se.desc.Gurupath, pr.Gurupath)
 				continue
 			}
 		}
 		if pr.Name != "" {
-			if se.loc.Name != pr.Name {
+			if se.desc.Name != pr.Name {
 				continue
 			}
 		}
 		for _, si := range se.instances {
-			if hasApi(si.apitype, pr.ApiType) {
+			if si.hasApi(pr.ApiType) {
 				//fmt.Printf("Adding %s\n", si.toString())
-				sd := se.loc
+				sd := se.desc
 				gr := &pb.GetResponse{}
 				gr.Service = sd
 				gr.Location = &pb.ServiceLocation{}
