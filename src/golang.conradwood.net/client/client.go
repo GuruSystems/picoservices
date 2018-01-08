@@ -61,7 +61,7 @@ func SaveToken(tk string) error {
 func DialTCPWrapper(gurupath string) (net.Conn, error) {
 	reg := cmdline.GetRegistryAddress()
 	//fmt.Printf("Using registrar @%s\n", reg)
-	opts := []grpc.DialOption{grpc.WithInsecure()}
+	opts := getDialopts()
 	conn, err := grpc.Dial(reg, opts...)
 	if err != nil {
 		printError(gurupath, fmt.Sprintf("Error dialling registry %s @ %s\n", gurupath, reg))
@@ -100,7 +100,7 @@ func DialTCPWrapper(gurupath string) (net.Conn, error) {
 func DialWrapper(servicename string) (*grpc.ClientConn, error) {
 	reg := cmdline.GetRegistryAddress()
 	//fmt.Printf("Using registrar @%s to dial %s (grpc)\n", reg, servicename)
-	opts := []grpc.DialOption{grpc.WithInsecure()}
+	opts := getDialopts()
 	conn, err := grpc.Dial(reg, opts...)
 	if err != nil {
 		printError(servicename, fmt.Sprintf("Error dialling servicename %s @ %s\n", servicename, reg))
@@ -212,8 +212,9 @@ func SetAuthToken() context.Context {
 	md := metadata.Pairs("token", tok,
 		"clid", "itsme",
 	)
-
-	ctx := metadata.NewOutgoingContext(context.Background(), md)
+	millis := 5000
+	ctx, _ := context.WithTimeout(context.Background(), time.Duration(millis)*time.Millisecond)
+	ctx = metadata.NewOutgoingContext(ctx, md)
 	return ctx
 }
 
@@ -232,6 +233,11 @@ func getErrorCacheByName(name string) *errorCache {
 	return ec
 }
 
+func getDialopts() []grpc.DialOption {
+	deadline := 2
+	opts := []grpc.DialOption{grpc.WithInsecure(), grpc.WithTimeout(time.Duration(deadline) * time.Second)}
+	return opts
+}
 func printError(path string, msg string) {
 	e := getErrorCacheByName(path)
 	if e == nil {

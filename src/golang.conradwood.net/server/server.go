@@ -304,6 +304,9 @@ func serveServiceInfo(w http.ResponseWriter, req *http.Request, sd *serverDef) {
 	p := req.URL.Path
 	if strings.HasPrefix(p, "/internal/service-info/name") {
 		w.Write([]byte(sd.name))
+	} else if strings.HasPrefix(p, "/internal/service-info/build") {
+		w.Write([]byte(fmt.Sprintf("buildid: %d\nBuild_timestamp:%s\nBuild_date_string:",
+			cmdline.Buildnumber, cmdline.Build_date, cmdline.Build_date_string)))
 	} else if strings.HasPrefix(p, "/internal/service-info/metrics") {
 		fmt.Printf("Request path: \"%s\"\n", p)
 		m := strings.TrimPrefix(p, "/internal/service-info/metrics")
