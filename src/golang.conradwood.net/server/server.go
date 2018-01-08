@@ -247,6 +247,9 @@ func ServerStartup(def *serverDef) error {
 
 	}
 
+	for name, _ := range grpcServer.GetServiceInfo() {
+		def.name = name
+	}
 	// hook up prometheus
 	def.grpc_server_requests = prometheus.NewCounterVec(
 		prometheus.CounterOpts{
@@ -270,9 +273,6 @@ func ServerStartup(def *serverDef) error {
 		return fmt.Errorf("cannot register multiple(%d) names", len(grpcServer.GetServiceInfo()))
 	}
 
-	for name, _ := range grpcServer.GetServiceInfo() {
-		def.name = name
-	}
 	serverDefs[def.name] = def
 
 	AddRegistry(def)
