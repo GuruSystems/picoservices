@@ -417,7 +417,8 @@ func reRegister() {
 }
 
 // expose an ever-increasing counter with the given metric
-func ExposeMetricCounter(name string, value *uint64) error {
+// Deprecation: We switched to prometheus
+func exposeMetricCounter(name string, value *uint64) error {
 	ctrmetrics[name] = value
 	return nil
 }
