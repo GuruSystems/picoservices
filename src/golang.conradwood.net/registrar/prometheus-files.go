@@ -4,6 +4,7 @@ package main
 // for the targets
 
 import (
+	"bytes"
 	"flag"
 	"fmt"
 	pb "golang.conradwood.net/registrar/proto"
@@ -17,9 +18,11 @@ const (
 )
 
 var (
-	targetsdir = flag.String("prometheus_targets", "", "Directory to store targets for prometheus in. (empty==no targetfiles are maintained)")
-	targets    []*target
-	promlock   sync.Mutex
+	targetsdir   = flag.String("prometheus_targets", "", "Directory to store targets for prometheus in. (empty==no targetfiles are maintained)")
+	templatefile = flag.String("prometheus_config_template", "", "A prometheus config file to use as template (prefix)")
+	pmcfgfile    = flag.String("prometheus_config_file", "", "If not empty, maintain a prometheus config file")
+	targets      []*target
+	promlock     sync.Mutex
 )
 
 type target struct {
@@ -57,6 +60,10 @@ func UpdateTargets() {
 	err := writeTargets()
 	if err != nil {
 		fmt.Printf("Failed to write targets: %s\n", err)
+		return
+	}
+	if *pmcfgfile != "" {
+		RewriteConfigFile()
 	}
 }
 
@@ -148,4 +155,36 @@ func getTargetByName(name string) *target {
 func targetName(name string) string {
 	x := strings.Split(name, ".")
 	return x[0]
+}
+
+func RewriteConfigFile() {
+	var buffer bytes.Buffer
+
+	if *templatefile != "" {
+		bs, err := ioutil.ReadFile(*templatefile)
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+		buffer.WriteString(string(bs))
+	}
+
+	for _, t := range targets {
+		fname := fmt.Sprintf("%s/%s.yaml", *targetsdir, t.name)
+		buffer.WriteString(fmt.Sprintf("  - job_name: '%s'\n", t.name))
+		buffer.WriteString(fmt.Sprintf("    metrics_path: '/internal/service-info/metrics'\n"))
+		buffer.WriteString(fmt.Sprintf("    scheme: 'https'\n"))
+		buffer.WriteString(fmt.Sprintf("    tls_config:\n"))
+		buffer.WriteString(fmt.Sprintf("      insecure_skip_verify: true\n"))
+		buffer.WriteString(fmt.Sprintf("    file_sd_configs:\n"))
+		buffer.WriteString(fmt.Sprintf("      - files:\n"))
+		buffer.WriteString(fmt.Sprintf("        - '%s'\n", fname))
+	}
+	if *pmcfgfile == "" {
+		return
+	}
+	err := ioutil.WriteFile(*pmcfgfile, []byte(buffer.String()), 0644)
+	if err != nil {
+		fmt.Printf("Failed to write config file: %s\n", err)
+	}
 }
