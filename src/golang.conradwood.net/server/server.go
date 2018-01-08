@@ -11,6 +11,7 @@ import (
 	"crypto/tls"
 	"crypto/x509"
 	"errors"
+	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"golang.conradwood.net/cmdline"
 	"golang.org/x/net/context"
@@ -38,12 +39,16 @@ var (
 
 	register_refresh = flag.Int("register_refresh", 10, "registration refresh interval in `seconds`")
 	usercache        = make(map[string]*UserCache)
-	ctrmetrics       = make(map[string]*uint64)
+	serverDefs       = make(map[string]*serverDef)
 	registered       []*serverDef
 	stopped          bool
 	ticker           *time.Ticker
 	promHandler      http.Handler
 )
+
+func init() {
+
+}
 
 type UserCache struct {
 	UserID  string
@@ -60,11 +65,12 @@ type serverDef struct {
 	CA          []byte
 	Register    Register
 	// set to true if this server does NOT require authentication (default: it does need authentication)
-	NoAuth        bool
-	name          string
-	types         []pb.Apitype
-	registered_id string
-	DeployPath    string
+	NoAuth               bool
+	name                 string
+	types                []pb.Apitype
+	registered_id        string
+	DeployPath           string
+	grpc_server_requests *prometheus.CounterVec
 }
 
 func (s *serverDef) toString() string {
@@ -89,9 +95,11 @@ func NewHTMLServerDef(name string) *serverDef {
 func NewServerDef() *serverDef {
 	res := &serverDef{}
 	res.registered_id = ""
-	res.Key = Privatekey
-	res.Certificate = Certificate
-	res.CA = Ca
+	/*
+		res.Key = Privatekey
+		res.Certificate = Certificate
+		res.CA = Ca
+	*/
 	res.DeployPath = *deploypath
 	res.types = append(res.types, pb.Apitype_status)
 	res.types = append(res.types, pb.Apitype_grpc)
@@ -113,6 +121,18 @@ func UnaryAuthInterceptor(ctx context.Context, req interface{}, info *grpc.Unary
 	if !ok {
 		return nil, grpc.Errorf(codes.Unauthenticated, "missing context metadata")
 	}
+
+	name := ServiceNameFromInfo(info)
+	def := getServerDefByName(name)
+	if def == nil {
+		s := fmt.Sprintf("Service not registered! %s", name)
+		fmt.Println(s)
+		return nil, errors.New(s)
+	}
+	method := MethodNameFromInfo(info)
+	//fmt.Printf("Method: \"%s\"\n", method)
+
+	def.grpc_server_requests.With(prometheus.Labels{"method": method}).Inc()
 	nctx, err := authenticate(ctx, meta)
 	if err != nil {
 		return nil, errors.New(fmt.Sprintf("intercepted and failed call to %v: %s", req, err))
@@ -227,6 +247,20 @@ func ServerStartup(def *serverDef) error {
 
 	}
 
+	// hook up prometheus
+	def.grpc_server_requests = prometheus.NewCounterVec(
+		prometheus.CounterOpts{
+			Name: fmt.Sprintf("%s_grpc_requests_received", def.name),
+			Help: "requests to log stuff received",
+		},
+		[]string{"method"},
+	)
+	err = prometheus.Register(def.grpc_server_requests)
+	if err != nil {
+		s := fmt.Sprintf("Failed to register reqCounter: %s\n", err)
+		fmt.Println(s)
+		return errors.New(s)
+	}
 	grpc.EnableTracing = true
 	def.Register(grpcServer)
 	if err != nil {
@@ -239,6 +273,8 @@ func ServerStartup(def *serverDef) error {
 	for name, _ := range grpcServer.GetServiceInfo() {
 		def.name = name
 	}
+	serverDefs[def.name] = def
+
 	AddRegistry(def)
 	// something odd?
 	reflection.Register(grpcServer)
@@ -267,12 +303,6 @@ func serveServiceInfo(w http.ResponseWriter, req *http.Request, sd *serverDef) {
 		fmt.Printf("Request path: \"%s\"\n", p)
 		m := strings.TrimPrefix(p, "/internal/service-info/metrics")
 		m = strings.TrimLeft(m, "/")
-		up := ctrmetrics[m]
-		if up == nil {
-			fmt.Printf("Metric request for unknown metric: \"%s\"\n", m)
-			return
-		}
-		fmt.Fprintf(w, "%d", *up)
 	} else {
 		fmt.Printf("Invalid path: \"%s\"\n")
 	}
@@ -416,9 +446,35 @@ func reRegister() {
 
 }
 
+func getServerDefByName(name string) *serverDef {
+	return serverDefs[name]
+}
+func MethodNameFromInfo(info *grpc.UnaryServerInfo) string {
+	full := info.FullMethod
+	if full[0] == '/' {
+		full = full[1:]
+	}
+	ns := strings.SplitN(full, "/", 2)
+	if len(ns) < 2 {
+		return ""
+	}
+	res := ns[1]
+	if res[0] == '/' {
+		res = res[1:]
+	}
+	return ns[1]
+}
+func ServiceNameFromInfo(info *grpc.UnaryServerInfo) string {
+	full := info.FullMethod
+	if full[0] == '/' {
+		full = full[1:]
+	}
+	ns := strings.SplitN(full, "/", 2)
+	return ns[0]
+}
+
 // expose an ever-increasing counter with the given metric
 // Deprecation: We switched to prometheus
 func exposeMetricCounter(name string, value *uint64) error {
-	ctrmetrics[name] = value
 	return nil
 }
