@@ -17,14 +17,24 @@ import (
 	"os"
 	"os/user"
 	"strings"
+	"sync"
+	"time"
 )
 
 var (
 	cert               = []byte{1, 2, 3}
 	displayedTokenInfo = false
 
-	token = flag.String("token", "user_token", "The authentication token (cookie) to authenticate with. May be name of a file in ~/.picoservices/tokens/, if so file contents shall be used as cookie")
+	token     = flag.String("token", "user_token", "The authentication token (cookie) to authenticate with. May be name of a file in ~/.picoservices/tokens/, if so file contents shall be used as cookie")
+	errorList []*errorCache
+	errorLock sync.Mutex
 )
+
+type errorCache struct {
+	servicename string
+	lastOccured time.Time
+	lastPrinted time.Time
+}
 
 func SaveToken(tk string) error {
 
@@ -54,7 +64,7 @@ func DialTCPWrapper(gurupath string) (net.Conn, error) {
 	opts := []grpc.DialOption{grpc.WithInsecure()}
 	conn, err := grpc.Dial(reg, opts...)
 	if err != nil {
-		fmt.Printf("Error dialling registry %s @ %s\n", gurupath, reg)
+		printError(gurupath, fmt.Sprintf("Error dialling registry %s @ %s\n", gurupath, reg))
 		return nil, err
 	}
 	defer conn.Close()
@@ -63,19 +73,19 @@ func DialTCPWrapper(gurupath string) (net.Conn, error) {
 	lr, err := rcl.GetTarget(context.Background(), gt)
 	if err != nil {
 		s := fmt.Sprintf("Error getting TCP target for gurupath %s: %s", gurupath, err)
-		fmt.Println(s)
+		printError(gurupath, s)
 		return nil, errors.New(s)
 	}
 	if len(lr.Service) == 0 {
 		s := fmt.Sprintf("No TCP target found for path %s", gurupath)
-		fmt.Println(s)
+		printError(gurupath, s)
 		return nil, errors.New(s)
 	}
 	svr := lr.Service[0]
 	svl := svr.Location
 	if len(svl.Address) == 0 {
 		s := fmt.Sprintf("No TCP location found for path %s", gurupath)
-		fmt.Println(s)
+		printError(gurupath, s)
 		return nil, errors.New(s)
 	}
 	adr := svl.Address[0]
@@ -93,7 +103,7 @@ func DialWrapper(servicename string) (*grpc.ClientConn, error) {
 	opts := []grpc.DialOption{grpc.WithInsecure()}
 	conn, err := grpc.Dial(reg, opts...)
 	if err != nil {
-		fmt.Printf("Error dialling servicename %s @ %s\n", servicename, reg)
+		printError(servicename, fmt.Sprintf("Error dialling servicename %s @ %s\n", servicename, reg))
 		return nil, err
 	}
 	defer conn.Close()
@@ -101,19 +111,19 @@ func DialWrapper(servicename string) (*grpc.ClientConn, error) {
 	gt := &pb.GetTargetRequest{Name: servicename, ApiType: pb.Apitype_grpc}
 	lr, err := rcl.GetTarget(context.Background(), gt)
 	if err != nil {
-		fmt.Printf("Error getting grpc service address %s: %s\n", servicename, err)
+		printError(servicename, fmt.Sprintf("Error getting grpc service address %s: %s\n", servicename, err))
 		return nil, err
 	}
 	if len(lr.Service) == 0 {
 		s := fmt.Sprintf("No grpc target found for name %s", servicename)
-		fmt.Println(s)
+		printError(servicename, s)
 		return nil, errors.New(s)
 	}
 	svr := lr.Service[0]
 	svl := svr.Location
 	if len(svl.Address) == 0 {
 		s := fmt.Sprintf("No grpc location found for name %s - is it running?", servicename)
-		fmt.Println(s)
+		printError(servicename, s)
 		return nil, errors.New(s)
 	}
 	sa := svl.Address[0]
@@ -205,4 +215,42 @@ func SetAuthToken() context.Context {
 
 	ctx := metadata.NewOutgoingContext(context.Background(), md)
 	return ctx
+}
+
+func getErrorCacheByName(name string) *errorCache {
+	errorLock.Lock()
+	defer errorLock.Unlock()
+	for _, ec := range errorList {
+		if ec.servicename == name {
+			return ec
+		}
+	}
+	ec := &errorCache{servicename: name,
+		lastOccured: time.Now(),
+	}
+	errorList = append(errorList, ec)
+	return ec
+}
+
+func printError(path string, msg string) {
+	e := getErrorCacheByName(path)
+	if e == nil {
+		fmt.Println(msg)
+		return
+	}
+	if !e.needsPrinting() {
+		return
+	}
+	fmt.Println(msg)
+}
+
+// returns true if this needs printing
+// resets counter if it returns true
+func (e *errorCache) needsPrinting() bool {
+	now := time.Now()
+	if now.Sub(e.lastPrinted) < (time.Duration(5) * time.Minute) {
+		return false
+	}
+	e.lastPrinted = now
+	return false
 }
