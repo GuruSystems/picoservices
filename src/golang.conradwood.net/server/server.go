@@ -40,7 +40,8 @@ var (
 	register_refresh = flag.Int("register_refresh", 10, "registration refresh interval in `seconds`")
 	usercache        = make(map[string]*UserCache)
 	serverDefs       = make(map[string]*serverDef)
-	registered       []*serverDef
+	registered       []*serverDef // is registered
+	knownServices    []*serverDef // all services, even not known ones
 	stopped          bool
 	ticker           *time.Ticker
 	promHandler      http.Handler
@@ -251,8 +252,11 @@ func ServerStartup(def *serverDef) error {
 	}
 
 	grpc.EnableTracing = true
+	// callback to the callers' specific intialisation
+	// (set by the caller of this function)
 	def.Register(grpcServer)
 	if err != nil {
+		fmt.Printf("Serverstartup: failed to register service on startup: %s\n", err)
 		return fmt.Errorf("grpc register error: %s", err)
 	}
 	if len(grpcServer.GetServiceInfo()) > 1 {
@@ -280,6 +284,10 @@ func ServerStartup(def *serverDef) error {
 		fmt.Println(s)
 		return errors.New(s)
 	}
+
+	knownServices = append(knownServices, def)
+
+	fmt.Printf("Adding service to registry...\n")
 	AddRegistry(def)
 	// something odd?
 	reflection.Register(grpcServer)
@@ -431,9 +439,7 @@ func AddRegistry(sd *serverDef) (string, error) {
 
 	resp, err := client.RegisterService(context.Background(), &req)
 	if err != nil {
-		fmt.Printf("RegisterService(%s) failed: %s\n", req.Service.Name, err)
-		fmt.Printf("  Published address: \"%s\"\n", req.Address[0].Host)
-		fmt.Printf("  Registry:   %s\n", cmdline.GetRegistryAddress())
+		fmt.Printf("RegisterService(%s) failed (registry=%s): %s\n", req.Service.Name, req.Address[0].Host, err)
 		return "", err
 	}
 	if resp == nil {
@@ -448,6 +454,14 @@ func AddRegistry(sd *serverDef) (string, error) {
 }
 
 func reRegister() {
+	// register any that are not yet registered
+	for _, sd := range knownServices {
+		if sd.registered_id != "" {
+			continue
+		}
+		AddRegistry(sd)
+	}
+	// reregister any that are registered already
 	for _, sd := range registered {
 		AddRegistry(sd)
 	}
