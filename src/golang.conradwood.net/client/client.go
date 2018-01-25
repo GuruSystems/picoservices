@@ -48,7 +48,7 @@ func SaveToken(tk string) error {
 	if _, err := os.Stat(fname); !os.IsNotExist(err) {
 		return errors.New(fmt.Sprintf("File %s exists already", fname))
 	}
-	os.MkdirAll(cfgdir, 0600)
+	os.MkdirAll(cfgdir, 0700)
 	fmt.Printf("Saving new token to %s\n", fname)
 	err = ioutil.WriteFile(fname, []byte(tk), 0600)
 	if err != nil {
