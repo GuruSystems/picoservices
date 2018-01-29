@@ -30,6 +30,7 @@ var (
 	firstname  = flag.String("firstname", "", "Firstname of the user to create")
 	lastname   = flag.String("lastname", "", "Lastname of the user to create")
 	username   = flag.String("username", "", "username of the user to create")
+	svcaccount = flag.String("servicename", "", "name of a service to create (instead of lastname/firstname etc...")
 )
 
 func readLine(prompt string) string {
@@ -69,6 +70,12 @@ func main() {
 	aclient := pb.NewAuthenticationServiceClient(conn)
 	ctx := context.Background()
 
+	if *svcaccount != "" {
+		*email = fmt.Sprintf("%s@gurusys.co.uk", *svcaccount)
+		*firstname = *svcaccount
+		*lastname = *svcaccount
+		*username = *svcaccount
+	}
 	if (*email != "") || (*firstname != "") || (*lastname != "") || (*username != "") {
 		req := &pb.CreateUserRequest{
 			UserName:  *username,
