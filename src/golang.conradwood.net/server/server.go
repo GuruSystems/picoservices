@@ -414,7 +414,8 @@ func AddRegistry(sd *serverDef) (string, error) {
 
 	//fmt.Printf("Registering service %s with registry server\n", name)
 	opts := []grpc.DialOption{grpc.WithInsecure()}
-	conn, err := grpc.Dial(cmdline.GetRegistryAddress(), opts...)
+	ra := cmdline.GetRegistryAddress()
+	conn, err := grpc.Dial(ra, opts...)
 	if err != nil {
 		fmt.Println("failed to dial registry server: %v", err)
 		return "", err
@@ -439,7 +440,7 @@ func AddRegistry(sd *serverDef) (string, error) {
 
 	resp, err := client.RegisterService(context.Background(), &req)
 	if err != nil {
-		fmt.Printf("RegisterService(%s) failed (registry=%s): %s\n", req.Service.Name, req.Address[0].Host, err)
+		fmt.Printf("RegisterService(%s) failed (registry=%s,addr=%s): %s\n", req.Service.Name, ra, req.Address[0].Host, err)
 		return "", err
 	}
 	if resp == nil {

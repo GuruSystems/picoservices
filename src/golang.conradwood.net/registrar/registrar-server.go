@@ -71,6 +71,7 @@ func main() {
 			CheckRegistry()
 		}
 	}()
+	fmt.Printf("Serving...\n")
 	grpcServer.Serve(lis)
 }
 
