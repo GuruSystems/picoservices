@@ -18,7 +18,16 @@ if [ ! -d $VENDOR ]; then
     exit 10
 fi
 
+VENDOR="`pwd`/$VENDOR"
 pwd
 echo "Copying repo $SRC to $VENDOR"
 
-cp -rv $SRC/src/* ${VENDOR}
+(cd ${SRC} ; git diff --quiet)
+CODE=$?
+if [ ${CODE} -ne 0 ]; then
+    echo "Refusing to patch from a locally modified version"
+    exit 10
+fi
+
+cd ${SRC}/src
+find . | grep -v vendor | grep -v '*'|grep -v '~$'| grep -v '/.git'|grep -v 'dist'|grep -v 'vendor'|cpio -pav --make-directories --unconditional ${VENDOR}
