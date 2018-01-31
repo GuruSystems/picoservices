@@ -25,7 +25,8 @@ echo "Copying repo $SRC to $VENDOR"
 (cd ${SRC} ; git diff --quiet)
 CODE=$?
 if [ ${CODE} -ne 0 ]; then
-    echo "Refusing to patch from a locally modified version"
+    echo "$0: Refusing to patch from a locally modified version"
+    ( cd ${SRC} ; git diff )
     exit 10
 fi
 
