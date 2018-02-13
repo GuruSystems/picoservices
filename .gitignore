@@ -1,0 +1,6 @@
+auth/client/client
+auth/server/server
+registrar/client/client
+registrar/server/server
+keyvalueserver/client/keyvalueserver
+keyvalueserver/server/keyvalueserver
