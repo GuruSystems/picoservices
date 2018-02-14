@@ -1,9 +1,0 @@
-The "keyvalueserver" is an example.
-
-Starting the server "registers" with the registrar.
-Using the client it will post/query key/values from the service (which it finds via the registar).
-The server will authenticate clients against the authentication service (which it finds via the registrar)
-
-
-
-
